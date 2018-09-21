@@ -1,18 +1,23 @@
 <template>
     <div style="overflow:hidden;padding-left:1px;height:45px;">
-         <div v-for="(item,index) in moneyarr" class="mytype cur" :style="mnysel == index?{color:'#409efe',boxShadow: '2px 2px 11px 0px rgba(59, 140, 255, 0.3)'}:''" @click="changemny(index)">{{item}}</div>
-         <p class="right"><span style="margin-right:12px;">{{time[$store.state.alllang]}}</span>
+         <div v-for="(item,index) in moneyarr" class="mytype cur" :style="mnysel == index?{color:'rgb(73,165,251)',backgroundColor:'#fff',border:'none'}:''" @click="changemny(index)">{{item}}</div>
+         <p class="right"><span style="margin-right:14px;font-size:14px;">{{time[$store.state.alllang]}}</span>
             <el-date-picker
             v-model="value1"
             type="date"
             placeholder="选择日期" style="font-size:16px;">
             </el-date-picker>
-            <span v-if="showtype" style="margin-left:48px;margin-right:12px;">{{tyarr[$store.state.alllang]}}</span>
-            <select v-model="type" class="myselect" v-if="showtype">
+            <span v-if="showtype" style="margin-left:40px;margin-right:14px;font-size:14px;">{{tyarr[$store.state.alllang]}}</span>
+            <!-- <select v-model="type" class="myselect">
                 <option :value="index" v-for="(item,index) in typearr1" v-if="$store.state.moneyty == 0">{{item[$store.state.alllang]}}</option>
                 <option :value="index" v-for="(item,index) in typearr2" v-if="$store.state.moneyty == 1">{{item[$store.state.alllang]}}</option>
                 <option :value="index" v-for="(item,index) in typearr3" v-if="$store.state.moneyty == 2">{{item[$store.state.alllang]}}</option>
-            </select>
+            </select> -->
+            <el-select v-model="type"   class="top_right" v-if="showtype" >
+                <el-option :key="index" :label="item[$store.state.alllang]" :value="index" v-for="(item,index) in typearr1" v-if="$store.state.moneyty == 0">{{item[$store.state.alllang]}}</el-option>
+                <el-option :key="index" :label="item[$store.state.alllang]"  :value="index" v-for="(item,index) in typearr2" v-if="$store.state.moneyty == 1">{{item[$store.state.alllang]}}</el-option>
+                <el-option :key="index" :label="item[$store.state.alllang]"  :value="index" v-for="(item,index) in typearr3" v-if="$store.state.moneyty == 2">{{item[$store.state.alllang]}}</el-option>
+            </el-select>
          </p>
     </div>
 </template>
@@ -75,6 +80,7 @@ export default {
         changemny(aa){
             this.mnysel = aa
             this.$store.commit('getdapptype',0)
+            this.$store.commit('savepage',1)
             this.type = this.$store.state.dapptype
             this.$store.commit('changemoneyty',aa)
         }
@@ -103,11 +109,19 @@ select::-ms-expand { display: none; }
     height: 40px;
     border-radius: 5px;
     padding-left: 20px;
+    border: none;
     box-sizing: border-box;
-    font-size: 16px;
+    font-size: 14px;
     color: #4f5f6e;
     border-radius: 20px;
-    background-color: #edeff7;
+    background-color: #e8ecf2;
+    /* background-color: #fff; */
+}
+select option{
+    background-color: #fff;
+}
+select option:hover{
+    background-color: #f8f9fa;
 }
 .mytype{
     float: left;
@@ -118,10 +132,9 @@ select::-ms-expand { display: none; }
     box-sizing: border-box;
     margin-right: 20px;
     position: relative;
-    background-color: #ffffff;
+    border: solid 1px #e0e7ed;
 	border-radius: 20px;
-    color: #808c9b;
-    
+    color: #797b8e; 
 }
 .right{
     float:right;
@@ -130,15 +143,19 @@ select::-ms-expand { display: none; }
 </style>
 
 <style>
-..el-date-editor.el-input, .el-date-editor.el-input__inner{
-    width: 200px;
+.el-date-editor.el-input, .el-date-editor.el-input__inner{
+    width: 194px;
 }
 .el-input--suffix .el-input__inner{
     border-radius: 20px;
-    background-color: #edeff7;
+    background-color: #e8ecf2;
     width: 200px;
 }
 .el-input__suffix{
     right:25px;
+}
+.el-input__inner{
+    font-size:14px;
+    color:#797b8e;
 }
 </style>

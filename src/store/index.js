@@ -7,13 +7,18 @@ export default new Vuex.Store({
     state:{
         moneyty:0,
         requesttime:'',
-        close:false,
+        close:true,
         dapptype:0,
         themenuflag:true,
         requrl:'http://service.dappdata.io',
         appid:'',
         // 语言
-        alllang:0,
+        alllang:1,
+        //记录页码
+        yourpage:1,
+        //控制loading
+        loadflag:true,
+        loadopacty:true,
         
     },
     mutations:{
@@ -31,8 +36,8 @@ export default new Vuex.Store({
         getdapptype(state,type){
             state.dapptype = type
         },
-        changemenuflag(state){
-            state.themenuflag = !state.themenuflag
+        changemenuflag(state,meflg){
+            state.themenuflag = meflg
         },
         falsemenu(state,ff){
             state.themenuflag = ff
@@ -42,6 +47,15 @@ export default new Vuex.Store({
         },
         changlang(state,lang){
             state.alllang = lang
+        },
+        savepage(state,page){
+            state.yourpage = page
+        },
+        changeloadflge(state,page){
+            state.loadflag = page
+        },
+        changeloadopacty(state,page){
+            state.loadopacty = page
         }
     }
 })

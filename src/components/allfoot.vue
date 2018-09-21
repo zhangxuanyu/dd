@@ -16,9 +16,8 @@ export default {
     line-height: 86px;
     text-align: center;
 	height: 86px;
-    color: #acacac;
+    color: #a5aac0;
     font-size: 12px;
-	background-color: #f7f7f8;
-    border-top: 1px solid #d9e3ea;
+	background-color: #fafbfc;
 }
 </style>

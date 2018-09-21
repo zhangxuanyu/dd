@@ -1,10 +1,11 @@
 <template>
     <div class="out" :style="{minHeight:geth,marginLeft:mglf}">
         <min-menu class="leftme" :style="{left:open}"></min-menu>
+        <!-- <p class="alltitle">{{ttarr[3][$store.state.alllang]}}</p> -->
         <div class="contright">
             <!-- 新用户数图表 -->
             <div class="dapp">
-                <p><span style="float:left;">{{ttarr[0][$store.state.alllang]}}</span> <span style="float:right;"><span style="margin-right:10px;">{{ttarr[1][$store.state.alllang]}}</span><el-date-picker
+                <p><span style="float:left;color: #212229;font-weight: 600;">{{ttarr[0][$store.state.alllang]}}</span> <span style="float:right;margin-top: -10px;margin-bottom: 30px;"><span style="margin-right:10px;font-size: 14px;color: #797b8e;">{{ttarr[1][$store.state.alllang]}}</span><el-date-picker
                                                         v-model="value7"
                                                         type="daterange"
                                                         align="right"
@@ -15,26 +16,20 @@
                                                         :picker-options="pickerOptions2">
                                                     </el-date-picker>
                                         </span></p>
-                <div id="tradenum"  style="min-width:500px;height:500px"></div>
+                <div id="tradenum"  style="min-width:500px;height:500px;margin-bottom:70px;"></div>
 
                 <table  width="100%" cellspacing='0' style="text-align: center;margin-top: 50px;">
                     <tr class="top bg pd">
-                        <th  v-for="(item,index) in titlearr" class="title all topbt" :style="index == 0?{borderLeft:'none'}:''">{{item[$store.state.alllang]}}</th>
+                        <th  v-for="(item,index) in titlearr" class="title all topbt" :style="index == titlearr.length - 1?{borderRight:'1px solid #ebecf0'}:''">{{item[$store.state.alllang]}}</th>
                     </tr>
                     <tr class="top pd nbt" v-for="(item,index) in arr" v-if="index>=(currentPage1-1)*10&&index<currentPage1*10">
                         <td class="title all">{{timeuse(item.timestamp-86400)}}</td>
                         <td class="title all">{{conversion(item.day_tx.toString())}}</td>
                         <td class="title all">{{conversion(item.total_tx.toString())}}</td>
-                        <td class="title all">{{conversion((item.total_tx_rate*100).toFixed(2))}}%</td> 
+                        <td class="title all" style="borderRight:1px solid #ebecf0">{{conversion((item.total_tx_rate*100).toFixed(2))}}%</td> 
                     </tr>
                 </table>
-                <!-- <el-pagination
-                    @current-change="newuserPage"
-                    :current-page.sync="currentPage1"
-                    :page-size="10"
-                    layout="total, prev, pager, next"
-                    :total="arr.length" style="margin-top:40px;">
-                </el-pagination> -->
+               
 
                 <div style="width:300px;height:50px;margin:0 auto;margin-top:40px;" >
                     <span style="float:left;margin-top:7px;font-size:12px;color:#4f5f6e;" v-if="$store.state.alllang == 0">共 {{arr.length}} 条</span>
@@ -52,28 +47,22 @@
 
             <!-- 活跃用户 -->
              <div class="dapp">
-                <p style="text-align:left;"><span>{{ttarr[2][$store.state.alllang]}}</span></p>
-                <div id="alltrade"  style="min-width:500px;height:500px"></div>
+                <p style="text-align:left;margin-bottom: 20px;color: #212229;font-weight: 600;"><span>{{ttarr[2][$store.state.alllang]}}</span></p>
+                <div id="alltrade"  style="min-width:500px;height:500px;margin-bottom:30px;"></div>
 
                 <table  width="100%" cellspacing='0' style="text-align: center;">
                     <tr class="top bg pd">
-                        <th  v-for="(item,index) in titlearr1" class="title all topbt" :style="index == 0?{borderLeft:'none'}:''">{{item[$store.state.alllang]}}</th>
+                        <th  v-for="(item,index) in titlearr1" class="title all topbt" :style="index == titlearr1.length - 1?{borderRight:'1px solid #ebecf0'}:''">{{item[$store.state.alllang]}}</th>
                     </tr>
                     <tr class="top pd nbt" v-for="(item,index) in arr"  v-if="index>=(currentPage2-1)*10&&index<currentPage2*10">
                         <td class="title all">{{timeuse(item.timestamp-86400)}}</td>
                         <td class="title all">{{conversion(item.total_vol.toFixed(2))}}</td>
                         <td class="title all">{{conversion((item.total_tx_rate*100).toFixed(2))}}%</td>
                         <td class="title all">{{conversion(item.average_vol.toFixed(2))}}</td>
-                        <td class="title all">{{conversion((item.average_rate*100).toFixed(2))}}%</td>
+                        <td class="title all" style="borderRight:1px solid #ebecf0">{{conversion((item.average_rate*100).toFixed(2))}}%</td>
                     </tr>
                 </table>
-                <!-- <el-pagination
-                    @current-change="actuserPage"
-                    :current-page.sync="currentPage2"
-                    :page-size="10"
-                    layout="total, prev, pager, next"
-                    :total="arr.length" style="margin-top:40px;">
-                </el-pagination> -->
+               
 
                 <div style="width:300px;height:50px;margin:0 auto;margin-top:40px;" >
                     <span style="float:left;margin-top:7px;font-size:12px;color:#4f5f6e;" v-if="$store.state.alllang == 0">共 {{arr.length}} 条</span>
@@ -142,9 +131,9 @@ export default {
                     }]
                     },
                     titlearr:[['日期','Date'],['当日交易笔数','Daily Transactions'],['总交易笔数','Transactions'], ['增长率','Growth Rate']],
-                    titlearr1 :[['日期','Date'],['总交易量','Volume'],['总交易量增长率','Volume(Growth Rate)'], ['平均单笔交易金额','Average Volume'],['平均交易金额增长率','Average Volume(Growth Rate)']],
+                    titlearr1 :[['日期','Date'],['总交易量','Volume'],['总交易量增长率','Volume(Growth Rate)'], ['平均单笔交易量','Average Volume'],['平均交易量增长率','Average Volume(Growth Rate)']],
                     arr:[],
-                    ttarr:[['交易笔数','Transactions'],['时间段','Period'],['交易总额','Volume']],
+                    ttarr:[['交易笔数','Transactions'],['时间段','Period'],['交易量','Volume'],['交易数据','Transaction Data']],
                     currentPage1:1,
                     currentPage2:1,
                     mglf:'',
@@ -159,6 +148,9 @@ export default {
             }
         },
     created(){
+            this.$store.commit('changemenuflag',false)
+            this.$store.commit('changeloadopacty',true)
+            this.$store.commit('changeloadflge',true)
             this.geth = window.innerHeight - 60 + 'px'
             var now = new Date(new Date().setHours(0, 0, 0, 0)) - 0
             var now1 = now -  86400000 * 14
@@ -173,13 +165,20 @@ export default {
                 this.fornew()
                 this.fornewflag = true
             },50)
+            if(this.$store.state.themenuflag){
+                    this.open = 253+'px'
+                    this.mglf = 503+'px'
+                }else{
+                    this.open = ''
+                    this.mglf = ''
+                }
         },
         mounted(){
             this.drawall() 
         },
         computed:{
             addclose(){
-                return this.$store.state.close 
+                return this.$store.state.themenuflag 
             },
             thelang(){
                 return this.$store.state.alllang 
@@ -188,13 +187,20 @@ export default {
         watch:{
             addclose(n,o){
                 if(n){
-                    this.open = 303+'px'
-                    this.mglf = 658+'px'
+                    this.open = 253+'px'
+                    this.mglf = 503+'px'
                 }else{
                     this.open = ''
                     this.mglf = ''
                 }
-                this.drawall() 
+                // this.drawall() 
+                var newchart = setInterval(()=>{
+                    window.tradenum.reflow()
+                    window.alltrade.reflow()
+                },17)
+                setTimeout(()=>{
+                    clearInterval(newchart)
+                },1010)
             },
             value7(n,o){
                 console.log(n)
@@ -227,10 +233,10 @@ export default {
         drawall(){
             
                 setTimeout(()=>{
-                    this.drawuser('tradenum',this.xarr,this.timearr,this.ttarr[0][this.$store.state.alllang])
+                    this.drawuser('tradenum',this.xarr,this.timearr,this.ttarr[0][this.$store.state.alllang],'tradenum')
                 },1000)
                 setTimeout(()=>{
-                    this.drawuser('alltrade',this.xarr,this.allarr,this.ttarr[2][this.$store.state.alllang])
+                    this.drawuser('alltrade',this.xarr,this.allarr,this.ttarr[2][this.$store.state.alllang],'alltrade')
                 },1000)  
             
             
@@ -248,7 +254,7 @@ export default {
             }
             return year+'-'+month+'-'+day 
         },
-        drawuser(aa,arr1,arr2,string){
+        drawuser(aa,arr1,arr2,string,windname){
              var options={   //hchart的参数
 			        chart: {
 			            zoomType: 'xy'
@@ -256,6 +262,7 @@ export default {
 			        title: {
 			            text: ''
                     },
+                    colors:['#409efe','#00e175','#ff0a50','black'],
                     credits: {
                         enabled: false
                     },
@@ -271,13 +278,13 @@ export default {
 				            labels: {
 				                format: '{value}',
 				                style: {
-				                    color: '#2E7DFF'
+				                    color: '#409efe'
 				                }
 				            },
 				            title: {
 				                text: string,
 				                style: {
-				                    color:'#2E7DFF'
+				                    color:'#409efe'
 				                }
 				            }
 				        }
@@ -295,10 +302,10 @@ export default {
 			        ]
 				}
                 // this.chart = new Highcharts.Chart(chartContainer, options)
-                var chart = Highcharts.chart(aa,options)
+                window[windname] = Highcharts.chart(aa,options)
                 
 	        	    window.onresize = function () {
-	        	    	 chart.reflow();
+	        	    	 window[windname].reflow();
 	        	    }
         },
         newuserPage(val){
@@ -326,10 +333,7 @@ export default {
                                         res.data.msg.tx_info.forEach((a,bb) => {
                                             if(bb < res.data.msg.tx_info.length -1){
                                                 this.arr.push(a)
-                                            }
-                                                
-                                            
-                                            
+                                            }                                          
                                         })
                                         
                                         this.arr.forEach((e) => {
@@ -344,7 +348,7 @@ export default {
                                             
                                             
                                         });
-                                        
+                                        this.$store.commit('changeloadopacty',false)
                                     })
         }
     }
@@ -353,21 +357,31 @@ export default {
 
 <style scoped>
 .out{
-    margin-left: 358px;
-    margin-top: 117px;
+    margin-left: 321px;
+    margin-top: 102px;
     padding-left: 1px;
-    margin-right: 40px;
+    margin-right: 30px;
     box-sizing: border-box;
     overflow: visible;
+    transition: all 0.5s;
 }
 .leftme{
     position: fixed;
+    z-index: 100;
     top: 60px;
     left: 73px;
+    transition: all 0.5s;
 }
 .contright{
     width: 100%;
     box-sizing: border-box;
+}
+.alltitle{
+    margin-top: 50px;
+    margin-bottom: 30px;
+    text-align: left;
+    font-size: 24px;
+    color: #c1c7cd;
 }
 .dapp{
     width: 100%;
@@ -376,8 +390,8 @@ export default {
     margin-right: 20px;
     padding: 30px;
     box-sizing: border-box;
-    box-shadow: 1px 1px 10px 0px 
-		rgba(2, 121, 255, 0.1);
+    box-shadow: 3px 2px 10px 0px 
+		rgba(37, 48, 76, 0.08);
 }
 .top{
     height: 55px;
@@ -387,10 +401,16 @@ export default {
     padding-left: 30px;
     box-sizing: border-box;
     text-align: left;
-    border-bottom: 1px solid #ececec;
+    border-bottom: 1px solid #ebecf0;
 }
 .bg{
     background-color: #f9f9f9;
+}
+.bg .all{
+    color:#4f5f6e;
+}
+.nbt .all{
+    color:#808c9b;
 }
 .pd{
     padding-left: 0px;
@@ -398,23 +418,45 @@ export default {
 .all{
     text-align: center;
     height: 51px;
-    border-bottom: 1px solid #ececec;
-    border-left: 1px solid #ececec;
+    border-bottom: 1px solid #ebecf0;
+    border-left: 1px solid #ebecf0;
     white-space: nowrap;
+    font-size: 14px;
 }
 .topbt{
-    border-top: 1px solid #ececec;
+    border-top: 1px solid #ebecf0;
 }
 .nbt .all:nth-of-type(1){
-    border-left: none;  
+    /* border-left: none;   */
 }
 </style>
 <style>
+.el-input__inner{
+    border: 1px solid #f7f8fa;
+}
+.el-input__inner:hover{
+    border-color:#f7f8fa;
+}
 .el-range-editor.el-input__inner{
     border-radius: 20px;
-    background-color: #edeff7;
+    background-color: #f7f8fa;
 }
 .el-range-editor .el-range-input{
-    background-color: #edeff7;
+    background-color: #f7f8fa;
+}
+.el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
+    width:350px;
+}
+.el-icon-date:before{
+    content:'';
+}
+.el-pager li.active{
+    color:rgb(73,165,251);
+}
+.el-pager li:hover{
+    color:#49a5fb;
+}
+.el-pagination{
+    font-weight:400;
 }
 </style>

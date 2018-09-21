@@ -1,5 +1,6 @@
 <template>
     <div class="out"  :style="{marginLeft:theleft}">
+        <!-- <p  class="alltitle">{{toparr[0][$store.state.alllang]}}</p> -->
         <div class="ranktb">
             <p class="title">{{toparr[0][$store.state.alllang]}}</p>
             <div class="searchbox">
@@ -8,10 +9,10 @@
             <p class="tips">"{{code}}"{{toparr[1][$store.state.alllang]}}</p>
             <table  width="100%" cellspacing='0' style="text-align: center;">
                 <tr class="top bg pd">
-                    <th class="all" v-for="(item,index) in titlearr">{{item[$store.state.alllang]}}</th>
+                    <th class="all" v-for="(item,index) in titlearr" :style="index==0?{borderLeft:'1px solid rgb(235, 236, 240)'}:''">{{item[$store.state.alllang]}}</th>
                 </tr>
                 <tr  class="top pd conthover" v-for="(item,index) in arr">
-                    <td class="title all">{{index+1+(currentPage1-1)*10}}</td>
+                    <td class="title all" style="border-left:1px solid rgb(235, 236, 240);">{{index+1+(currentPage1-1)*10}}</td>
                     <td class="title all hhvv cur" @click="gotodetail(item.dapp_id)"><div style="width:26px;height:26px;border-radius: 13px;backgroundImage:url(../../static/all1.png);display:inline-block;margin-top:5px;vertical-align:-5px;margin-right:10px;"></div>{{item.title}}</td>
                     <td class="title all">{{item.dapp_id.split('_')[0]}}</td>
                     <td class="title all">{{item.category}}</td>
@@ -27,7 +28,7 @@
                 :current-page.sync="currentPage1"
                 :page-size="10"
                 layout="total, prev, pager, next"
-                :total="all" style="margin-top:40px;">
+                :total="all" style="margin-top:30px;">
             </el-pagination>
         </div>
         
@@ -40,7 +41,7 @@ export default {
             data(){
                 return{
                     toparr:[['搜索中心','Search Center'],['搜索结果','Search Result'],['请输入搜索内容','Search…']],
-                    titlearr:[['序号','Serial Number'],['名称','Name'],['平台','Platform'],['类别','Category'],['简介','Introduction']],
+                    titlearr:[['序号','Serial Number'],['名称','Name'],['平台','Platform'],['分类','Category'],['简介','Introduction']],
                     arr:[],
                     currentPage1: 1,
                     code:'',
@@ -74,6 +75,8 @@ export default {
                 }
             },
             created(){
+                this.$store.commit('changeloadopacty',true)
+                this.$store.commit('changeloadflge',true)
                 let href = window.location.href;
                 if(href.indexOf('?')>-1){
                     console.log(window.location.href.split('?')[1].split('='||'&'))
@@ -93,9 +96,9 @@ export default {
             methods:{
                 cglf(n){
                     if(n){
-                        this.theleft='330px'
+                        this.theleft='280px'
                     }else{
-                        this.theleft='120px'
+                        this.theleft='100px'
                     }
                 },
                 handleSizeChange(val) {
@@ -121,6 +124,7 @@ export default {
                                         console.log(res.data.msg)
                                         this.all = res.data.msg.count
                                         this.arr = res.data.msg.dapp_list
+                                        this.$store.commit('changeloadopacty',false)
                                     })
                 },
                 serch(){
@@ -149,15 +153,24 @@ table td{
     margin-left: 330px;
     margin-top: 100px;
     padding-left: 1px;
+    transition: all 0.5s;
 }
 .ranktb{
      width: 98%;
      background-color: #fff;
+     min-height: 696px;
      box-sizing: border-box;
      padding: 0 40px;
-     padding-top: 69px;
+     padding-top: 50px;
      box-shadow: 1px 1px 10px 0px 
 		rgba(2, 121, 255, 0.1);
+    padding-bottom: 40px;
+}
+.alltitle{
+    margin-bottom: 30px; 
+    text-align: left;
+    font-size: 24px;
+    color: #c1c7cd;
 }
 .top{
     height: 55px;
@@ -172,23 +185,24 @@ table td{
 .title{
     font-size: 36px;
     color: #4f5f6e;
-    margin-bottom: 49px;
+    margin-bottom: 40px;
 }
 .searchbox{
     width: 600px;
     height: 60px;
     line-height: 60px;
     margin: 0 auto;
-    margin-bottom: 59px;
+    margin-bottom: 40px;
     border: solid 1px #ececec;
     padding: 20px;
     box-sizing: border-box;
 }
 .tips{
     font-size: 16px;
-    color: #111111;
+    color: rgb(33, 34, 41);
+    font-weight: 600;
     text-align: left;
-    margin-bottom: 13px;
+    margin-bottom: 20px;
 }
 .bg{
     background-color: #f9f9f9;
@@ -200,14 +214,22 @@ table td{
     text-align: center;
     height: 51px;
     font-size: 14px;
-    border-bottom: 1px solid #ececec;
+    border-right: 1px solid rgb(235, 236, 240);
+    border-bottom: 1px solid rgb(235, 236, 240);
     white-space: nowrap;
+    color: #808c9b;
+}
+.bg .all{
+    border-top: 1px solid rgb(235, 236, 240);
+    color: #4f5f6e;
 }
 .all:nth-of-type(1){
     width: 100px;
 }
 .all:nth-of-type(2){
     width: 250px;
+    padding-left: 20px;
+    box-sizing: border-box;
     text-align: left;
 }
 .all:nth-of-type(3){
@@ -217,6 +239,8 @@ table td{
     width: 150px;
 }
 .all:nth-of-type(5){
+    padding-left: 20px;
+    box-sizing: border-box;
     text-align: left;
 }
 .conthover:hover{
@@ -225,30 +249,7 @@ table td{
 .hhvv:hover{
     color: #409efe;
 }
-/* .all:nth-of-type(1){
-    width: 141px;
-}
-.all:nth-of-type(2){
-    width: 406px;
-}
-.all:nth-of-type(3){
-    width: 166px;
-}
-.all:nth-of-type(4){
-    width: 165px;
-}
-.all:nth-of-type(5){
-    width: 181px;
-}
-.all:nth-of-type(6){
-    width: 160px;
-}
-.all:nth-of-type(7){
-    width: 180px;
-}
-.all:nth-of-type(8){
-    width: 141px;
-} */
+
 
 </style>
 

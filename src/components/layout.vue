@@ -2,7 +2,8 @@
     <div>
         <go-search class="top"></go-search>
         <the-menu class="menu"></the-menu>
-        <router-view class="cont"/>
+        <my-load v-if="$store.state.loadflag"></my-load>
+        <router-view  class="cont"/>
         <the-foot class="foot" :style="{paddingLeft:theleft}"></the-foot>
     </div>
 </template>
@@ -11,11 +12,13 @@
 import goSearch from './gosearch'
 import theMenu from './menu'
 import theFoot from './allfoot'
+import myLoad from './loading';
 export default {
     components:{
                 goSearch,
                 theMenu,
-                theFoot
+                theFoot,
+                myLoad
             },
     data(){
         return{
@@ -54,13 +57,14 @@ export default {
     position: fixed;
     top: 0px;
     left:0px;
-    z-index: 9999;
+    z-index: 102;
 }
 .menu{
     margin-right: 10px;
     position: fixed;
-    top: 60px;
+    top: 0px;
     left: 0px;
+    z-index: 999;
 }
 .cont{
     overflow: hidden;

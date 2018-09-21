@@ -1,36 +1,51 @@
 <template>
     <div  class="out" :style="{minHeight:geth,marginLeft:mglf}" >
         <min-menu class="leftme" :style="{left:open}"></min-menu>
+        <!-- <p class="alltitle">{{ttarr[10][$store.state.alllang]}}</p> -->
         <div class="contright" v-if="arr.title">
             <!-- dapp介绍 -->
-            <div class="dapp" style="minHeight:600px;">
+            <div class="dapp" style="minHeight:610px;">
                 <div class="outtitle">
-                    <img :src="'../../static/icon/'+urlid+'.jpg'" alt="" class="titleimg" onerror="javascript:this.src='../../static/all1.png'">
+                    <img :src="'https://bkc-dapp-1252899312.cos.ap-hongkong.myqcloud.com/dappdata/static/icon/'+urlid+'.jpg'" alt="" class="titleimg" onerror="javascript:this.src='../../static/all1.png'">
                     <div class="title">
                         <p class="titlf">{{arr.title}}</p>
-                        <p class="titlty">{{arr.platform}}>{{arr.category}}</p>
+                        <p class="titlty">{{arr.platform}} > {{arr.category}}</p>
                     </div>
                 </div>
 
                 <!-- 轮播图 -->
-                <div class="pic topnav_box">
-                    <ul :style="allleng" class="allpic">
-                        <li v-for="(item,index) in picarr" class="outpic" v-show="imgcount"><img :src="'../../static/'+urlid+'/'+item+'.png'" alt="" onerror="javascript:this.src=''"  class="picwh"><img :src="'../../static/'+urlid+'/'+item+'.jpg'" alt="" onerror="javascript:this.src=''"  class="picwh"> </li>
+                <div class="pic topnav_box" >
+                    <ul :style="allleng" class="allpic"  v-show="picshow">
+                        <li v-for="(item,index) in picarr" class="outpic" v-show="imgcount"><img :src="'https://bkc-dapp-1252899312.cos.ap-hongkong.myqcloud.com/dappdata/static/'+urlid+'/'+item+'.png'" alt="" onerror="javascript:this.src=''"  class="picwh"><img :src="'https://bkc-dapp-1252899312.cos.ap-hongkong.myqcloud.com/dappdata/static/'+urlid+'/'+item+'.jpg'" alt="" onerror="javascript:this.src=''"  class="picwh"> </li>
                         <li v-for="(item,index) in picarr" class="inpic" v-show="!imgcount"><img :src="wrongarr[index]" alt="" onerror="javascript:this.src=''"  class="picwh"></li>
                     </ul>
                 </div>
                 
                 <div style="position:relative;">
                     <div class="intro">
-                        <p style="color:#111;font-size:16px;margin-bottom:19px;">{{ttarr[0][$store.state.alllang]}}</p>
-                        <p style="line-height:30px;font-size:14px;">{{arr.description}}</p>
+                        <p style="color:rgb(33, 34, 41);font-weight:600;font-size:16px;margin-bottom:10px;">{{ttarr[0][$store.state.alllang]}}</p>
+                        <p style="line-height:30px;font-size:14px; color: #797b8e;">{{arr.description}}</p>
                     </div>
 
                     <div class="info">
-                        <p style="color:#111;font-size:16px;margin-bottom:19px;">{{ttarr[1][$store.state.alllang]}}</p>
-                        <div  style="line-height:30px;font-size:14px;" class="cur base"><a :href="arr.website" target="_black"><img src="../../static/home.png" alt=""> {{ttarr[2][$store.state.alllang]}} <div class="go"></div></a></div>
-                        <div  style="line-height:30px;font-size:14px;" class="cur base"><a :href="arr.github" target="_black"><img src="../../static/GitHub.png" alt=""> {{ttarr[3][$store.state.alllang]}} <div class="go"></div></a></div>
-                        <div  style="line-height:30px;font-size:14px;" class="cur base"><a :href="theurl" target="_black"><img src="../../static/dapp.png" alt=""> {{ttarr[4][$store.state.alllang]}} <div class="go"></div></a></div>
+                        <p style="color:rgb(33, 34, 41);font-weight:600;font-size:16px;margin-bottom:10px;">{{ttarr[1][$store.state.alllang]}}</p>
+                        <div  style="line-height:30px;font-size:14px;" class="cur base">
+                            <a :href="arr.website" target="_black" rel="noopener noreferrer">
+                                <img src="../../static/home.png" alt=""> {{ttarr[2][$store.state.alllang]}} 
+                                <div class="go"></div>
+                            </a>
+                        </div>
+                        <div  style="line-height:30px;font-size:14px;" class="cur base">
+                            <a :href="arr.github?arr.github:'javascript:;'" :style="arr.github?{}:{color:'#ccc'}" target="_black" rel="noopener noreferrer">
+                                <img src="../../static/GitHub.png" alt=""> {{ttarr[3][$store.state.alllang]}} 
+                                <div class="go" v-if="arr.github"></div>
+                            </a>
+                        </div>
+                        <div  style="line-height:30px;font-size:14px;" class="cur base">
+                            <a :href="theurl?theurl:'javascript:;'" target="_black" :style="theurl?{}:{color:'#ccc'}" rel="noopener noreferrer">
+                                <img src="../../static/dapp.png" alt=""> {{ttarr[4][$store.state.alllang]}} <div class="go" v-if="theurl"></div>
+                            </a>
+                        </div>
                     </div>
                 </div>
                 
@@ -40,6 +55,7 @@
 
             <!-- 图表 -->
             <div class="picture">
+                <p style="font-size: 16px;color: #212229;margin-bottom:30px;text-align:left;font-weight:600;">{{ttarr[11][$store.state.alllang]}}</p>
                 <div id="thirtychart" style="min-width:500px;height:500px"></div>
             </div>  
 
@@ -51,7 +67,7 @@
     --感谢设计师@B.Q，所有的恐龙均为原画  </p>
                 </div> -->
                 <div class="newinfo">
-                    <p>{{ttarr[5][$store.state.alllang]}}</p>
+                    <p style="color: #212229;font-weight: 600;">{{ttarr[5][$store.state.alllang]}}</p>
                     <p style="line-height:30px;font-size:14px;"></p>
                 </div>
             </div>
@@ -97,7 +113,9 @@ export default {
                         ['累计用户','Users'],
                         ['交易量','Volume'],
                         ['调用次数','Transactions'],
-                        ['综合排名','Rankings']],
+                        ['综合排行','Rankings'],
+                        ['应用详情','Details'],
+                        ['近 30 日排名','Rank History']],
                 code:'',
                 theurl:'',
                 xarr:[],
@@ -107,32 +125,33 @@ export default {
                 allarr:[],
                 urlid:'',
                 //统计图片数量
-                imgcount:0
+                imgcount:0,
+                //轮播图显示
+                picshow:false
             }
         },
         created(){
+            this.$store.commit('changemenuflag',false)
+            this.$store.commit('changeloadopacty',true)
+            this.$store.commit('changeloadflge',true)
             this.geth = window.innerHeight - 60 + 'px',
             this.allleng = {'width':this.wrongarr.length*370+'px'}
                 setTimeout(()=>{
                     this.fornew()
                 },50)
-            
-            // let href = window.location.href;
-            //     if(href.indexOf('?')>-1){
-            //         console.log(window.location.href.split('?')[1].split('='||'&'))
-            //         var code = window.location.href.split('?')[1].split('=')[0];
-            //         var num = window.location.href.split('?')[1].split('=')[1];
-            //         console.log(num)
-            //         // this.code = num
-            //         // var num1 = num.split('_')[0]
-                   
-            //         // console.log(num1)
-            //         this.urlid = num
-            //     }
+            if(this.$store.state.themenuflag){
+                    this.open = 253+'px'
+                    this.mglf = 503+'px'
+                }else{
+                    this.open = ''
+                    this.mglf = ''
+                }
         },
         mounted(){
             setTimeout(()=>{
                 console.log(this.xarr)
+                console.log(this.$store.state.close)
+                
                 this.draw(this.xarr,this.userarr,this.usearr,this.tradearr,this.allarr,this.ttarr)
                 $('.outpic').each((a)=>{
                     console.log($('.outpic').eq(a)[0].children)
@@ -142,11 +161,6 @@ export default {
                     if($('.outpic').eq(a)[0].children[1].src.indexOf('jpg')!=-1||$('.outpic').eq(a)[0].children[1].src.indexOf('png')!=-1){
                         this.imgcount++
                     }
-                    // $(this).children.each((a)=>{
-                    //     if($(this).src.indexOf('jpg')!=-1||$(this).src.indexOf('png')!=-1){
-                    //         this.imgcount++
-                    //     }
-                    // })
                 })
                 console.log(this.imgcount)
                 if(this.imgcount){
@@ -161,7 +175,7 @@ export default {
         },
         computed:{
             addclose(){
-                return this.$store.state.close 
+                return this.$store.state.themenuflag 
             },
             thelang(){
                 return this.$store.state.alllang 
@@ -171,16 +185,19 @@ export default {
             addclose(n,o){
                 console.log(1111111111111)
                 if(n){
-                    this.open = 303+'px'
-                    this.mglf = 658+'px'
+                    this.open = 253+'px'
+                    this.mglf = 503+'px'
                 }else{
                     this.open = ''
                     this.mglf = ''
                 }
+               
+                var newchart = setInterval(()=>{
+                    window.chartsss.reflow()
+                },17)
                 setTimeout(()=>{
-                    
-                    this.draw(this.xarr,this.userarr,this.usearr,this.tradearr,this.allarr,this.ttarr)
-                },1000)
+                    clearInterval(newchart)
+                },1010)
             },
             thelang(n,o){
                 this.draw(this.xarr,this.userarr,this.usearr,this.tradearr,this.allarr,this.ttarr)
@@ -193,6 +210,7 @@ export default {
 			        chart: {
 			            zoomType: 'xy'
 			        },
+                    colors:['#409efe','#00e175','#ff0a50','#f48421'],
 			        title: {
 			            text: ''
 			        },
@@ -211,13 +229,13 @@ export default {
 				            labels: {
 				                format: '{value}',
 				                style: {
-				                    color: '#2E7DFF'
+				                    color: '#409efe'
 				                }
 				            },
 				            title: {
 				                text: arr6[6][this.$store.state.alllang],
 				                style: {
-				                    color:'#2E7DFF'
+				                    color:'#409efe'
 				                }
 				            }
 				        },
@@ -225,13 +243,13 @@ export default {
 				            title: {
 				                text: arr6[7][this.$store.state.alllang],
 				                style: {
-				                    color:'black'
+				                    color:'#00e175'
 				                }
 				            },
 				            labels: {
 				                format: '{value}',
 				                style: {
-				                    color:'black'
+				                    color:'#00e175'
 				                }
 				            },
 				            opposite: true
@@ -240,13 +258,13 @@ export default {
 				            title: {
 				                text: arr6[8][this.$store.state.alllang],
 				                style: {
-				                    color:'#90ed7d'
+				                    color:'#ff0a50'
 				                }
 				            },
 				            labels: {
 				                format: '{value}',
 				                style: {
-				                    color:'#90ed7d'
+				                    color:'#ff0a50'
 				                }
 				            },
 				            opposite: true
@@ -255,13 +273,13 @@ export default {
 				            title: {
 				                text: arr6[9][this.$store.state.alllang],
 				                style: {
-				                    color:'red'
+				                    color:'#f48421'
 				                }
 				            },
 				            labels: {
 				                format: '{value}',
 				                style: {
-				                    color:'red'
+				                    color:'#f48421'
 				                }
 				            },
 				            opposite: true
@@ -277,14 +295,14 @@ export default {
 				            name: arr6[6][this.$store.state.alllang],
 				            data: arr2,
                             type: 'spline',
-                            color:'#2E7DFF'
+                            
 				        },
 				        {  //纵坐标
 				            name: arr6[7][this.$store.state.alllang],
 				            data: arr4,
 				            type: 'spline',
                             yAxis: 1,
-                            color:'black',
+                            
                             // tooltip:{
                             //     valueDecimals: 2,
                             //     valuePrefix: '$',
@@ -296,23 +314,23 @@ export default {
 				            data: arr3,
 				            type: 'spline',
                             yAxis: 2,
-                            color:'#90ed7d'
+                            
 				        },
 				        {  //纵坐标
 				            name: arr6[9][this.$store.state.alllang],
 				            data: arr5,
 				            type: 'spline',
                             yAxis: 3,
-                            color:'red'
+                            
 				        }
 
 			        ]
 				}
                 // this.chart = new Highcharts.Chart(chartContainer, options)
-                var chart = Highcharts.chart('thirtychart',options)
+                window.chartsss = Highcharts.chart('thirtychart',options)
                 
 	        	    window.onresize = function () {
-	        	    	 chart.reflow();
+	        	    	 window.chartsss.reflow();
 	        	    }
             },
             fornew(){
@@ -329,6 +347,9 @@ export default {
                                     },{
                                         headers: {'Content-Type': "application/x-www-form-urlencoded"}
                                     }).then(res => {
+                                        setTimeout(()=>{
+                                            this.picshow = true
+                                        },1000)
                                         console.log(res.data.msg)
                                         this.arr = res.data.msg
                                         this.urlid = res.data.msg.dapp_id
@@ -344,10 +365,11 @@ export default {
                                             this.allarr.unshift(e.rank_order)
                                         });
                                         if(this.arr.platform == 'NAS'){
-                                            this.theurl = 'https://explorer.nebulas.io/address'+this.arr.contracts[0]
+                                            this.theurl = 'https://explorer.nebulas.io/#/address/'+this.arr.contracts[0]
                                         }else if(this.arr.platform == 'ETH'){
                                             this.theurl = 'https://etherscan.io/address/'+this.arr.contracts[0]
                                         }
+                                        this.$store.commit('changeloadopacty',false)
                                     })
             }
         }
@@ -356,12 +378,13 @@ export default {
 
 <style scoped>
 .out{
-    margin-left: 358px;
-    margin-top: 117px;
+    margin-left: 321px;
+    margin-top: 102px;
     padding-left: 1px;
-    margin-right: 40px;
+    margin-right: 30px;
     box-sizing: border-box;
     overflow: visible;
+    transition: all 0.5s;
 }
 a{
   text-decoration: none;
@@ -370,8 +393,17 @@ a{
 }
 .leftme{
     position: fixed;
+    z-index: 100;
     top: 60px;
     left: 73px;
+    transition: all 0.5s;
+}
+.alltitle{
+    margin-top: 50px;
+    margin-bottom: 30px;
+    text-align: left;
+    font-size: 24px;
+    color: #c1c7cd;
 }
 .contright{
     width: 100%;
@@ -381,11 +413,10 @@ a{
     width: 100%;
     background-color: #fff;
     padding: 30px;
-    border-radius: 6px;
     box-sizing: border-box;
     position: relative;
-    box-shadow: 1px 1px 10px 0px 
-		rgba(2, 121, 255, 0.1);
+    box-shadow: 3px 2px 10px 0px 
+		rgba(37, 48, 76, 0.08);
 }
 .titleimg{
     width:64px;
@@ -399,7 +430,9 @@ a{
 }
 .titlf{
     font-size: 24px;
+    font-weight: 600;
     color: #4f5f6e;
+    line-height: 34px;
 }
 .titlty{
     font-size: 16px;
@@ -407,11 +440,11 @@ a{
     margin-top: 10px;
 }
 .outtitle{
-    height: 95px;
+    height: 92px;
     border-bottom: 1px solid #eff3f5;
 }
 .pic{
-    height: 246px; 
+    height: 230px; 
     border-bottom: 1px solid #eff3f5; 
     margin-top: 30px;     
     overflow-X: scroll;                                                          
@@ -428,7 +461,7 @@ a{
 {  
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);  
     border-radius: 10px; 
-      background-color:#f1f1f1;    
+    background-color:#f1f1f1;    
     
 }
 .topnav_box::-webkit-scrollbar-thumb{
@@ -436,6 +469,7 @@ a{
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);  
    background-color:#c1c1c1;
 } 
+
 .allpic{
     height: 200px;
 }
@@ -457,11 +491,13 @@ a{
     box-sizing: border-box;
     text-align: left;
     margin-top: 30px;
+    border-top: 1px solid #eff3f5;
+    padding-top: 30px;
 }
 .info{
     width: 320px;
     position: absolute;
-    top: 0px;
+    top: 30px;
     right: 10px;
     text-align: left;
 }
@@ -471,11 +507,10 @@ a{
     background-color: #fff;
     margin-top: 30px;
     margin-right: 20px;
-    border-radius: 6px;
     padding: 30px;
     box-sizing: border-box;
-    box-shadow: 1px 1px 10px 0px 
-		rgba(2, 121, 255, 0.1);
+    box-shadow: 3px 2px 10px 0px 
+		rgba(37, 48, 76, 0.08);
 }
 .news{
     width: 100%;
@@ -499,8 +534,8 @@ a{
     width: 95%;
     margin-top: 30px;
     text-align: left;
-    box-shadow: 1px 1px 10px 0px 
-		rgba(2, 121, 255, 0.1);
+    box-shadow: 3px 2px 10px 0px 
+		rgba(37, 48, 76, 0.08);
 }
 .go{
     width: 14px;
@@ -513,5 +548,38 @@ a{
 }
 .base:hover .go{
     background-image: url(../../static/go1.png);
+}
+</style>
+<style>
+.el-input__inner{
+    border: 1px solid #f7f8fa;
+}
+.el-input__inner:hover{
+    border-color:#f7f8fa;
+}
+.el-range-editor.el-input__inner{
+    border-radius: 20px;
+    background-color: #f7f8fa;
+}
+.el-range-editor .el-range-input{
+    background-color: #f7f8fa;
+}
+.el-pagination{
+    font-weight:400;
+}
+.el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
+    width:350px;
+}
+.el-icon-date:before{
+    content:'';
+}
+.el-pager li.active{
+    color:rgb(73,165,251);
+}
+.el-pager li:hover{
+    color:#49a5fb;
+}
+.el-pagination{
+    font-weight:400;
 }
 </style>

@@ -1,41 +1,29 @@
 <template>
-    <div class="out" :style="{marginLeft:theleft}">
+    <div class="out" :style="{marginLeft:theleft,minWidth: '1144px'}">
+        <!-- <p class="alltitle">{{toptip[$store.state.alllang]}}</p> -->
         <the-sel></the-sel>
-        <div class="ranktb" style="minHeight:1000px;">
-            <div class="top">
+        <div class="ranktb" style="minHeight:955px;">
+            <div class="top" style="font-weight: 600;color:#212229;">
                  {{toptip[$store.state.alllang]}}
             </div>
             <table  width="100%" cellspacing='0' style="text-align: center;">
-                <tr class="top bg pd">
-                    <th  v-for="(item,index) in titlearr" class="title all" :style="{width:stylearr[index]}">{{item[$store.state.alllang]}}</th>
+                <tr class="top bg" style="color: rgb(70, 74, 88);">
+                    <th  v-for="(item,index) in titlearr" class="title all" :style="{width:stylearr[index],borderBottom:'2px solid #ebecf0'}">{{item[$store.state.alllang]}}</th>
                 </tr>
                 <tr  class="top pd" v-for="(item,index) in arr">
-                    <td class="title all">{{index+1+(currentPage1-1)*10}}</td>
-                    <td class="title all hhvv cur" @click="gotodetail(item.dapp_id)"><div class="ttimg"><img :src="'../../static/icon/'+item.dapp_id+'.jpg'" alt="" onerror="javascript:this.src='../../static/all1.png'" style="width:26px;height:26px;position:absolute;"></div>{{item.title}}</td>
-                    <td class="title all">
+                    <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{index+1+(currentPage1-1)*10}}</td>
+                    <td class="title all hhvv cur" @click="gotodetail(item.dapp_id)" :style="index == arr.length -1 ?{border:'none'}:''"><div class="ttimg"><img :src="'https://bkc-dapp-1252899312.cos.ap-hongkong.myqcloud.com/dappdata/static/icon/'+item.dapp_id+'.jpg'" alt="" onerror="javascript:this.src='../../static/all1.png'" style="width:26px;height:26px;position:absolute;"></div>{{item.title}}</td>
+                    <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">
                         <img src="../../static/up.png" alt="" v-if="item.change > 0" class="mgt">
                         <img src="../../static/down.png" alt="" v-if="item.change < 0" class="mgt" >
                         {{item.change}}</td>
-                    <td class="title all">{{conversion(item.total_call.toString())}}</td>
-                    <td class="title all">{{conversion(item.day_call.toString())}}</td>
-                    <td class="title all">{{conversion(item.call_rate.toFixed(2))}}%</td>
-                    <td class="title all">{{item.category}}</td>
+                    <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{conversion(item.total_call.toString())}}</td>
+                    <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{conversion(item.day_call.toString())}}</td>
+                    <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{conversion(item.call_rate.toFixed(2))}}%</td>
+                    <td class="title all" :style="index == arr.length -1 ?{border:'none',textTransform:'capitalize'}:{textTransform:'capitalize'}">{{item.category}}</td>
                 </tr>
             </table>
-            <!-- <div  class="top bg pd">
-                <div v-for="(item,index) in titlearr" class="title all">{{item}}</div>
-            </div>
-            <div class="top pd" v-for="(item,index) in arr">
-                <div v-for="(it,ind) in titlearr" class="title all">{{item}}</div>
-            </div> -->
-            <!-- <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page.sync="currentPage1"
-                :page-size="10"
-                layout="total, prev, pager, next"
-                :total="all" style="margin-top:40px;" v-if="arr.length>=1">
-            </el-pagination> -->
+            
             <div style="width:300px;height:50px;margin:0 auto;margin-top:40px;"  v-if="arr.length>=1">
                 <span style="float:left;margin-top:7px;font-size:12px;color:#4f5f6e;" v-if="$store.state.alllang == 0">共 {{all}} 条</span>
                 <span style="float:left;margin-top:7px;font-size:12px;color:#4f5f6e;" v-if="$store.state.alllang == 1">Total {{all}} items</span>
@@ -62,7 +50,7 @@ export default {
             data(){
                 return{
                     toptip:['合约调用排行','Transactions'],
-                    titlearr:[[' ',' '],['名称','Name'],['变动情况','Changes'],['总调用次数','Transactions'],['当日调用次数','Daily Transactions'],['增长率','Growth Rate'],['分类','Category']],
+                    titlearr:[[' ',' '],['名称','Name'],['变动情况','Changes'],['调用次数','Transactions'],['当日调用次数','Daily Transactions'],['增长率','Growth Rate'],['分类','Category']],
                     arr:[],
                     currentPage1: 1,
                     //请求数组
@@ -70,7 +58,7 @@ export default {
                     reqAarr:['ETH','EOS','NAS'],
                     allmoney:[['total','exchanges','games','high-risk','marketplaces','gambling','other'],['total','game','tool','exchange','other'],['total','Game','Tool','Market','Other']],
                     all:'',
-                    theleft:'330px',
+                    theleft:'280px',
                     stylearr:['','','100px','','','','']
                 }
             },
@@ -91,6 +79,7 @@ export default {
             },
             watch:{
                 themoney(n,o){
+                    this.currentPage1 = this.$store.state.yourpage
                     this.fornew()
                 },
                 thetime(n,o){
@@ -105,10 +94,13 @@ export default {
                 }
             },
             created(){
+                this.$store.commit('changeloadopacty',true)
+                this.$store.commit('changeloadflge',true)
                 setTimeout(()=>{
                     this.fornew()
                 },50)
                 this.cglf(this.$store.state.themenuflag)
+                this.currentPage1 = this.$store.state.yourpage
             },
             methods:{
                 //数字字符串添加逗号
@@ -121,9 +113,9 @@ export default {
                 },
                 cglf(n){
                     if(n){
-                        this.theleft='330px'
+                        this.theleft='280px'
                     }else{
-                        this.theleft='120px'
+                        this.theleft='100px'
                     }
                 },
                 handleSizeChange(val) {
@@ -131,10 +123,11 @@ export default {
                 },
                 handleCurrentChange(val) {
                     console.log(`当前页: ${val}`);
+                    this.$store.commit('savepage',val)
                     this.fornew()
                 },
                 gotodetail(a){
-                    this.$store.commit('falsemenu',false)
+                    // this.$store.commit('falsemenu',false)
                     this.$router.push({path:'/detail?id='+a});
                 },
                 //请求数据函数
@@ -154,6 +147,7 @@ export default {
                                         console.log(res.data.msg)
                                         this.all = res.data.msg.count
                                         this.arr = res.data.msg.data.data
+                                        this.$store.commit('changeloadopacty',false)
                                     })
                 }
             }
@@ -173,26 +167,30 @@ table td{
     margin-left: 330px;
     margin-top: 100px;
     padding-left: 1px;
+    transition: all 0.5s;
 }
 .ranktb{
      width: 98%;
      /* height: 899px; */
      padding-bottom: 59px;
      background-color: #fff;
-     margin-top: 30px;
-     border-radius: 6px;
-     box-shadow: 1px 1px 10px 0px 
-		rgba(2, 121, 255, 0.1);
+     padding: 28px 30px 30px 30px;
+     box-sizing: border-box;
+     margin-top: 25px;
+     box-shadow: 3px 2px 10px 0px 
+		rgba(37, 48, 76, 0.08);
+}
+.alltitle{
+    margin-bottom: 30px; 
+    text-align: left;
+    font-size: 24px;
+    color: #c1c7cd;
 }
 .top{
-    height: 75px;
-    line-height: 71px;
     font-size: 16px;
-    color: #111111;
-    padding-left: 30px;
+    color: #797b8e;
     box-sizing: border-box;
     text-align: left;
-    border-bottom: 1px solid #ececec;
 }
 .title{
     /* float: left; */
@@ -210,20 +208,24 @@ table td{
     position: relative;
 }
 .bg{
-    background-color: #f9f9f9;
+    /* background-color: #f9f9f9; */
 }
 .pd{
     padding-left: 0px;
 }
 .all{
-    text-align: center;
+    text-align: right;
+    padding-right: 20px;
+    box-sizing: border-box;
     height: 71px;
+    font-size: 14px;
     border-bottom: 1px solid #ececec;
     white-space: nowrap;
     position: relative;
 }
 .all:nth-of-type(1){
     width: 100px;
+    text-align: center;
 }
 .all:nth-of-type(2){
     text-align: left;
@@ -262,6 +264,27 @@ table td{
     width: 155px;
 } */
 
+
+</style>
+<style>
+.el-pagination{
+    font-weight:400;
+}
+.el-icon-date:before {
+    content: "";
+}
+.el-input__inner{
+    border: 1px solid #edeff7;
+}
+.el-input__inner:hover{
+    border-color:#edeff7;
+}
+.el-pager li.active{
+    color:rgb(73,165,251);
+}
+.el-pager li:hover{
+    color:#49a5fb;
+}
 
 </style>
 

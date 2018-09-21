@@ -1,15 +1,15 @@
 <template>
     <div class="menu" :style="{minHeight:geth,width:loww}">
-        <div class="lock">
-            <!-- <div class="right cur" @click="closemenu"></div> -->
-        </div>
-        <div v-for="(item,index) in mearr" >
-            <div class="lock lockh " :style="index == select?{color:'#409efe'}:''">
-                <img :src="item.img" alt="" class="left mg1 cur"  @click="gotoother(index,true)">
-                <span  class="left mg2 cur"  @click="gotoother(index,true)">{{item.word[$store.state.alllang]}}</span>
-                <img :src="item.icon" alt="" @click="changeflag(index)" class="cur">
+        
+        <div v-for="(item,index) in mearr" class="outlock">
+            <div class="lock lockh " :style="index == select?{color:'#48a5fb',backgroundColor:'#f6f9fb'}:''"  @click="gotoother(index,true)">
+                <img :src="item.img" alt="" class="left mg1 cur" >
+                <span  class="left mg2 cur" >{{item.word[$store.state.alllang]}}</span>
+                <img :src="item.icon" alt="" @click.stop="changeflag(index)" class="cur">
             </div>
-            <div v-if="item.address.length > 0&&item.flag" v-for="(itt,indd) in item.address" class="adflow cur" @click="run(index,item.posi[indd],index)">{{itt[$store.state.alllang]}}</div>
+            <div v-if="item.address.length > 0&&item.flag" v-for="(itt,indd) in item.address" :class="{'adflow':true,'cur':true,'nobot':indd==item.address.length-1}" @click="run(index,item.posi[indd],index)" :style="">
+                {{itt[$store.state.alllang]}}
+            </div>
         </div>
         
 
@@ -25,7 +25,7 @@ export default {
             //菜单数组
             mearr:[
             {word:['应用详情','Details'],img:'../../static/an.png'},
-            {word:['用户分析','User Analysis'],img:'../../static/an.png',icon:'../../static/downcld.png',flag:false,address:[['用户总数','Users'],['新用户数','New users'],['活跃用户','Active Users']],posi:[0,630,1920]},
+            {word:['用户分析','User Analysis'],img:'../../static/an.png',icon:'../../static/downcld.png',flag:false,address:[['累计用户','Users'],['新增用户','New users'],['活跃用户','Active Users']],posi:[0,630,1920]},
             {word:['交易数据','Transaction Data'],img:'../../static/an.png',icon:'../../static/downcld.png',flag:false,address:[['交易笔数','Transactions'],['交易总额','Volume']],posi:[0,1300]},
             // {word:['合约调用','Transactions'],img:'../../static/an.png',icon:'../../static/downcld.png',flag:false,address:[['调用次数','Transactions'],['实时调用','nowcall']],posi:[0,1350]}
             {word:['合约调用','Transactions'],img:'../../static/an.png'}
@@ -36,6 +36,8 @@ export default {
             loww:'',
             //显示选中
             select:0,
+            //子类选中
+            minselect:0,
             urlid:''
         }
     },
@@ -56,7 +58,7 @@ export default {
         console.log(this.$route.path)
          this.mearr=[
                 {word:['应用详情','Details'],img:'../../static/an.png'},
-                {word:['用户分析','User Analysis'],img:'../../static/an.png',icon:'../../static/downcld.png',flag:false,address:[['用户总数','Users'],['新用户数','New users'],['活跃用户','Active Users']],posi:[0,630,1920]},
+                {word:['用户分析','User Analysis'],img:'../../static/an.png',icon:'../../static/downcld.png',flag:false,address:[['累计用户','Users'],['新增用户','New users'],['活跃用户','Active Users']],posi:[0,630,1920]},
                 {word:['交易数据','Transaction Data'],img:'../../static/an.png',icon:'../../static/downcld.png',flag:false,address:[['交易笔数','Transactions'],['交易总额','Volume']],posi:[0,1300]},
                  {word:['合约调用','Transactions'],img:'../../static/an.png'}
             ]
@@ -94,7 +96,7 @@ export default {
                 // this.mearr[3].img = '../../static/an.png'
                 this.mearr=[
                     {word:['应用详情','Details'],img:'../../static/an.png'},
-                    {word:['用户分析','User Analysis'],img:'../../static/an.png',icon:'../../static/downcld.png',flag:false,address:[['用户总数','Users'],['新用户数','New users'],['活跃用户','Active Users']],posi:[0,630,1920]},
+                    {word:['用户分析','User Analysis'],img:'../../static/an.png',icon:'../../static/downcld.png',flag:false,address:[['累计用户','Users'],['新增用户','New users'],['活跃用户','Active Users']],posi:[0,630,1920]},
                     {word:['交易数据','Transaction Data'],img:'../../static/an.png',icon:'../../static/downcld.png',flag:false,address:[['交易笔数','Transactions'],['交易总额','Volume']],posi:[0,1300]},
                     {word:['合约调用','Transactions'],img:'../../static/an.png'}
                 ]
@@ -141,7 +143,32 @@ export default {
             }
             console.log(ab)
             setTimeout(() => {
-              window.scrollTo(0,ab)
+              var bbc = document.documentElement.scrollTop || document.body.scrollTop; 
+              if(bbc < ab){
+                  var toscroll =  setInterval(()=>{
+                    bbc = bbc + 100
+                    if(bbc >= ab){
+                        window.scrollTo(0,ab)
+                        clearInterval(toscroll)
+                        return
+                    }
+                    
+                    window.scrollTo(0,bbc)
+                },10)
+              }else if(bbc > ab){
+                  var toscroll =  setInterval(()=>{
+                    bbc = bbc - 100
+                    if(bbc <= ab){
+                        window.scrollTo(0,ab)
+                        clearInterval(toscroll)
+                        return
+                    }
+                   
+                    window.scrollTo(0,bbc)
+                },10)
+              }else{
+
+              }
           }, 500);
         }
     }
@@ -150,17 +177,26 @@ export default {
 
 <style scoped>
 .menu{
-    width: 250px;
+    width: 220px;
     height: 100%;
+    padding-top: 52px;
     background-color: #fff;
 }
+.outlock{
+    overflow: hidden;
+    margin-bottom: 61px;
+}
 .lock{
-    width: 250px;
-    height: 70px;
+    width: 220px;
+    height: 40px;
     float: left;
-    line-height: 70px;
+    line-height: 40px;
     color: #4f5f6e;
     font-size: 16px;
+    
+}
+.lock:hover .mg2{
+    color: #49a5fb;  
 }
 .lock1{
     width: 70px;
@@ -189,8 +225,8 @@ export default {
 .mg1{
     width: 6px;
     height: 6px;
-    margin-left: 51px;
-    margin-top: 32px;
+    margin-left: 26px;
+    margin-top: 16px;
 }
 .leftl{
     margin-left: 19px;
@@ -199,19 +235,24 @@ export default {
     margin-left: 30px;
 }
 .lockh:hover{
-    background-color: #ecf5ff;
+    color: #48a5fb;
 }
 .adflow{
-    width: 250px;
+    width: 220px;
     height: 35px;
     line-height: 35px;
+    font-size: 14px;
+    color: #808c9b;
     box-sizing: border-box;
-    padding-left: 100px;
+    padding-left: 62px;
     float: left;
     text-align: left;
     margin-bottom: 20px;
 }
 .adflow:hover{
-    background-color: #ecf5ff;
+    color:#48a5fb;
+}
+.nobot{
+    margin-bottom: 0px;
 }
 </style>

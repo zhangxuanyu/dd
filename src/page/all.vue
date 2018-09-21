@@ -1,36 +1,41 @@
 <template>
-    <div class="cont" :style="{marginLeft:theleft}">
+    <div class="cont" :style="{marginLeft:theleft,minWidth: '1144px'}">
         <!-- 币种 -->
-        <div class="card" v-for="item in arr" :style="{width:cdwd}">
+        
+        <div class="card_flex">
+            <div class="card" v-for="(item,index) in arr" :style="{width:cdwd}">
 
 
 
-            <p class="title">{{item.word}}</p>
-            <div  class="card_out">
-                <div v-for="it in item.data" class="card_in">
-                    <p class="subtitle">{{it.word[$store.state.alllang]}}</p>
-                    <p class="tips">(24h)</p>
-                    <p class="numbers">{{it.num}}</p>
-                    <p class="subtitle" :style="it.add > 0?{color:'#00d994'}:it.add < 0?{color:'#ff0a50'}:{color: '#808c9b'}">
-                    <img src="../../static/up.png" alt="" v-if="it.add > 0" class="mgt">
-                    <img src="../../static/down.png" alt="" v-if="it.add < 0" class="mgt" >
-                    {{it.add>0?'+'+it.add:it.add}}%
-                    </p>
+                <p class="title">{{item.word}}</p>
+                <div class="dappnum">{{dappnumtips[$store.state.alllang]}}：{{item.num}}</div>
+                <div  class="card_out">
+                    <div v-for="(it,inde) in item.data" class="card_in">
+                        <p class="subtitle"><img :src="inde == 1?it.img:''" alt="" :style="index == 2?{position:'absolute',top:'-1px',left:'0px'}:{position:'absolute',top:'-1px',left:'5px'}">{{it.word[$store.state.alllang]}}</p>
+                        <p class="tips">(24h)</p>
+                        <p class="numbers">{{it.num}}</p>
+                        <p class="subtitle" :style="it.add > 0?{color:'#1ccfa7'}:it.add < 0?{color:'#f85e70'}:{color: 'rgb(167, 174, 182);'}">
+                        <img src="../../static/up.png" alt="" v-if="it.add > 0" class="mgt">
+                        <img src="../../static/down.png" alt="" v-if="it.add < 0" class="mgt" >
+                        {{it.add>0?'+'+it.add:it.add}}%
+                        </p>
+                    </div>
                 </div>
+                
             </div>
-            
+
         </div>
 
         <!-- 曲线图 -->
         <div class="picture">
-            <p style="height:40px;"><span class="left lefttips">{{pictt[$store.state.alllang]}}</span>
+            <p style="margin-right: -15px;margin-bottom:60px;"><span class="left lefttips">{{pictt[$store.state.alllang]}}</span>
             <span class="right cur righttype" @click="chat(2)" :style="color3">{{adduser[$store.state.alllang]}}</span>
             <span class="right cur righttype" @click="chat(1)"  :style="color2">{{alluser[$store.state.alllang]}}</span>
             <span class="right cur righttype" @click="chat(0)"  :style="color1">{{calltimes[$store.state.alllang]}}</span></p>
             <div id="mychart" style="min-width:400px;height:400px"></div>
         </div> 
 
-        <!-- <img :src="'../../static/'+uashdj+'/'+item+'.png'" alt="" v-for="item in 5" onerror="javascript:this.src=''" style="width:350px;height:200px;">          -->
+       
 
     </div>
 </template>
@@ -51,30 +56,33 @@ export default {
         return{
             arr:[{
                 word:'ETH',
+                num:0,
                 data:[
-                    {img:'../../static/inuser.png',word:['活跃用户','Active Users'],num:'',add:''},
-                    {img:'../../static/intrade.png',word:['交易量','Volume'],num:'',add:''},
-                    {img:'../../static/inuse.png',word:['调用次数','Transactions'],num:'',add:''}
+                    {img:'../../static/ETH-1.png',word:['活跃用户','Active Users'],num:'',add:''},
+                    {img:'../../static/ETH-1.png',word:['交易量','Volume'],num:'',add:''},
+                    {img:'../../static/ETH-1.png',word:['调用次数','Transactions'],num:'',add:''}
                 ]
             },
             {
                 word:'EOS',
+                num:0,
                 data:[
-                    {img:'../../static/inuser.png',word:['活跃用户','Active Users'],num:'',add:''},
-                    {img:'../../static/intrade.png',word:['交易量','Volume'],num:'',add:''},
-                    {img:'../../static/inuse.png',word:['调用次数','Transactions'],num:'',add:''}
+                    {img:'../../static/EOS-1.png',word:['活跃用户','Active Users'],num:'',add:''},
+                    {img:'../../static/EOS-1.png',word:['交易量','Volume'],num:'',add:''},
+                    {img:'../../static/EOS-1.png',word:['调用次数','Transactions'],num:'',add:''}
                 ]
             },
             {
                 word:'NAS',
+                num:0,
                 data:[
-                    {img:'../../static/inuser.png',word:['活跃用户','Active Users'],num:'',add:''},
-                    {img:'../../static/intrade.png',word:['交易量','Volume'],num:'',add:''},
-                    {img:'../../static/inuse.png',word:['调用次数','Transactions'],num:'',add:''}
+                    {img:'../../static/NAS-1.png',word:['活跃用户','Active Users'],num:'',add:''},
+                    {img:'../../static/NAS-1.png',word:['交易量','Volume'],num:'',add:''},
+                    {img:'../../static/NAS-1.png',word:['调用次数','Transactions'],num:'',add:''}
                 ]
             }],
             //切换图表
-            color1:{color:'#409efe',backgroundColor: '#ffffff',boxShadow: '2px 2px 11px 0px rgba(59, 140, 255, 0.3)',borderRadius:' 12px'},
+            color1:{color:'#409efe',backgroundColor: '#f5faff',borderRadius:' 12px'},
             color2:'',
             color3:'',
             //请求数组
@@ -86,30 +94,40 @@ export default {
             etharr:[],
             eosarr:[],
             uashdj:'wu wu',
-            theleft:'330px',
+            theleft:'280px',
             cdwd:'',
             clientHeight: 0,
             //图表改变宽度
             chartwd:'',
             // 图表文字切换
-            pictt:['整图趋势','Trend'],
+            toparr:['总览','Overview'],
+            pictt:['整体趋势','Trend'],
             adduser:['新增用户','New Users'],
             alluser:['累计用户','Users'],
-            calltimes:['调用次数','Transactions']
+            calltimes:['调用次数','Transactions'],
+            dappnumtips:['Dapps数量','Dapps'],
+            chartsss:'',
+            // 图表重绘
+            redrawflag:true
         }
     },
     created(){
-        this.fornew()
+        this.fornew(true)
         this.cglf(this.$store.state.themenuflag)
         var bbc = window.innerWidth
         console.log(parseInt(this.theleft))
         this.cdwd = (bbc - parseInt(this.theleft)-110)/3 + 'px'
         console.log(bbc - parseInt(this.theleft)-90)
+        //loading初始化
+        this.$store.commit('changeloadopacty',true)
+        this.$store.commit('changeloadflge',true)
     },
     mounted(){
-        setTimeout(()=>{
-            this.initChart(this.xarr,this.etharr,this.nasarr,this.eosarr)
-        },500)
+        
+        // setTimeout(()=>{
+        //     console.log(this.xarr)
+            
+        // },1000)
         const that = this;
         $(window).on('resize',function(){
             that.clientHeight = document.body.clientWidth
@@ -129,20 +147,30 @@ export default {
         clientHeight (val,o) {
             var bbc = window.innerWidth
             this.cdwd = (bbc - parseInt(this.theleft)-110)/3 + 'px'
+        },
+        redrawflag(){
+            setTimeout(()=>{
+                this.initChart(this.xarr,this.etharr,this.nasarr,this.eosarr)
+            },1000)
         }
     },
     methods:{
         cglf(n){
             if(n){
-                this.theleft='330px'
+                this.theleft='280px'
             }else{
-                this.theleft='120px'
+                this.theleft='100px'
             }
             var bbc = window.innerWidth
             this.cdwd = (bbc - parseInt(this.theleft)-110)/3 + 'px'
+            
+            var newchart = setInterval(()=>{
+                window.chartsss.reflow()
+            },17)
             setTimeout(()=>{
-                this.initChart(this.xarr,this.etharr,this.nasarr,this.eosarr)
-            },50)
+                // this.initChart(this.xarr,this.etharr,this.nasarr,this.eosarr)
+                clearInterval(newchart)
+            },1010)
         },
         initChart(arr1,arr2,arr3,arr4) {
 		    //   var chartContainer = document.getElementById('mychart')
@@ -150,6 +178,7 @@ export default {
 			        chart: {
 			            zoomType: 'xy'
 			        },
+                    colors:['#409efe','#00e175','#ff0a50'],
 			        title: {
 			            text: ''
 			        },
@@ -168,13 +197,13 @@ export default {
 				            labels: {
 				                format: '{value}',
 				                style: {
-				                    color: '#2E7DFF'
+				                    color: '#409efe'
 				                }
 				            },
 				            title: {
 				                text: 'ETH',
 				                style: {
-				                    color:'#2E7DFF'
+				                    color:'#409efe'
 				                }
 				            }
 				        },
@@ -182,13 +211,13 @@ export default {
 				            title: {
 				                text: 'EOS',
 				                style: {
-				                    color:'black'
+				                    color:'#00e175'
 				                }
 				            },
 				            labels: {
 				                format: '{value}',
 				                style: {
-				                    color:'black'
+				                    color:'#00e175'
 				                }
 				            },
 				            opposite: true
@@ -197,13 +226,13 @@ export default {
 				            title: {
 				                text: 'NAS',
 				                style: {
-				                    color:'#90ed7d'
+				                    color:'#ff0a50'
 				                }
 				            },
 				            labels: {
 				                format: '{value}',
 				                style: {
-				                    color:'#90ed7d'
+				                    color:'#ff0a50'
 				                }
 				            },
 				            opposite: true
@@ -234,11 +263,12 @@ export default {
 
 			        ]
 				}
-                // this.chart = new Highcharts.Chart(chartContainer, options)
-                var chart = Highcharts.chart('mychart',options1)
+                window.chartsss = Highcharts.chart('mychart',options1)
                 
 	        	    window.onresize = function () {
-	        	    	chart.reflow();
+                        // chart.reflow();
+                        
+                        window.chartsss.reflow()
 	        	    }
 
             },
@@ -247,24 +277,19 @@ export default {
                     this.color2 = ''
                     this.color3 = ''
                     this.select = a
-                    this.fornew()
+                    this.fornew(false)
                 if(a == 0){
-                    this.color1 = {color:'#409efe',backgroundColor: '#ffffff',boxShadow: '2px 2px 11px 0px rgba(59, 140, 255, 0.3)',borderRadius:' 12px'}
+                    this.color1 = {color:'rgb(73,165,251)',backgroundColor: '#f5faff',borderRadius:' 12px'}
                     
                 }else if(a == 1){
-                    this.color2 = {color:'#409efe',backgroundColor: '#ffffff',boxShadow: '2px 2px 11px 0px rgba(59, 140, 255, 0.3)',borderRadius:' 12px'}
+                    this.color2 = {color:'rgb(73,165,251)',backgroundColor: '#f5faff',borderRadius:' 12px'}
                     
                 }else if(a == 2){
-                    this.color3 = {color:'#409efe',backgroundColor: '#ffffff',boxShadow: '2px 2px 11px 0px rgba(59, 140, 255, 0.3)',borderRadius:' 12px'}
+                    this.color3 = {color:'rgb(73,165,251)',backgroundColor: '#f5faff',borderRadius:' 12px'}
                     
                 }
-                setTimeout(()=>{
-                    console.log(this.etharr)
-                    this.initChart(this.xarr,this.etharr,this.nasarr,this.eosarr)
-                },500)
-                
             },
-            fornew(){
+            fornew(aa){
                 this.xarr = []
                 this.etharr = []
                 this.nasarr = []
@@ -276,28 +301,58 @@ export default {
 						},{
 							headers: {'Content-Type': "application/x-www-form-urlencoded"}
 						}).then(res => {
-                            console.log(res.data.msg)
-                            this.arr[0].data[0].num = res.data.msg.change_24h.eth.user
-                            this.arr[0].data[0].add = (res.data.msg.change_24h.eth.user_rate*100).toFixed(2)
-                            this.arr[0].data[1].num = res.data.msg.change_24h.eth.vol.toFixed(0)
-                            this.arr[0].data[1].add = (res.data.msg.change_24h.eth.vol_rate*100).toFixed(2)
-                            this.arr[0].data[2].num = res.data.msg.change_24h.eth.tx
-                            this.arr[0].data[2].add = (res.data.msg.change_24h.eth.tx_rate*100).toFixed(2)
+                            console.log(res.data.msg) 
+                            var numtimes = 1
+                            if(aa){
+                                var numroll = setInterval(()=>{
+                                    if(numtimes>=90){
+                                        clearInterval(numroll)
+                                    }
+                                    numtimes++
+                                    this.arr[0].data[0].num = parseInt(res.data.msg.change_24h.eth.user/90*numtimes)
+                                    
+                                    this.arr[0].data[1].num = parseInt(res.data.msg.change_24h.eth.vol/90*numtimes)
+                                    
+                                    this.arr[0].data[2].num = parseInt( res.data.msg.change_24h.eth.tx/90*numtimes)
+                                    
+                                    this.arr[1].data[0].num = parseInt(res.data.msg.change_24h.eos.user/90*numtimes)
+                                    
+                                    this.arr[1].data[1].num = parseInt(res.data.msg.change_24h.eos.vol/90*numtimes)
+                                    
+                                    this.arr[1].data[2].num = parseInt(res.data.msg.change_24h.eos.tx/90*numtimes)
+                                  
+                                    this.arr[2].data[0].num = parseInt(res.data.msg.change_24h.nas.user/90*numtimes)
+                                    
+                                    this.arr[2].data[1].num = parseInt(res.data.msg.change_24h.nas.vol/90*numtimes)
+                                    
+                                    this.arr[2].data[2].num = parseInt(res.data.msg.change_24h.nas.tx/90*numtimes)
+                                    
+                                },20)
+                            }
+                                this.arr[0].data[0].num = res.data.msg.change_24h.eth.user 
+                                this.arr[0].data[0].add = (res.data.msg.change_24h.eth.user_rate*100).toFixed(2)
+                                this.arr[0].data[1].num = res.data.msg.change_24h.eth.vol.toFixed(0)
+                                this.arr[0].data[1].add = (res.data.msg.change_24h.eth.vol_rate*100).toFixed(2)
+                                this.arr[0].data[2].num = res.data.msg.change_24h.eth.tx
+                                this.arr[0].data[2].add = (res.data.msg.change_24h.eth.tx_rate*100).toFixed(2)
+    
+                                this.arr[1].data[0].num = res.data.msg.change_24h.eos.user
+                                this.arr[1].data[0].add = (res.data.msg.change_24h.eos.user_rate*100).toFixed(2)
+                                this.arr[1].data[1].num = res.data.msg.change_24h.eos.vol.toFixed(0)
+                                this.arr[1].data[1].add = (res.data.msg.change_24h.eos.vol_rate*100).toFixed(2)
+                                this.arr[1].data[2].num = res.data.msg.change_24h.eos.tx
+                                this.arr[1].data[2].add = (res.data.msg.change_24h.eos.tx_rate*100).toFixed(2)
+    
+                                this.arr[2].data[0].num = res.data.msg.change_24h.nas.user
+                                this.arr[2].data[0].add = (res.data.msg.change_24h.nas.user_rate*100).toFixed(2)
+                                this.arr[2].data[1].num = res.data.msg.change_24h.nas.vol.toFixed(0)
+                                this.arr[2].data[1].add = (res.data.msg.change_24h.nas.vol_rate*100).toFixed(2)
+                                this.arr[2].data[2].num = res.data.msg.change_24h.nas.tx
+                                this.arr[2].data[2].add = (res.data.msg.change_24h.nas.tx_rate*100).toFixed(2)
 
-                            this.arr[1].data[0].num = res.data.msg.change_24h.eos.user
-                            this.arr[1].data[0].add = (res.data.msg.change_24h.eos.user_rate*100).toFixed(2)
-                            this.arr[1].data[1].num = res.data.msg.change_24h.eos.vol.toFixed(0)
-                            this.arr[1].data[1].add = (res.data.msg.change_24h.eos.vol_rate*100).toFixed(2)
-                            this.arr[1].data[2].num = res.data.msg.change_24h.eos.tx
-                            this.arr[1].data[2].add = (res.data.msg.change_24h.eos.tx_rate*100).toFixed(2)
-
-                            this.arr[2].data[0].num = res.data.msg.change_24h.nas.user
-                            this.arr[2].data[0].add = (res.data.msg.change_24h.nas.user_rate*100).toFixed(2)
-                            this.arr[2].data[1].num = res.data.msg.change_24h.nas.vol.toFixed(0)
-                            this.arr[2].data[1].add = (res.data.msg.change_24h.nas.vol_rate*100).toFixed(2)
-                            this.arr[2].data[2].num = res.data.msg.change_24h.nas.tx
-                            this.arr[2].data[2].add = (res.data.msg.change_24h.nas.tx_rate*100).toFixed(2)
-
+                                this.arr[0].num = res.data.msg.count.eth
+                                this.arr[1].num = res.data.msg.count.eos
+                                this.arr[2].num = res.data.msg.count.nas
                             // this.xarr = res.data.msg.day_30d.eth_info
                             res.data.msg.day_30d.eth_info.forEach(e => {
                                 var ddd = new Date((e.timestamp-86400)*1000)
@@ -313,7 +368,8 @@ export default {
                             res.data.msg.day_30d.eos_info.forEach(e => {
                                 this.eosarr.unshift(e.value)
                             });
-                            
+                            this.$store.commit('changeloadopacty',false)
+                            this.redrawflag = !this.redrawflag
                         })
             }
     }
@@ -324,19 +380,38 @@ export default {
 .cont{
     margin-left: 330px;
     margin-top: 50px;
+    transition: all 0.5s;
 }
 .card{
-    min-width: 397px;
-    height: 300px;
+    min-width: 351px;
+    height: 262px; 
     background-color: #fff;
-    float: left;
+    /* float: left; */
     padding: 30px;
     box-sizing: border-box;
-    margin-top: 57px;
-    border-radius: 6px;
+    margin-top: 50px;
     margin-right: 30px;
-    box-shadow: 1px 1px 10px 0px 
-		rgba(2, 121, 255, 0.1);
+    box-shadow: 3px 2px 10px 0px 
+		rgba(37, 48, 76, 0.08);
+        position: relative;
+}
+.dappnum{
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    background-color: #f7f8fa;
+    height: 24px;
+    line-height: 24px;
+    font-size: 12px;
+    color: #797b8e;
+    padding: 0 20px;
+    border-radius: 12px;
+}
+.alltitle{
+    margin-top: 50px;
+    text-align: left;
+    font-size: 24px;
+    color: #c1c7cd;
 }
 .card:nth-of-type(1){
     background-image: url(../../static/ETH.png);
@@ -352,37 +427,42 @@ export default {
     background-image: url(../../static/NAS.png);
     background-position: center center;
     background-repeat: no-repeat;
+    
+}
+.card_flex{
+    display: flex;
+    justify-content:space-between;
 }
 .card_out{
     display: flex;
-    justify-content:space-between;
+    justify-content:space-around;
     text-align: center;
 }
 .card_in{
-    width: 115px;
-    height: 206px;
+    width: 97px;
     text-align: center;
 }
 .title{
-    font-size: 20px;
-    color: #111;
+    font-size: 18px;
+    color: #212229;
+    font-weight: 600;
     margin-bottom: 40px;
     text-align: left;
-    font-weight: 600;
 }
 .tips{
-    font-size: 14px;
-    color: #a8afb8;
+    font-size: 12px;
+    color: #797b8e;
     margin-bottom: 30px;
 }
 .subtitle{
-    color: #808c9b;
-    font-size: 16px;
+    color: #797b8e;
+    font-size: 14px;
+    position: relative;
 }
 .numbers{
-    font-size: 36px;
-    color: #4f5e70;
-    margin-bottom: 25px;
+    font-size: 30px;
+    color: #464a58;
+    margin-bottom: 20px;
 }
 .mgt{
     vertical-align: -3px;
@@ -390,21 +470,21 @@ export default {
 .picture{
     width: 100%;
     height: 500px;
-    border-radius: 6px;
     background-color: #fff;
     margin-top: 30px;
     float: right;
-    margin-right: 20px;
-    padding: 30px;
+    margin-right: 30px;
+    padding: 27px 30px 30px 60px;
     box-sizing: border-box;
-    box-shadow: 1px 1px 10px 0px 
-		rgba(2, 121, 255, 0.1);
+    box-shadow: 3px 2px 10px 0px 
+		rgba(37, 48, 76, 0.08);
 }
 .left{
     float: left;
 }
 .lefttips{
-    color: #161a29;
+    color: #212229;
+    font-weight: 600;
     font-size: 16px; 
 }
 .righttype{

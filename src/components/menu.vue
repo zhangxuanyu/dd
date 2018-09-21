@@ -1,24 +1,34 @@
 <template>
     <div class="menu" :style="{minHeight:geth,width:loww}">
+        
+        
         <div class="lock lotop" v-if="$store.state.themenuflag">
-            <div class="right cur" @click="closemenu"></div>
+            <img src="../../static/logo.png" alt="" class="logo cur" @click="gotoindex">
+            <!--  -->
         </div>
-        <div v-for="(item,index) in mearr" class="lock cur lockh" v-if="$store.state.themenuflag" :style="index == select?{color:'#3b8cff',backgroundColor:'#e0edff'}:''" @click="gotoother(index)">
-            <div class="leftblue" v-if="index == select"></div>
-            <img :src="item.img" alt="" class="left mg1">
+        <div v-for="(item,index) in mearr" class="lock cur lockh" v-if="$store.state.themenuflag" :style="index == select?{color:'#fff',backgroundColor:'#212b45'}:''" @click="gotoother(index)" @mouseenter="move(index)" @mouseleave="moveout">
+            <!-- <div class="leftblue" v-if="index == select"></div> -->
+            <!-- 改变背景图 -->
+            <div  class="left mg1" :style="{backgroundImage:'url('+item.img+')'}"></div>
+            <!-- <img :src="item.img" alt=""> -->
             <span  class="left mg2">{{item.word[$store.state.alllang]}}</span>
         </div>
 
-        <div class="lock1 lotop" v-if="!$store.state.themenuflag">
-            <div class="right cur rightl" @click="closemenu"></div>
-        </div>
-        <div  class="flpfont">
-            <div v-for="(item,index) in mearr" class="lock1 cur lockh flip" v-if="!$store.state.themenuflag" :style="index == select?{backgroundColor:'#e0edff'}:''" @click="gotoother(index)">
-                <img :src="item.img" alt="" class="left mg1 leftl">
-                <div class="flip1">
-                    <span>{{item.word[$store.state.alllang]}}</span>
+        <div v-if="!$store.state.themenuflag" style="width:70px;">
+            <div class="lock1 lotop" v-if="!$store.state.themenuflag">
+                <img src="../../static/logo1.png" alt="" class="logo1 cur" @click="gotoindex">
+                <!-- <div class="right cur rightl" @click="closemenu"></div> -->
+            </div>
+            <div  class="flpfont">
+                <div v-for="(item,index) in mearr" class="lock1 cur lockh flip" v-if="!$store.state.themenuflag" :style="index == select?{}:''" @click="gotoother(index)"  @mouseenter="move(index)" @mouseleave="moveout">
+                    <img :src="item.img" alt="" class="left mg1 leftl">
+                    <!-- 放上去显示分类 -->
+                    <!-- <div class="flip1">
+                        <span>{{item.word[$store.state.alllang]}}</span>
+                    </div> -->
                 </div>
             </div>
+
         </div>
         
         
@@ -34,7 +44,7 @@ export default {
             //菜单数组
             mearr:[
             {word:['总览','Overview'],img:'../../static/all2.png'},
-            {word:['综合排名','Rankings'],img:'../../static/rank2.png'},
+            {word:['综合排行','Rankings'],img:'../../static/rank2.png'},
             {word:['用户数量排行','Users'],img:'../../static/user1.png'},
             {word:['交易金额排行','Volume'],img:'../../static/money.png'},
             {word:['合约调用排行','Transactions'],img:'../../static/use.png'}
@@ -46,37 +56,77 @@ export default {
             //显示选中
             select:0,
             //页面收缩
+            // 记录图片列表
+            imglist:''
             
         }
     },
     created(){
         this.geth = window.innerHeight - 60 + 'px'
         console.log(this.$route.path)
-         
+        
         this.routechange(false)
+    },
+    computed:{
+        flgmenu(){
+            return this.$store.state.themenuflag
+        }
     },
     watch: {
         '$route' (to, from) {
             this.routechange(true)
+        },
+        flgmenu(n,o){
+            if(n){
+                this.loww = ''
+            }else{
+                this.loww = 70+'px'
+            }
         }
     },
     methods:{
-        closemenu(){
-            if(this.$store.state.themenuflag){
-                this.loww = 70+'px'
-            }else{
-                this.loww = ''
+        //深拷贝
+        deepclone(obj){
+            let _obj = JSON.stringify(obj),
+                objClone = JSON.parse(_obj);
+            return objClone
+        },
+        move(aa){
+            console.log(111111111111111)
+            console.log(this.imglist)
+            if(aa == 0){
+                this.mearr[aa].img = '../../static/all2.png'
+                
+            }else if(aa ==1){
+                this.mearr[aa].img = '../../static/rank1.png'
+                
+            }else if(aa == 2){
+                this.mearr[aa].img = '../../static/user2.png'
+                
+            }else if(aa == 3){
+                this.mearr[aa].img = '../../static/money1.png'
+                
+            }else if(aa ==4){
+                this.mearr[aa].img = '../../static/use1.png'
+                
             }
-            this.$store.commit('changemenuflag')
-            if(this.$route.path == '/detail'||this.$route.path == '/user'||this.$route.path == '/trade'||this.$route.path == '/usedapp'){
-                this.$store.commit('changeclose')
-            }
+            console.log(this.imglist)
+            console.log(this.mearr)
+        },
+        moveout(){
+            console.log(22222222222)
+            console.log(this.imglist)
+            this.mearr = this.deepclone(this.imglist)
+        },
+        gotoindex(){
+            this.$router.push({path:'/'});
         },
         gotoother(aa){
             this.select = aa
+            this.$store.commit('savepage',1)
             this.mearr=[
                 {word:['总览','Overview'],img:'../../static/all1.png'},
-                {word:['综合排名','Rankings'],img:'../../static/rank2.png'},
+                {word:['综合排行','Rankings'],img:'../../static/rank2.png'},
                 {word:['用户数量排行','Users'],img:'../../static/user1.png'},
                 {word:['交易金额排行','Volume'],img:'../../static/money.png'},
                 {word:['合约调用排行','Transactions'],img:'../../static/use.png'}
@@ -97,12 +147,18 @@ export default {
                 this.mearr[aa].img = '../../static/use1.png'
                 this.$router.push({path:'/use'});
             }
+            setTimeout(()=>{
+                this.imglist = this.deepclone(this.mearr)
+                console.log(this.imglist)
+            },50)
+            
             
         },
+        
         routechange(abc){
             this.mearr=[
                 {word:['总览','Overview'],img:'../../static/all1.png'},
-                {word:['综合排名','Rankings'],img:'../../static/rank2.png'},
+                {word:['综合排行','Rankings'],img:'../../static/rank2.png'},
                 {word:['用户数量排行','Users'],img:'../../static/user1.png'},
                 {word:['交易金额排行','Volume'],img:'../../static/money.png'},
                 {word:['合约调用排行','Transactions'],img:'../../static/use.png'}
@@ -124,16 +180,17 @@ export default {
                 this.mearr[4].img = '../../static/use1.png'
             }else if(this.$route.path == '/detail'||this.$route.path == '/user'||this.$route.path == '/trade'||this.$route.path == '/usedapp'){
                 this.select = -1
-                if(this.$store.state.themenuflag&&abc){
+                // if(this.$store.state.themenuflag&&abc){
                     
-                    this.$store.commit('changeclose')
-                }
-                this.$store.commit('falsemenu',false)
+                //     this.$store.commit('changeclose')
+                // }
+                // this.$store.commit('falsemenu',false)
                 
-                this.loww = 70+'px'
+                // this.loww = 70+'px'
             }else if(this.$route.path == '/search'){
                 this.select = -1
             }
+            this.imglist = this.deepclone(this.mearr)
         }
     }
 }
@@ -141,20 +198,22 @@ export default {
 
 <style scoped>
 .menu{
-    width: 300px;
+    width: 250px;
     height: 100%;
-    background-color: #fff;
+    background-color: #25304c;
     border-right: 1px solid #fafafb;
+    overflow: hidden;
+    transition: all 0.5s;
 }
 .lock{
-    width: 300px;
+    width: 250px;
     height: 70px;
     float: left;
     line-height: 70px;
-    color: #4f5f6e;
+    color: #a2aece;
     font-size: 16px;
     position: relative;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 .leftblue{
     position: absolute;
@@ -169,33 +228,37 @@ export default {
     height: 70px;
     float: left;
     line-height: 70px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     color: #4f5f6e;
 }
-.lotop{
+/* .lotop{
     border-bottom: 1px solid #fafafb;
+} */
+.logo{
+    margin-top: 10px;
+    float: left;
+    margin-left: 30px;
+}
+.logo1{
+    margin-top: 10px;
 }
 .right{
     float: right;
-    width: 19px;
-    height: 17px;
     margin-top: 20px;
     margin-right: 40px;
-    background-image: url(../../static/menu2.png);
+    
 }
 .rightl{
     margin-right: 29px;
 }
-.right:hover{
-    background-image: url(../../static/menu1.png);
-}
+
 .left{
     float: left;
 }
 .mg1{
     width: 24px;
     height: 24px;
-    margin-left: 51px;
+    margin-left:30px;
     margin-top: 20px;
 }
 .leftl{
@@ -205,7 +268,7 @@ export default {
     margin-left: 30px;
 }
 .lockh:hover{
-    background-color: #fafafb;
+    color:#d1d8e8;
 }
 .flip{
     transition: all 1s;

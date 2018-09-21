@@ -17,13 +17,15 @@ import Pcnotfond from '../page/notfound'
 
 Vue.use(Router)
 
-export default new Router({
+ 
+const router = new Router({
+  // mode: 'history',
   routes: [
     { 
       path: '*', 
       component: Pcnotfond,
       meta:{
-        title:'TokenRank'
+        title:'DappData'
       }
     },
     {
@@ -112,4 +114,15 @@ export default new Router({
       ]
     }
   ]
+  
 })
+
+//导航守卫
+router.beforeEach((to, from, next) => {
+  //这里能够跟踪路径的变化
+  window.scrollTo(0,0)
+  //最后通过钩子继续页面的跳转
+  next();
+});
+
+export default router

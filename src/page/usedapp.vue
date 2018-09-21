@@ -1,11 +1,12 @@
 <template>
     <div class="out" :style="{minHeight:geth,marginLeft:mglf}">
         <min-menu class="leftme" :style="{left:open}"></min-menu>
+        <!-- <p class="alltitle">{{ttarr[3][$store.state.alllang]}}</p> -->
         <div class="contright"> 
 
             <!-- 新用户数图表 -->
             <div class="dapp">
-                <p style="overflow:hidden;"><span style="float:left;">{{ttarr[0][$store.state.alllang]}}</span> <span style="float:right;"><span style="margin-right:10px;">{{ttarr[1][$store.state.alllang]}}</span>
+                <p><span style="float:left;color: #212229;font-weight: 600;">{{ttarr[0][$store.state.alllang]}}</span> <span style="float:right;margin-top: -10px;margin-bottom: 30px;"><span style="margin-right:10px;font-size: 14px;color: #797b8e;">{{ttarr[1][$store.state.alllang]}}</span>
                         <el-date-picker
                             v-model="value7"
                             type="daterange"
@@ -18,26 +19,20 @@
                         </el-date-picker>
                     </span>
                 </p>
-                <div id="usemun"  style="min-width:500px;height:500px"></div>
+                <div id="usemun"  style="min-width:500px;height:500px;margin-bottom:67px;"></div>
 
                 <table  width="100%" cellspacing='0' style="text-align: center;">
                     <tr class="top bg pd">
-                        <th  v-for="(item,index) in titlearr" class="title all topbt">{{item[$store.state.alllang]}}</th>
+                        <th  v-for="(item,index) in titlearr" class="title all topbt" :style="index == titlearr.length - 1?{borderRight:'1px solid #ebecf0'}:''">{{item[$store.state.alllang]}}</th>
                     </tr>
                     <tr class="top pd" v-for="(item,index) in arr" v-if="index>=(currentPage1-1)*10&&index<currentPage1*10">
                         <td  class="title all" >{{timeuse(item.timestamp-86400)}}</td>
                         <td  class="title all" >{{conversion(item.day_call.toString())}}</td>
                         <td  class="title all" >{{conversion(item.total_call.toString())}}</td>
-                        <td  class="title all" >{{conversion((item.call_rate*100).toFixed(2))}}%</td>
+                        <td  class="title all" style="border-right:1px solid #ebecf0;">{{conversion((item.call_rate*100).toFixed(2))}}%</td>
                     </tr>
                 </table>
-                <!-- <el-pagination
-                    @current-change="newuserPage"
-                    :current-page.sync="currentPage1"
-                    :page-size="10"
-                    layout="total, prev, pager, next"
-                    :total="arr.length" style="margin-top:40px;">
-                </el-pagination> -->
+               
 
                 <div style="width:300px;height:50px;margin:0 auto;margin-top:40px;" >
                     <span style="float:left;margin-top:7px;font-size:12px;color:#4f5f6e;" v-if="$store.state.alllang == 0">共 {{arr.length}} 条</span>
@@ -55,16 +50,16 @@
 
             <!-- 活跃用户 -->
              <div class="dapp">
-                 <p style="text-align:left;">{{ttarr[2][$store.state.alllang]}}</p>
+                 <p style="text-align:left;margin-bottom: 20px;color: #212229;font-weight: 600;">{{ttarr[2][$store.state.alllang]}}</p>
                 <table  width="100%" cellspacing='0' style="text-align: center;">
                     <tr class="top bg pd fixwd">
-                        <th class="title all topbt">TxHash</th>
-                        <th class="title all topbt" style="width:50px;" v-if="urlid == 'NAS'">Block</th>
-                        <th class="title all topbt" style="width:120px;">Time</th>
-                        <th class="title all topbt">From</th>
-                        <th class="title all topbt">To</th>
-                        <th class="title all topbt" style="width:40px;">Value</th>
-                        <th class="title all topbt" style="width:80px;" v-if="urlid == 'NAS'">[TxFee]</th>
+                        <th class="title all topbt">{{titlearr1[0][$store.state.alllang]}}</th>
+                        <th class="title all topbt" style="width:50px;" v-if="urlid == 'NAS'">{{titlearr1[1][$store.state.alllang]}}</th>
+                        <th class="title all topbt" style="width:120px;">{{titlearr1[2][$store.state.alllang]}}</th>
+                        <th class="title all topbt">{{titlearr1[3][$store.state.alllang]}}</th>
+                        <th class="title all topbt">{{titlearr1[4][$store.state.alllang]}}</th>
+                        <th class="title all topbt" style="width:40px;border-right:1px solid #ebecf0;">{{titlearr1[5][$store.state.alllang]}}</th>
+                        <th class="title all topbt" style="width:80px;border-right:1px solid #ebecf0;" v-if="urlid == 'NAS'">{{titlearr1[6][$store.state.alllang]}}</th>
                     </tr>
                     <tr class="top pd fixwd" v-for="(item,index) in arr1" v-if="index>=(currentPage2-1)*10&&index<currentPage2*10">
                         <td class="title all fs"  v-if="urlid == 'NAS'">{{item.Tx_hash}}</td>
@@ -80,20 +75,13 @@
                         <td class="title all fs"  v-if="urlid == 'NAS'">{{item.To_address}}</td>
                         <td class="title all fs"  v-if="urlid == 'ETH'">{{item.To}}</td>
                         <td class="title all fs"  v-if="urlid == 'EOS'">{{item.to}}</td>
-                        <td class="title all fs" style="width:40px;" v-if="urlid == 'NAS'">{{(item.Val/1000000000000000000).toFixed(2)}}</td>
-                        <td class="title all fs" style="width:40px;" v-if="urlid == 'ETH'">{{(item.Value/1000000000000000000).toFixed(2)}}</td>
-                        <td class="title all fs" style="width:40px;" v-if="urlid == 'EOS'">{{parseFloat(item.value).toFixed(2)}}</td>
-                        <td class="title all fs" style="width:80px;"  v-if="urlid == 'NAS'">{{(item.Data.txFee).toFixed(2)}}</td>
+                        <td class="title all fs" style="width:40px;border-right:1px solid #ebecf0;" v-if="urlid == 'NAS'">{{(item.Val/1000000000000000000).toFixed(2)}}</td>
+                        <td class="title all fs" style="width:40px;border-right:1px solid #ebecf0;" v-if="urlid == 'ETH'">{{(item.Value/1000000000000000000).toFixed(2)}}</td>
+                        <td class="title all fs" style="width:40px;border-right:1px solid #ebecf0;" v-if="urlid == 'EOS'">{{parseFloat(item.value).toFixed(2)}}</td>
+                        <td class="title all fs" style="width:80px;border-right:1px solid #ebecf0;"  v-if="urlid == 'NAS'">{{parseInt(item.Data.txFee)}}</td>
                     </tr>
                 </table>
-                <!-- <el-pagination
-                    @current-change="actuserPage"
-                    :current-page.sync="currentPage2"
-                    :page-size="10"
-                    layout="total, prev, pager, next"
-                    :total="arr1.length" style="margin-top:40px;">
-                </el-pagination> -->
-
+                
                 <div style="width:300px;height:50px;margin:0 auto;margin-top:40px;" >
                     <span style="float:left;margin-top:7px;font-size:12px;color:#4f5f6e;" v-if="$store.state.alllang == 0">共 {{arr.length}} 条</span>
                     <span style="float:left;margin-top:7px;font-size:12px;color:#4f5f6e;" v-if="$store.state.alllang == 1">Total {{arr.length}} items</span>
@@ -159,13 +147,13 @@ export default {
                         }
                     }]
                     },
-                    ttarr:[['调用次数','Transactions'],['时间段','Period'],['实时调用','View List of Transactions']],
-                    titlearr:[['日期','Date'],['当日调用笔数','Daily Transactions'],['总调用笔数','Transactions'], ['增长率','Growth Rate']], 
+                    ttarr:[['调用次数','Transactions'],['时间段','Period'],['实时调用','View List of Transactions'],['合约调用','Transactions']],
+                    titlearr:[['日期','Date'],['当日调用次数','Daily Transactions'],['总调用次数','Transactions'], ['增长率','Growth Rate']], 
                     xarr:[],
                     usearr:[],
                     arr:[],
                     arr1:[],
-                    titlearr1:['TxHash','Block','Time','From','To','Value','[TxFee]'],    
+                    titlearr1:[['交易哈希','TxHash'],['区块','Block'],['时间','Time'],['从','From'],['到','To'],['交易额','Value'],['交易费','[TxFee]']],    
                     currentPage1:1,
                     currentPage2:1,
                     // 省略显示
@@ -180,6 +168,9 @@ export default {
             }
         },
     created(){
+            this.$store.commit('changemenuflag',false)
+            this.$store.commit('changeloadopacty',true)
+            this.$store.commit('changeloadflge',true)
             this.geth = window.innerHeight - 60 + 'px'
             var now = new Date(new Date().setHours(0, 0, 0, 0)) - 0
             var now1 = now -  86400000 * 14
@@ -207,15 +198,22 @@ export default {
                     this.fornew()
                     this.fornewflag = true
             },50)
+            if(this.$store.state.themenuflag){
+                    this.open = 253+'px'
+                    this.mglf = 503+'px'
+                }else{
+                    this.open = ''
+                    this.mglf = ''
+                }
         },
         mounted(){
             setTimeout(()=>{
-                this.drawuser('usemun',this.xarr,this.usearr,this.ttarr[0][this.$store.state.alllang])
+                this.drawuser('usemun',this.xarr,this.usearr,this.ttarr[0][this.$store.state.alllang],'usemun')
             },2500)        
         },
     computed:{
         addclose(){
-            return this.$store.state.close 
+            return this.$store.state.themenuflag 
         },
         thelang(){
                 return this.$store.state.alllang 
@@ -224,13 +222,19 @@ export default {
     watch:{
         addclose(n,o){
             if(n){
-                this.open = 303+'px'
-                this.mglf = 658+'px'
+                this.open = 253+'px'
+                this.mglf = 503+'px'
             }else{
                 this.open = ''
                 this.mglf = ''
             }
-            this.drawall() 
+            // this.drawall() 
+            var newchart = setInterval(()=>{
+                    window.usemun.reflow()
+                },17)
+                setTimeout(()=>{
+                    clearInterval(newchart)
+                },1010)
         },
         value7(n,o){
             console.log(n)
@@ -263,7 +267,7 @@ export default {
                 },
         drawall(){
             setTimeout(()=>{
-                    this.drawuser('usemun',this.xarr,this.usearr,this.ttarr[0][this.$store.state.alllang])
+                    this.drawuser('usemun',this.xarr,this.usearr,this.ttarr[0][this.$store.state.alllang],'usemun')
                 },1000)  
         },
         timeuse1(aaa){
@@ -304,7 +308,7 @@ export default {
             }
             return year+'-'+month+'-'+day 
         },
-        drawuser(aa,arr1,arr2,string){
+        drawuser(aa,arr1,arr2,string,windowname){
              var options={   //hchart的参数
 			        chart: {
 			            zoomType: 'xy'
@@ -312,6 +316,7 @@ export default {
 			        title: {
 			            text: ''
                     },
+                    colors:['#409efe','#00e175','#ff0a50','black'],
                     credits: {
                         enabled: false
                     },
@@ -327,13 +332,13 @@ export default {
 				            labels: {
 				                format: '{value}',
 				                style: {
-				                    color: '#2E7DFF'
+				                    color: '#409efe'
 				                }
 				            },
 				            title: {
 				                text: string,
 				                style: {
-				                    color:'#2E7DFF'
+				                    color:'#409efe'
 				                }
 				            }
 				        }
@@ -351,10 +356,10 @@ export default {
 			        ]
 				}
                 // this.chart = new Highcharts.Chart(chartContainer, options)
-                var chart = Highcharts.chart(aa,options)
+                window[windowname] = Highcharts.chart(aa,options)
                 
 	        	    window.onresize = function () {
-	        	    	 chart.reflow();
+	        	    	 window[windowname].reflow();
 	        	    }
         },
         newuserPage(val){
@@ -374,7 +379,7 @@ export default {
                     Axios.post(url,{
                                         "dapp_id":this.$store.state.appid,
                                         "start":this.begintime/1000,
-                                        "last":this.endtime/1000+86400000
+                                        "last":this.endtime/1000+86400
                                     },{
                                         headers: {'Content-Type': "application/x-www-form-urlencoded"}
                                     }).then(res => {
@@ -400,6 +405,7 @@ export default {
                                             this.usearr.unshift(e.day_call)
                                         });
                                         console.log(this.xarr)
+                                        this.$store.commit('changeloadopacty',false)
                                     })
         } 
     }
@@ -419,17 +425,27 @@ table td{
     font-size: 12px;
 } 
 .out{
-    margin-left: 358px;
-    margin-top: 117px;
+    margin-left: 321px;
+    margin-top: 102px;
     padding-left: 1px;
-    margin-right: 40px;
+    margin-right: 30px;
     box-sizing: border-box;
     overflow: visible;
+    transition: all 0.5s;
+}
+.alltitle{
+    margin-top: 50px;
+    margin-bottom: 30px;
+    text-align: left;
+    font-size: 24px;
+    color: #c1c7cd;
 }
 .leftme{
     position: fixed;
     top: 60px;
     left: 73px;
+    z-index: 100;
+    transition: all 0.5s;
 }
 .contright{
     width: 100%;
@@ -441,10 +457,9 @@ table td{
     margin-top: 30px;
     margin-right: 20px;
     padding: 30px;
-    border-radius: 6px;
     box-sizing: border-box;
-    box-shadow: 1px 1px 10px 0px 
-		rgba(2, 121, 255, 0.1);
+    box-shadow: 3px 2px 10px 0px 
+		rgba(37, 48, 76, 0.08);
 }
 .top{
     height: 55px;
@@ -454,7 +469,7 @@ table td{
     padding-left: 30px;
     box-sizing: border-box;
     text-align: left;
-    border-bottom: 1px solid #ececec;
+    border-bottom: 1px solid #ebecf0;;
 }
 .bg{
     background-color: #f9f9f9;
@@ -462,19 +477,28 @@ table td{
 .pd{
     padding-left: 0px;
 }
+
 .all{
     text-align: center;
     height: 51px;
-    border-bottom: 1px solid #ececec;
-    border-left: 1px solid #ececec;
+    border-bottom: 1px solid #ebecf0;;
+    border-left: 1px solid #ebecf0;;
     white-space: nowrap;
     padding: 0 20px;
+    font-size: 14px;
+}
+
+.pd .all,.fixwd .all{
+    color:#808c9b;
+}
+.bg .all{
+    color:#4f5f6e;
 }
 .topbt{
-    border-top: 1px solid #ececec;
+    border-top: 1px solid #ebecf0;;
 }
 .top .all:nth-of-type(1){
-    border-left: none;  
+    /* border-left: none;   */
 }
 
 /* .fixwd .all:nth-of-type(5){
@@ -489,12 +513,35 @@ table td{
 } */
 </style>
 <style>
-
+.el-input__inner{
+    border: 1px solid #f7f8fa;
+}
+.el-input__inner:hover{
+    border-color:#f7f8fa;
+}
 .el-range-editor.el-input__inner{
     border-radius: 20px;
-    background-color: #edeff7;
+    background-color: #f7f8fa;
 }
 .el-range-editor .el-range-input{
-    background-color: #edeff7;
+    background-color: #f7f8fa;
+}
+.el-pagination{
+    font-weight:400;
+}
+.el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
+    width:350px;
+}
+.el-icon-date:before{
+    content:'';
+}
+.el-pager li.active{
+    color:rgb(73,165,251);
+}
+.el-pager li:hover{
+    color:#49a5fb;
+}
+.el-pagination{
+    font-weight:400;
 }
 </style>
