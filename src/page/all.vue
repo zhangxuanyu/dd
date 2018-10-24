@@ -1,16 +1,20 @@
 <template>
     <div class="cont" :style="{marginLeft:theleft,minWidth: '1144px'}">
         <!-- 币种 -->
-        
+        <p class="new">
+            <span>{{blocktitle[0][$store.state.alllang]}}</span>
+            <!-- <span @click="gotoother(1,'')">{{blocktitle[3][$store.state.alllang]}} ></span> -->
+            <span></span>
+        </p>
         <div class="card_flex">
-            <div class="card" v-for="(item,index) in arr" :style="{width:cdwd}">
+            <!-- <div class="card cur" v-for="(item,index) in arr" :style="{width:cdwd}" :key="index" @click="gotoother(5,'ETH_'+360)"> -->
+            <div class="card cur" v-for="(item,index) in arr" :style="{width:cdwd}" :key="index" >
 
 
-
-                <p class="title">{{item.word}}</p>
+                <p class="title">{{item.word}} <span v-if="index == 1" style="color:rgb(73, 165, 251);font-size:14px;font-weight:400;">(beta)</span> </p>
                 <div class="dappnum">{{dappnumtips[$store.state.alllang]}}：{{item.num}}</div>
                 <div  class="card_out">
-                    <div v-for="(it,inde) in item.data" class="card_in">
+                    <div v-for="(it,inde) in item.data" class="card_in" :key="inde">
                         <p class="subtitle"><img :src="inde == 1?it.img:''" alt="" :style="index == 2?{position:'absolute',top:'-1px',left:'0px'}:{position:'absolute',top:'-1px',left:'5px'}">{{it.word[$store.state.alllang]}}</p>
                         <p class="tips">(24h)</p>
                         <p class="numbers">{{it.num}}</p>
@@ -25,483 +29,937 @@
             </div>
 
         </div>
+        <!-- 热门dapp -->
+        <p class="hot" v-show="false">
+            <span>{{blocktitle[1][$store.state.alllang]}}</span>
+            <span @click="gotoother(2,'')">{{blocktitle[3][$store.state.alllang]}} ></span>
+        </p>
+        <div class="hotdapp" v-show="false">
+            <div v-for="(item,index) in hotarr" :key="index" class="hotbox" @click="gotoother(4,'ETH_'+360)">
+                <div class="hot_content cur">
+                    <div class="hot_left">
+                        <div class="left_img" :style="{background:' url('+item.img+') no-repeat',backgroundSize:'contain'}">
+
+                        </div>
+                        <p>{{item.name}}</p>
+                        <p>{{item.plat}}&nbsp;|&nbsp;{{item.categories}}</p>
+                    </div>
+                    <div class="hot_right">
+                        <div class="hot_right_left" v-for="(it,id) in item.content" :key="id">
+                            <p>{{blocktitle[id+4][$store.state.alllang]}}</p>
+                            <p>(24h)</p>
+                            <p>{{it.value}}</p>
+                            <p :style="it.rate>0?{color:'#1ccfa7'}:{color:'#f85e70'}">
+                                <img src="../../static/up.png" alt="" class="mgt" v-if="it.rate>=0">
+                                <img src="../../static/down.png" alt="" class="mgt" v-else>
+                                {{it.rate}}%
+                            </p>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
 
         <!-- 曲线图 -->
-        <div class="picture">
-            <p style="margin-right: -15px;margin-bottom:60px;"><span class="left lefttips">{{pictt[$store.state.alllang]}}</span>
-            <span class="right cur righttype" @click="chat(2)" :style="color3">{{adduser[$store.state.alllang]}}</span>
-            <span class="right cur righttype" @click="chat(1)"  :style="color2">{{alluser[$store.state.alllang]}}</span>
-            <span class="right cur righttype" @click="chat(0)"  :style="color1">{{calltimes[$store.state.alllang]}}</span></p>
-            <div id="mychart" style="min-width:400px;height:400px"></div>
-        </div> 
+        <div style="overflow:hidden;margin-bottom:30px;">
+            <div class="picture">
+              <p style="margin-right: -15px;margin-bottom:60px;"><span class="left lefttips">{{pictt[$store.state.alllang]}}</span>
+              <span class="right cur righttype" @click="chat(2)" :style="color3">{{adduser[$store.state.alllang]}}</span>
+              <span class="right cur righttype" @click="chat(1)"  :style="color2">{{alluser[$store.state.alllang]}}</span>
+              <span class="right cur righttype" @click="chat(0)"  :style="color1">{{calltimes[$store.state.alllang]}}</span></p>
+              <div id="mychart" style="min-width:400px;height:400px"></div>
+          </div>
+        </div>
+         
 
-       
+        <!-- 研究报告 -->
+         <p class="report">
+            <span>{{blocktitle[2][$store.state.alllang]}}</span>
+            <span @click="gotoother(3)">{{blocktitle[3][$store.state.alllang]}} ></span>
+         </p>
+         <div class="swiper-container report_out">
+            <div class="swiper-wrapper report_long" >
+                <div class="swiper-slide report_in"  v-for="(item,index) in reportarr" :key="index" @click="gotoother(6,index)" style="width:320px;">
+                  
+                    <div class="content_img" :style="{background: 'url('+item.img_index+') no-repeat',backgroundSize:'cover'}">
 
+                    </div>
+                    <p>
+                        {{item.title[$store.state.alllang]}}
+                    </p>
+                    <p>
+                        {{item.time}}
+                    </p>
+                  
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
-import Highcharts from 'highcharts/highstock';
-import HighchartsMore from 'highcharts/highcharts-more';
-import HighchartsDrilldown from 'highcharts/modules/drilldown';
-import Highcharts3D from 'highcharts/highcharts-3d';
-import Axios from 'axios';
+import Highcharts from "highcharts/highstock";
+import HighchartsMore from "highcharts/highcharts-more";
+import HighchartsDrilldown from "highcharts/modules/drilldown";
+import Highcharts3D from "highcharts/highcharts-3d";
+import Axios from "axios";
+import Swiper from 'swiper';
+import 'swiper/dist/css/swiper.min.css';
 
-HighchartsMore(Highcharts)
+HighchartsMore(Highcharts);
 HighchartsDrilldown(Highcharts);
 Highcharts3D(Highcharts);
 
 export default {
-    data(){
-        return{
-            arr:[{
-                word:'ETH',
-                num:0,
-                data:[
-                    {img:'../../static/ETH-1.png',word:['活跃用户','Active Users'],num:'',add:''},
-                    {img:'../../static/ETH-1.png',word:['交易量','Volume'],num:'',add:''},
-                    {img:'../../static/ETH-1.png',word:['调用次数','Transactions'],num:'',add:''}
-                ]
+  data() {
+    return {
+      arr: [
+        {
+          word: "ETH",
+          num: 0,
+          data: [
+            {
+              img: "../../static/ETH-1.png",
+              word: ["活跃用户", "Active Users"],
+              num: "",
+              add: ""
             },
             {
-                word:'EOS',
-                num:0,
-                data:[
-                    {img:'../../static/EOS-1.png',word:['活跃用户','Active Users'],num:'',add:''},
-                    {img:'../../static/EOS-1.png',word:['交易量','Volume'],num:'',add:''},
-                    {img:'../../static/EOS-1.png',word:['调用次数','Transactions'],num:'',add:''}
-                ]
+              img: "../../static/ETH-1.png",
+              word: ["交易量", "Volume"],
+              num: "",
+              add: ""
             },
             {
-                word:'NAS',
-                num:0,
-                data:[
-                    {img:'../../static/NAS-1.png',word:['活跃用户','Active Users'],num:'',add:''},
-                    {img:'../../static/NAS-1.png',word:['交易量','Volume'],num:'',add:''},
-                    {img:'../../static/NAS-1.png',word:['调用次数','Transactions'],num:'',add:''}
+              img: "../../static/ETH-1.png",
+              word: ["调用次数", "Transactions"],
+              num: "",
+              add: ""
+            }
+          ]
+        },
+        {
+          word: "EOS",
+          num: 0,
+          data: [
+            {
+              img: "../../static/EOS-1.png",
+              word: ["活跃用户", "Active Users"],
+              num: "",
+              add: ""
+            },
+            {
+              img: "../../static/EOS-1.png",
+              word: ["交易量", "Volume"],
+              num: "",
+              add: ""
+            },
+            {
+              img: "../../static/EOS-1.png",
+              word: ["调用次数", "Transactions"],
+              num: "",
+              add: ""
+            }
+          ]
+        },
+        {
+          word: "NAS",
+          num: 0,
+          data: [
+            {
+              img: "../../static/NAS-1.png",
+              word: ["活跃用户", "Active Users"],
+              num: "",
+              add: ""
+            },
+            {
+              img: "../../static/NAS-1.png",
+              word: ["交易量", "Volume"],
+              num: "",
+              add: ""
+            },
+            {
+              img: "../../static/NAS-1.png",
+              word: ["调用次数", "Transactions"],
+              num: "",
+              add: ""
+            }
+          ]
+        }
+      ],
+      hotarr:[
+          {
+              img:'../../static/logo1.png',
+              name:'恐龙乐园',
+                plat:'NAS',
+                categories:'game',
+                content:[
+                    {
+                        value:65115,
+                        rate:5.34
+                    },{
+                        value:65115,
+                        rate:5.34
+                    }
                 ]
-            }],
-            //切换图表
-            color1:{color:'#409efe',backgroundColor: '#f5faff',borderRadius:' 12px'},
-            color2:'',
-            color3:'',
-            //请求数组
-            reqarr:['call','total_user','new_user'],
-            select:0,
-            //图表数组
-            xarr:[],
-            nasarr:[],
-            etharr:[],
-            eosarr:[],
-            uashdj:'wu wu',
-            theleft:'280px',
-            cdwd:'',
-            clientHeight: 0,
-            //图表改变宽度
-            chartwd:'',
-            // 图表文字切换
-            toparr:['总览','Overview'],
-            pictt:['整体趋势','Trend'],
-            adduser:['新增用户','New Users'],
-            alluser:['累计用户','Users'],
-            calltimes:['调用次数','Transactions'],
-            dappnumtips:['Dapps数量','Dapps'],
-            chartsss:'',
-            // 图表重绘
-            redrawflag:true
-        }
-    },
-    created(){
-        this.fornew(true)
-        this.cglf(this.$store.state.themenuflag)
-        var bbc = window.innerWidth
-        console.log(parseInt(this.theleft))
-        this.cdwd = (bbc - parseInt(this.theleft)-110)/3 + 'px'
-        console.log(bbc - parseInt(this.theleft)-90)
-        //loading初始化
-        this.$store.commit('changeloadopacty',true)
-        this.$store.commit('changeloadflge',true)
-    },
-    mounted(){
-        
-        // setTimeout(()=>{
-        //     console.log(this.xarr)
-            
-        // },1000)
-        const that = this;
-        $(window).on('resize',function(){
-            that.clientHeight = document.body.clientWidth
-        })
-        
-    },
-    computed:{
-        inleft(){
-            return this.$store.state.themenuflag
-        }
-    },
-    watch:{
-        inleft(n,o){
-            console.log(n)
-            this.cglf(n)
-        },
-        clientHeight (val,o) {
-            var bbc = window.innerWidth
-            this.cdwd = (bbc - parseInt(this.theleft)-110)/3 + 'px'
-        },
-        redrawflag(){
-            setTimeout(()=>{
-                this.initChart(this.xarr,this.etharr,this.nasarr,this.eosarr)
-            },1000)
-        }
-    },
-    methods:{
-        cglf(n){
-            if(n){
-                this.theleft='280px'
-            }else{
-                this.theleft='100px'
-            }
-            var bbc = window.innerWidth
-            this.cdwd = (bbc - parseInt(this.theleft)-110)/3 + 'px'
-            
-            var newchart = setInterval(()=>{
-                window.chartsss.reflow()
-            },17)
-            setTimeout(()=>{
-                // this.initChart(this.xarr,this.etharr,this.nasarr,this.eosarr)
-                clearInterval(newchart)
-            },1010)
-        },
-        initChart(arr1,arr2,arr3,arr4) {
-		    //   var chartContainer = document.getElementById('mychart')
-                var options1={   //hchart的参数
-			        chart: {
-			            zoomType: 'xy'
-			        },
-                    colors:['#409efe','#00e175','#ff0a50'],
-			        title: {
-			            text: ''
-			        },
-			        subtitle: {
-			            text: ''
-                    },
-                    credits: {
-                        enabled: false
-                    },
-			        xAxis: [{ //横坐标
-			            categories: arr1,
-			            crosshair: true
-			        }],
-			        yAxis: [
-				        { // Primary yAxis
-				            labels: {
-				                format: '{value}',
-				                style: {
-				                    color: '#409efe'
-				                }
-				            },
-				            title: {
-				                text: 'ETH',
-				                style: {
-				                    color:'#409efe'
-				                }
-				            }
-				        },
-				        { // Secondary yAxis
-				            title: {
-				                text: 'EOS',
-				                style: {
-				                    color:'#00e175'
-				                }
-				            },
-				            labels: {
-				                format: '{value}',
-				                style: {
-				                    color:'#00e175'
-				                }
-				            },
-				            opposite: true
-						},
-				        { // Secondary yAxis
-				            title: {
-				                text: 'NAS',
-				                style: {
-				                    color:'#ff0a50'
-				                }
-				            },
-				            labels: {
-				                format: '{value}',
-				                style: {
-				                    color:'#ff0a50'
-				                }
-				            },
-				            opposite: true
-						}
-						
-			        ],
-			        tooltip: {
-			            shared: true
-			        },
-			        series: [
-				        {
-				            name: 'ETH',
-				            data: arr2,
-				            type: 'spline',
-				        },
-				        {  //纵坐标
-				            name: 'EOS',
-				            data: arr4,
-				            type: 'spline',
-				            yAxis: 1,
-				        },
-				        {  //纵坐标
-				            name: 'NAS',
-				            data: arr3,
-				            type: 'spline',
-				            yAxis: 2,
-				        }
-
-			        ]
-				}
-                window.chartsss = Highcharts.chart('mychart',options1)
-                
-	        	    window.onresize = function () {
-                        // chart.reflow();
-                        
-                        window.chartsss.reflow()
-	        	    }
-
-            },
-            chat(a){
-                    this.color1 = ''
-                    this.color2 = ''
-                    this.color3 = ''
-                    this.select = a
-                    this.fornew(false)
-                if(a == 0){
-                    this.color1 = {color:'rgb(73,165,251)',backgroundColor: '#f5faff',borderRadius:' 12px'}
-                    
-                }else if(a == 1){
-                    this.color2 = {color:'rgb(73,165,251)',backgroundColor: '#f5faff',borderRadius:' 12px'}
-                    
-                }else if(a == 2){
-                    this.color3 = {color:'rgb(73,165,251)',backgroundColor: '#f5faff',borderRadius:' 12px'}
-                    
-                }
-            },
-            fornew(aa){
-                this.xarr = []
-                this.etharr = []
-                this.nasarr = []
-                this.eosarr = []
-                console.log(this.$store.state.moneyty,this.$store.state.requesttime)
-                var url = this.$store.state.requrl+'/index';
-                Axios.post(url,{
-							"key":this.reqarr[this.select]
-						},{
-							headers: {'Content-Type': "application/x-www-form-urlencoded"}
-						}).then(res => {
-                            console.log(res.data.msg) 
-                            var numtimes = 1
-                            if(aa){
-                                var numroll = setInterval(()=>{
-                                    if(numtimes>=90){
-                                        clearInterval(numroll)
-                                    }
-                                    numtimes++
-                                    this.arr[0].data[0].num = parseInt(res.data.msg.change_24h.eth.user/90*numtimes)
-                                    
-                                    this.arr[0].data[1].num = parseInt(res.data.msg.change_24h.eth.vol/90*numtimes)
-                                    
-                                    this.arr[0].data[2].num = parseInt( res.data.msg.change_24h.eth.tx/90*numtimes)
-                                    
-                                    this.arr[1].data[0].num = parseInt(res.data.msg.change_24h.eos.user/90*numtimes)
-                                    
-                                    this.arr[1].data[1].num = parseInt(res.data.msg.change_24h.eos.vol/90*numtimes)
-                                    
-                                    this.arr[1].data[2].num = parseInt(res.data.msg.change_24h.eos.tx/90*numtimes)
-                                  
-                                    this.arr[2].data[0].num = parseInt(res.data.msg.change_24h.nas.user/90*numtimes)
-                                    
-                                    this.arr[2].data[1].num = parseInt(res.data.msg.change_24h.nas.vol/90*numtimes)
-                                    
-                                    this.arr[2].data[2].num = parseInt(res.data.msg.change_24h.nas.tx/90*numtimes)
-                                    
-                                },20)
-                            }
-                                this.arr[0].data[0].num = res.data.msg.change_24h.eth.user 
-                                this.arr[0].data[0].add = (res.data.msg.change_24h.eth.user_rate*100).toFixed(2)
-                                this.arr[0].data[1].num = res.data.msg.change_24h.eth.vol.toFixed(0)
-                                this.arr[0].data[1].add = (res.data.msg.change_24h.eth.vol_rate*100).toFixed(2)
-                                this.arr[0].data[2].num = res.data.msg.change_24h.eth.tx
-                                this.arr[0].data[2].add = (res.data.msg.change_24h.eth.tx_rate*100).toFixed(2)
-    
-                                this.arr[1].data[0].num = res.data.msg.change_24h.eos.user
-                                this.arr[1].data[0].add = (res.data.msg.change_24h.eos.user_rate*100).toFixed(2)
-                                this.arr[1].data[1].num = res.data.msg.change_24h.eos.vol.toFixed(0)
-                                this.arr[1].data[1].add = (res.data.msg.change_24h.eos.vol_rate*100).toFixed(2)
-                                this.arr[1].data[2].num = res.data.msg.change_24h.eos.tx
-                                this.arr[1].data[2].add = (res.data.msg.change_24h.eos.tx_rate*100).toFixed(2)
-    
-                                this.arr[2].data[0].num = res.data.msg.change_24h.nas.user
-                                this.arr[2].data[0].add = (res.data.msg.change_24h.nas.user_rate*100).toFixed(2)
-                                this.arr[2].data[1].num = res.data.msg.change_24h.nas.vol.toFixed(0)
-                                this.arr[2].data[1].add = (res.data.msg.change_24h.nas.vol_rate*100).toFixed(2)
-                                this.arr[2].data[2].num = res.data.msg.change_24h.nas.tx
-                                this.arr[2].data[2].add = (res.data.msg.change_24h.nas.tx_rate*100).toFixed(2)
-
-                                this.arr[0].num = res.data.msg.count.eth
-                                this.arr[1].num = res.data.msg.count.eos
-                                this.arr[2].num = res.data.msg.count.nas
-                            // this.xarr = res.data.msg.day_30d.eth_info
-                            res.data.msg.day_30d.eth_info.forEach(e => {
-                                var ddd = new Date((e.timestamp-86400)*1000)
-                                var year = ddd.getFullYear()
-                                var month = ddd.getMonth()+1
-							    var day=ddd.getDate();
-                                this.xarr.unshift(year+'/'+month+'/'+day)
-                                this.etharr.unshift(e.value)
-                            });
-                            res.data.msg.day_30d.nas_info.forEach(e => {
-                                this.nasarr.unshift(e.value)
-                            });
-                            res.data.msg.day_30d.eos_info.forEach(e => {
-                                this.eosarr.unshift(e.value)
-                            });
-                            this.$store.commit('changeloadopacty',false)
-                            this.redrawflag = !this.redrawflag
-                        })
-            }
+          },
+          {
+              img:'../../static/logo1.png',
+              name:'恐龙乐园',
+                plat:'NAS',
+                categories:'game',
+                content:[
+                    {
+                        value:65115,
+                        rate:5.34
+                    },{
+                        value:65115,
+                        rate:5.34
+                    }
+                ]
+          },
+          {
+              img:'../../static/logo1.png',
+              name:'恐龙乐园',
+                plat:'NAS',
+                categories:'game',
+                content:[
+                    {
+                        value:65115,
+                        rate:5.34
+                    },{
+                        value:65115,
+                        rate:5.34
+                    }
+                ]
+          },
+          {
+              img:'../../static/logo1.png',
+              name:'恐龙乐园',
+                plat:'NAS',
+                categories:'game',
+                content:[
+                    {
+                        value:65115,
+                        rate:5.34
+                    },{
+                        value:65115,
+                        rate:5.34
+                    }
+                ]
+          },
+          {
+              img:'../../static/logo1.png',
+              name:'恐龙乐园',
+                plat:'NAS',
+                categories:'game',
+                content:[
+                    {
+                        value:65115,
+                        rate:5.34
+                    },{
+                        value:65115,
+                        rate:5.34
+                    }
+                ]
+          },
+          {
+              img:'../../static/logo1.png',
+              name:'恐龙乐园',
+                plat:'NAS',
+                categories:'game',
+                content:[
+                    {
+                        value:65115,
+                        rate:5.34
+                    },{
+                        value:65115,
+                        rate:5.34
+                    }
+                ]
+          }
+      ],
+      //切换图表
+      color1: {
+        color: "#409efe",
+        backgroundColor: "#f5faff",
+        borderRadius: " 12px"
+      },
+      color2: "",
+      color3: "",
+      //请求数组
+      reqarr: ["call", "total_user", "new_user"],
+      select: 0,
+      //图表数组
+      xarr: [],
+      nasarr: [],
+      etharr: [],
+      eosarr: [],
+      uashdj: "wu wu",
+      theleft: "280px",
+      cdwd: "",
+      clientHeight: 0,
+      //图表改变宽度
+      chartwd: "",
+      // 图表文字切换
+      toparr: ["总览", "Overview"],
+      pictt: ["整体趋势", "Trend"],
+      adduser: ["新增用户", "New Users"],
+      alluser: ["累计用户", "Users"],
+      calltimes: ["调用次数", "Transactions"],
+      dappnumtips: ["Dapps数量", "Dapps"],
+      blocktitle: [
+        ["热门公链", "New"],
+        ["热门Dapp", "Most Dapp"],
+        ["研究报告", "report"],
+        ["查看全部","more"],
+        ["新增用户数","New Users"],
+        ["活跃用户数","Active Users"]
+      ],
+      chartsss: "",
+      // 图表重绘
+      redrawflag: true,
+      //报告数据
+      reportarr:[]
+    };
+  },
+  created() {
+    this.reportarr = pdfarr
+    console.log(this.reportarr)
+    this.fornew(true);
+    this.cglf(this.$store.state.themenuflag);
+    var bbc = window.innerWidth;
+    console.log(parseInt(this.theleft));
+    this.cdwd = (bbc - parseInt(this.theleft) - 110) / 3 + "px";
+    console.log(bbc - parseInt(this.theleft) - 90);
+    //loading初始化
+    this.$store.commit("changeloadopacty", true);
+    this.$store.commit("changeloadflge", true);
+  },
+  mounted() {
+    console.log('==========='+this.$store.state.alllang)
+    console.log('==========='+this.alllang)
+    var mySwiper = new Swiper('.swiper-container', {      
+        slidesPerView:"auto"
+    })
+    const that = this;
+    $(window).on("resize", function() {
+      that.clientHeight = document.body.clientWidth;
+    });
+  },
+  computed: {
+    inleft() {
+      return this.$store.state.themenuflag;
     }
-}
+  },
+  watch: {
+    inleft(n, o) {
+      console.log(n);
+      this.cglf(n);
+    },
+    clientHeight(val, o) {
+      var bbc = window.innerWidth;
+      this.cdwd = (bbc - parseInt(this.theleft) - 110) / 3 + "px";
+    },
+    redrawflag() {
+      setTimeout(() => {
+        this.initChart(this.xarr,this.etharr,this.nasarr,this.eosarr)
+      }, 1000);
+    }
+  },
+  methods: {
+    gotoother(a,id){
+      if(a == 1){
+        this.$router.push({ path: "/chain" });
+      }else if(a == 2){
+        this.$router.push({ path: "/rank" });
+      }else if(a == 3){
+        this.$router.push({ path: "/report" });
+      }else if(a == 4){
+        this.$router.push({ path: "/detail?id="+id });
+      }else if(a == 5){
+        this.$router.push({ path: "/chaindetail?id="+id });
+      }else if(a == 6){
+        const {href} = this.$router.resolve({
+                name: 'pdf',
+                path:'/pdf',
+                query: {
+                  id:id,
+                  lang:this.$store.state.alllang
+                }
+              })
+        window.open(href, '_blank')
+      }
+    },
+    //鼠标按下移动事件
+    cglf(n) {
+      if (n) {
+        this.theleft = "280px";
+      } else {
+        this.theleft = "100px";
+      }
+      var bbc = window.innerWidth;
+      this.cdwd = (bbc - parseInt(this.theleft) - 110) / 3 + "px";
+
+      var newchart = setInterval(() => {
+        window.chartsss.reflow();
+      }, 17);
+      setTimeout(() => {
+        this.initChart(this.xarr,this.etharr,this.nasarr,this.eosarr)
+        clearInterval(newchart);
+      }, 1010);
+    },
+    initChart(arr1, arr2, arr3, arr4) {
+      var options1 = {
+        //hchart的参数
+        chart: {
+          zoomType: "xy"
+        },
+        colors: ["#409efe", "#00e175", "#ff0a50"],
+        title: {
+          text: ""
+        },
+        subtitle: {
+          text: ""
+        },
+        credits: {
+          enabled: false
+        },
+        xAxis: [
+          {
+            //横坐标
+            categories: arr1,
+            crosshair: true
+          }
+        ],
+        yAxis: [
+          {
+            // Primary yAxis
+            labels: {
+              format: "{value}",
+              style: {
+                color: "#409efe"
+              }
+            },
+            title: {
+              text: "ETH",
+              style: {
+                color: "#409efe"
+              }
+            }
+          },
+          {
+            // Secondary yAxis
+            title: {
+              text: "EOS",
+              style: {
+                color: "#00e175"
+              }
+            },
+            labels: {
+              format: "{value}",
+              style: {
+                color: "#00e175"
+              }
+            },
+            opposite: true
+          },
+          {
+            // Secondary yAxis
+            title: {
+              text: "NAS",
+              style: {
+                color: "#ff0a50"
+              }
+            },
+            labels: {
+              format: "{value}",
+              style: {
+                color: "#ff0a50"
+              }
+            },
+            opposite: true
+          }
+        ],
+        tooltip: {
+          shared: true
+        },
+        series: [
+          {
+            name: "ETH",
+            data: arr2,
+            type: "spline"
+          },
+          {
+            //纵坐标
+            name: "EOS",
+            data: arr4,
+            type: "spline",
+            yAxis: 1
+          },
+          {
+            //纵坐标
+            name: "NAS",
+            data: arr3,
+            type: "spline",
+            yAxis: 2
+          }
+        ]
+      };
+      window.chartsss = Highcharts.chart("mychart", options1);
+
+      window.onresize = function() {
+        chart.reflow();
+
+        window.chartsss.reflow();
+      };
+    },
+    chat(a) {
+      this.color1 = "";
+      this.color2 = "";
+      this.color3 = "";
+      this.select = a;
+      this.fornew(false);
+      if (a == 0) {
+        this.color1 = {
+          color: "rgb(73,165,251)",
+          backgroundColor: "#f5faff",
+          borderRadius: " 12px"
+        };
+      } else if (a == 1) {
+        this.color2 = {
+          color: "rgb(73,165,251)",
+          backgroundColor: "#f5faff",
+          borderRadius: " 12px"
+        };
+      } else if (a == 2) {
+        this.color3 = {
+          color: "rgb(73,165,251)",
+          backgroundColor: "#f5faff",
+          borderRadius: " 12px"
+        };
+      }
+    },
+    fornew(aa) {
+      this.xarr = [];
+      this.etharr = [];
+      this.nasarr = [];
+      this.eosarr = [];
+      console.log(this.$store.state.moneyty, this.$store.state.requesttime);
+      var url = this.$store.state.requrl + "/index";
+      Axios.post(
+        url,
+        {
+          key: this.reqarr[this.select]
+        },
+        {
+          headers: { "Content-Type": "application/x-www-form-urlencoded" }
+        }
+      ).then(res => {
+        console.log(res.data.msg);
+        var numtimes = 1;
+        if (aa) {
+          var numroll = setInterval(() => {
+            if (numtimes >= 90) {
+              clearInterval(numroll);
+            }
+            numtimes++;
+            this.arr[0].data[0].num = parseInt(
+              (res.data.msg.change_24h.eth.user / 90) * numtimes
+            );
+
+            this.arr[0].data[1].num = parseInt(
+              (res.data.msg.change_24h.eth.vol / 90) * numtimes
+            );
+
+            this.arr[0].data[2].num = parseInt(
+              (res.data.msg.change_24h.eth.tx / 90) * numtimes
+            );
+
+            this.arr[1].data[0].num = parseInt(
+              (res.data.msg.change_24h.eos.user / 90) * numtimes
+            );
+
+            this.arr[1].data[1].num = parseInt(
+              (res.data.msg.change_24h.eos.vol / 90) * numtimes
+            );
+
+            this.arr[1].data[2].num = parseInt(
+              (res.data.msg.change_24h.eos.tx / 90) * numtimes
+            );
+
+            this.arr[2].data[0].num = parseInt(
+              (res.data.msg.change_24h.nas.user / 90) * numtimes
+            );
+
+            this.arr[2].data[1].num = parseInt(
+              (res.data.msg.change_24h.nas.vol / 90) * numtimes
+            );
+
+            this.arr[2].data[2].num = parseInt(
+              (res.data.msg.change_24h.nas.tx / 90) * numtimes
+            );
+          }, 20);
+        }
+        this.arr[0].data[0].num = res.data.msg.change_24h.eth.user;
+        this.arr[0].data[0].add = (
+          res.data.msg.change_24h.eth.user_rate * 100
+        ).toFixed(2);
+        this.arr[0].data[1].num = res.data.msg.change_24h.eth.vol.toFixed(0);
+        this.arr[0].data[1].add = (
+          res.data.msg.change_24h.eth.vol_rate * 100
+        ).toFixed(2);
+        this.arr[0].data[2].num = res.data.msg.change_24h.eth.tx;
+        this.arr[0].data[2].add = (
+          res.data.msg.change_24h.eth.tx_rate * 100
+        ).toFixed(2);
+
+        this.arr[1].data[0].num = res.data.msg.change_24h.eos.user;
+        this.arr[1].data[0].add = (
+          res.data.msg.change_24h.eos.user_rate * 100
+        ).toFixed(2);
+        this.arr[1].data[1].num = res.data.msg.change_24h.eos.vol.toFixed(0);
+        this.arr[1].data[1].add = (
+          res.data.msg.change_24h.eos.vol_rate * 100
+        ).toFixed(2);
+        this.arr[1].data[2].num = res.data.msg.change_24h.eos.tx;
+        this.arr[1].data[2].add = (
+          res.data.msg.change_24h.eos.tx_rate * 100
+        ).toFixed(2);
+
+        this.arr[2].data[0].num = res.data.msg.change_24h.nas.user;
+        this.arr[2].data[0].add = (
+          res.data.msg.change_24h.nas.user_rate * 100
+        ).toFixed(2);
+        this.arr[2].data[1].num = res.data.msg.change_24h.nas.vol.toFixed(0);
+        this.arr[2].data[1].add = (
+          res.data.msg.change_24h.nas.vol_rate * 100
+        ).toFixed(2);
+        this.arr[2].data[2].num = res.data.msg.change_24h.nas.tx;
+        this.arr[2].data[2].add = (
+          res.data.msg.change_24h.nas.tx_rate * 100
+        ).toFixed(2);
+
+        this.arr[0].num = res.data.msg.count.eth;
+        this.arr[1].num = res.data.msg.count.eos;
+        this.arr[2].num = res.data.msg.count.nas;
+        // this.xarr = res.data.msg.day_30d.eth_info
+        res.data.msg.day_30d.eth_info.forEach(e => {
+          var ddd = new Date((e.timestamp - 86400) * 1000);
+          var year = ddd.getFullYear();
+          var month = ddd.getMonth() + 1;
+          var day = ddd.getDate();
+          this.xarr.unshift(year + "/" + month + "/" + day);
+          this.etharr.unshift(e.value);
+        });
+        console.log(this.etharr)
+        res.data.msg.day_30d.nas_info.forEach(e => {
+          this.nasarr.unshift(e.value);
+        });
+        res.data.msg.day_30d.eos_info.forEach(e => {
+          this.eosarr.unshift(e.value);
+        });
+        this.$store.commit("changeloadopacty", false);
+        this.redrawflag = !this.redrawflag;
+      });
+    }
+  }
+};
 </script>
 
 <style scoped>
-.cont{
-    margin-left: 330px;
-    margin-top: 50px;
-    transition: all 0.5s;
+a{
+  text-decoration: none;
 }
-.card{
-    min-width: 351px;
-    height: 262px; 
-    background-color: #fff;
-    /* float: left; */
-    padding: 30px;
-    box-sizing: border-box;
-    margin-top: 50px;
+.cont {
+  margin-left: 330px;
+  margin-top: 50px;
+  transition: all 0.5s;
+}
+.card {
+  min-width: 351px;
+  height: 262px;
+  background-color: #fff;
+  /* float: left; */
+  padding: 30px;
+  box-sizing: border-box;
+  margin-right: 30px;
+  box-shadow: 3px 2px 10px 0px rgba(37, 48, 76, 0.08);
+  position: relative;
+}
+.dappnum {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  background-color: #f7f8fa;
+  height: 24px;
+  line-height: 24px;
+  font-size: 12px;
+  color: #797b8e;
+  padding: 0 20px;
+  border-radius: 12px;
+}
+.alltitle {
+  margin-top: 50px;
+  text-align: left;
+  font-size: 24px;
+  color: #c1c7cd;
+}
+.card:nth-of-type(1) {
+  background-image: url(../../static/ETH.png);
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+.card:nth-of-type(2) {
+  background-image: url(../../static/EOS.png);
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+.card:nth-of-type(3) {
+  background-image: url(../../static/NAS.png);
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+.new,.hot,.report {
+  margin-top: 50px;
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #525864;
+  text-align: left;
+  font-weight: 600;
+  overflow: hidden;
+}
+.hot {
+  margin-top: 30px;
+}
+.report{
+    margin-top: 0px;
+}
+.new span:nth-last-of-type(1),.hot span:nth-last-of-type(1),.report span:nth-last-of-type(1){
+    float: right;
     margin-right: 30px;
+    cursor: pointer;
+    font-size: 16px;
+	color: #acb0bb;
+}
+.new span:nth-last-of-type(2),.hot span:nth-last-of-type(2),.report span:nth-last-of-type(2){
+    float: left;
+}
+.card_flex {
+  display: flex;
+  justify-content: space-between;
+}
+.card_out {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+}
+.card_in {
+  width: 97px;
+  text-align: center;
+}
+.title {
+  font-size: 18px;
+  color: #212229;
+  font-weight: 600;
+  margin-bottom: 40px;
+  text-align: left;
+}
+.tips {
+  font-size: 12px;
+  color: #797b8e;
+  margin-bottom: 30px;
+}
+.subtitle {
+  color: #797b8e;
+  font-size: 14px;
+  position: relative;
+}
+.numbers {
+  font-size: 26px;
+  color: #464a58;
+  margin-bottom: 20px;
+}
+.mgt {
+  vertical-align: -1px;
+}
+.hotdapp{
+    margin-right: 30px; 
+    overflow: hidden;
+}
+.hotbox{
+    height: 176px;
+    width: 50%;
+    box-sizing: border-box;
+    float: left;
+    margin-bottom: 30px;
+}
+.hot_content{
+    background-color: #fff;
+    height: 176px;
     box-shadow: 3px 2px 10px 0px 
 		rgba(37, 48, 76, 0.08);
         position: relative;
 }
-.dappnum{
+.hot_left{
     position: absolute;
-    top: 30px;
-    right: 30px;
-    background-color: #f7f8fa;
-    height: 24px;
-    line-height: 24px;
-    font-size: 12px;
-    color: #797b8e;
-    padding: 0 20px;
-    border-radius: 12px;
+    top: 0px;
+    left: 0px;
+    width: 170px;
+    border-right: 1px solid #eff3f5;
+    padding: 30px;
+    box-sizing: border-box;
 }
-.alltitle{
-    margin-top: 50px;
-    text-align: left;
-    font-size: 24px;
-    color: #c1c7cd;
-}
-.card:nth-of-type(1){
-    background-image: url(../../static/ETH.png);
-    background-position: center center;
-    background-repeat: no-repeat;
-}
-.card:nth-of-type(2){
-    background-image: url(../../static/EOS.png);
-    background-position: center center;
-    background-repeat: no-repeat;
-}
-.card:nth-of-type(3){
-    background-image: url(../../static/NAS.png);
-    background-position: center center;
-    background-repeat: no-repeat;
-    
-}
-.card_flex{
-    display: flex;
-    justify-content:space-between;
-}
-.card_out{
-    display: flex;
-    justify-content:space-around;
-    text-align: center;
-}
-.card_in{
-    width: 97px;
-    text-align: center;
-}
-.title{
-    font-size: 18px;
-    color: #212229;
-    font-weight: 600;
-    margin-bottom: 40px;
-    text-align: left;
-}
-.tips{
-    font-size: 12px;
-    color: #797b8e;
-    margin-bottom: 30px;
-}
-.subtitle{
-    color: #797b8e;
-    font-size: 14px;
-    position: relative;
-}
-.numbers{
-    font-size: 30px;
-    color: #464a58;
+.left_img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin: 0 auto;
     margin-bottom: 20px;
 }
-.mgt{
-    vertical-align: -3px;
+
+.hot_left p:nth-of-type(1){
+    font-size: 16px;
+	color: #464a58;
+    margin-bottom: 15px;
 }
-.picture{
-    width: 100%;
-    height: 500px;
-    background-color: #fff;
-    margin-top: 30px;
+.hot_left p:nth-of-type(2){
+    font-size: 12px;
+	color: #797b8e;
+}
+.hot_right{
+    margin-left: 170px;
+    height: 176px;
+    overflow: hidden;
+}
+.hot_right_left{
+    float: left;
+    width: 50%;
+    padding: 35px 0px;
+}
+.hot_right_left p:nth-of-type(1),.hot_right_left p:nth-of-type(2){
+    font-size: 14px;
+	line-height: 18px;
+	color: #797b8e;
+}
+.hot_right_left p:nth-of-type(2){
+    font-size: 12px;
+    margin-bottom: 15px;
+}
+.hot_right_left p:nth-of-type(3){
+    font-size: 30px;
+	line-height: 24px;
+	letter-spacing: 1px;
+	color: #464a58;
+    margin-bottom: 15px;
+}
+.hot_right_left p:nth-of-type(4){
+    font-size: 14px;
+	letter-spacing: 0px;
+	color: #1ccfa7;
+}
+.hot_right_right{
     float: right;
+}
+.hotbox:nth-of-type(2n){
+    padding-left: 15px;
+}
+.hotbox:nth-of-type(2n+1){
+    padding-right: 15px;
+}
+
+
+
+.report_out{
+    width: 100%;
+    height: 230px;
+}
+.report_long{
+    overflow: hidden;
+    width: 3000px;
+    height: 230px;
+}
+.report_in{
+    cursor: pointer;
+    height: 220px;
+    background-color: #fff;
     margin-right: 30px;
-    padding: 27px 30px 30px 60px;
-    box-sizing: border-box;
+    float: left;
     box-shadow: 3px 2px 10px 0px 
 		rgba(37, 48, 76, 0.08);
 }
-.left{
-    float: left;
+.content_img{
+    width: 320px;
+    height: 166px;
+    margin-bottom: 5px;
 }
-.lefttips{
-    color: #212229;
-    font-weight: 600;
-    font-size: 16px; 
-}
-.righttype{
-    color: #808c9b;
+.report_in p{
     font-size: 14px;
-    line-height: 24px;
-    /* width:80px; */
+    line-height: 22px;
     padding: 0 20px;
-    height:24px
+    text-align: left;
 }
-.right{
-    float: right;
-    margin: 0 15px;
+.report_in p:nth-of-type(1){
+    color: #464a58;
 }
-#mychart{
-    width: 100%;
-    height: 500px;
+.report_in p:nth-of-type(2){
+    color: #797b8e;
+}
+.report_out::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+
+  background-color: #c1c1c1;
+}
+.report_out::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  background-color: #f1f1f1;
+}
+.report_out::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #c1c1c1;
+}
+
+
+.picture {
+  width: 100%;
+  height: 500px;
+  background-color: #fff;
+  margin-top: 30px;
+  float: right;
+  margin-right: 30px;
+  padding: 27px 30px 30px 60px;
+  box-sizing: border-box;
+  box-shadow: 3px 2px 10px 0px rgba(37, 48, 76, 0.08);
+}
+.left {
+  float: left;
+}
+.lefttips {
+  color: #212229;
+  font-weight: 600;
+  font-size: 16px;
+}
+.righttype {
+  color: #808c9b;
+  font-size: 14px;
+  line-height: 24px;
+  /* width:80px; */
+  padding: 0 20px;
+  height: 24px;
+}
+.right {
+  float: right;
+  margin: 0 15px;
+}
+#mychart {
+  width: 100%;
+  height: 500px;
 }
 </style>
 

@@ -3,29 +3,32 @@
         <!-- <p class="alltitle">{{toparr[$store.state.alllang]}}</p> -->
         <the-sel></the-sel>
         <div class="ranktb"  style="minHeight:955px;">
-            <div class="top" style="font-weight: 600;color:#212229;">
+            <div class="top" style="font-weight: 600;color:#212229;margin-bottom:30px;">
                  {{toparr[$store.state.alllang]}}
+                 <the-time></the-time>
             </div>
             <table  width="100%" cellspacing='0' style="text-align: center;">
-                <tr class="top bg" style="color: rgb(70, 74, 88);">
-                    <th  v-for="(item,index) in titlearr" class="title all" :style="{width:stylearr[index],borderBottom:'2px solid #ebecf0'}">{{item[$store.state.alllang]}}</th>
+                <tr class="top bg" style="color: rgb(70, 74, 88);background-color:#f7fafc;">
+                    <th  v-for="(item,index) in titlearr" class="title all" :style="{width:stylearr[index],borderBottom:'2px solid #ebecf0'}" :class="{cur:rankpic_arr[ranknum[index]]}" 
+                    :key="index" @click="rankdata(index)">
+                        {{item[$store.state.alllang]}}
+                        <img :src="rankpic_arr[ranknum[index]]" alt="" style="width:6px;height:12px;vertical-align: -1px;margin-left:6px;" v-if="rankpic_arr[ranknum[index]]" >
+                    </th>
                 </tr>
                 <tr  class="top pd" v-for="(item,index) in arr">
                     <td class="title all"  :style="index == arr.length -1 ?{border:'none'}:''">{{index+1+(currentPage1-1)*10}}</td>
                     <td class="title all hhvv cur" @click="gotodetail(item.dapp_id)"  :style="index == arr.length -1 ?{border:'none'}:''"><div class="ttimg"><img :src="'https://bkc-dapp-1252899312.cos.ap-hongkong.myqcloud.com/dappdata/static/icon/'+item.dapp_id+'.jpg'" alt="" onerror="javascript:this.src='../../static/all1.png'" style="width:26px;height:26px;position:absolute;"></div>{{item.title}}</td>
                     <td class="title all"  :style="index == arr.length -1 ?{border:'none'}:''">
-                        <img src="../../static/up.png" alt="" v-if="item.change > 0" class="mgt">
-                        <img src="../../static/down.png" alt="" v-if="item.change < 0" class="mgt" >
-                    {{item.change}}</td>
-                    <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{conversion(item.total_user.toString())}}</td>
+                    {{item.total_user}}</td>
                     <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{conversion(item.new_user.toString())}}</td>
                     <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{conversion(item.active_user.toString())}}</td>
+                    <!-- <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{item.active_rate.toFixed(2)}}</td> -->
                     <td class="title all" :style="index == arr.length -1 ?{border:'none',textTransform:'capitalize'}:{textTransform:'capitalize'}">{{item.category}}</td>
                 </tr>
             </table>
            
             
-            <div style="width:300px;height:50px;margin:0 auto;margin-top:40px;"  v-if="arr.length>=1">
+            <div style="width:400px;height:50px;margin:0 auto;margin-top:40px;"  v-if="arr.length>=1">
                 <span style="float:left;margin-top:7px;font-size:12px;color:#4f5f6e;" v-if="$store.state.alllang == 0">共 {{all}} 条</span>
                 <span style="float:left;margin-top:7px;font-size:12px;color:#4f5f6e;" v-if="$store.state.alllang == 1">Total {{all}} items</span>
                 <el-pagination
@@ -46,25 +49,32 @@
 
 <script>
 import theSel from '../components/type_money'
+import theTime from '../components/time_type'
 import Axios from 'axios';
 export default {
     components:{
-               theSel
+               theSel,theTime
             },
             data(){
                 return{
                     toparr:['用户数量排行','Users'],
-                    titlearr:[[' ',' '],['名称','Name'],['变动情况','Changes'],['累计用户','Users'],['新增用户','New users'],['活跃用户','Active Users'],['分类','Category']],
+                    titlearr:[[' ',' '],['名称','Name'],['累计用户','Total Users'],['新增用户','New users'],['活跃用户','Active Users'],['分类','Category']],
                     arr:[],
                     currentPage1: 1,
                      //请求数组
                     reqarr:['eth','eos','nas'],
                     reqAarr:['ETH','EOS','NAS'],
                     // typearr:['total','game','tool','market','other'],
-                    allmoney:[['total','exchanges','games','high-risk','marketplaces','gambling','other'],['total','game','tool','exchange','other'],['total','Game','Tool','Market','Other']],
+                    allmoney:[['total','exchanges','games','high-risk','marketplaces','gambling','other'],['total','game','tool','exchange','marketplaces','gambling','high-rish','other'],['total','Game','Tool','Market','Other']],
                     all:'',
                     theleft:'280px',
-                    stylearr:['','','100px','','','','']
+                    stylearr:['','','100px','','','',''],
+                    // 排序功能图片数组
+                    rankpic_arr:[
+                        '../../static/sort1.png','../../static/sort2.png','../../static/sort3.png'
+                        ],
+                    // 排序功能控制数组 
+                    ranknum:[-1,-1,0,0,0,0,-1]
                 }
             },
             computed:{
@@ -108,6 +118,22 @@ export default {
                 this.currentPage1 = this.$store.state.yourpage
             },
             methods:{
+                rankdata(index){
+                    console.log(this.ranknum[index])
+                    if(index>1&&index<6){
+                        if(this.ranknum[index] == 0){
+                            this.ranknum=[-1,-1,0,0,0,0,-1]
+                            this.ranknum[index] = 1
+                        }else if(this.ranknum[index] == 1){
+                            this.ranknum=[-1,-1,0,0,0,0,-1]
+                            this.ranknum[index] = 2
+                        }else if(this.ranknum[index] == 2){
+                            this.ranknum=[-1,-1,0,0,0,0,-1]
+                            this.ranknum[index] = 1
+                        }
+                        
+                    }
+                },
                 //数字字符串添加逗号
                 conversion(str){
                     if(/\./.test(str)){
@@ -143,7 +169,7 @@ export default {
                     var url = this.$store.state.requrl+'/'+this.reqarr[this.$store.state.moneyty]+'/rank';
                         Axios.post(url,{
                                             "page":this.currentPage1,
-                                            "timestamp":this.$store.state.requesttime/1000,
+                                            "timestamp":this.$store.state.requesttime/1000+86400,
                                             "order_by":'user',
                                             "category":this.allmoney[this.$store.state.moneyty][this.$store.state.dapptype]
                                         },{

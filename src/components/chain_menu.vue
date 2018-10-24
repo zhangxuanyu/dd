@@ -14,11 +14,11 @@
             <div class="lock lockh " :style="index == select?{color:'#48a5fb',backgroundColor:'#f6f9fb'}:''"  @click="gotoother(index,true)">
                 <img :src="item.img" alt="" class="left mg1 cur" >
                 <span  class="left mg2 cur" >{{item.word[$store.state.alllang]}}</span>
-                <img :src="item.icon" alt="" @click.stop="changeflag(index)" class="cur">
+                <!-- <img :src="item.icon" alt="" @click.stop="changeflag(index)" class="cur"> -->
             </div>
-            <div v-if="item.address.length > 0&&item.flag" v-for="(itt,indd) in item.address" :class="{'adflow':true,'cur':true,'nobot':indd==item.address.length-1}" @click="run(index,item.posi[indd],index)" :style="">
+            <!-- <div v-if="item.address.length > 0&&item.flag" v-for="(itt,indd) in item.address" :class="{'adflow':true,'cur':true,'nobot':indd==item.address.length-1}" @click="run(index,item.posi[indd],index)" :style="">
                 {{itt[$store.state.alllang]}}
-            </div>
+            </div> -->
         </div>
         
 
@@ -34,32 +34,29 @@ export default {
       geth: "",
       //菜单数组
       mearr: [
-        { word: ["应用详情", "Details"], img: "../../static/an.png" },
+        { 
+            word: ["公链详情", "Details"],
+            img: "../../static/an.png" 
+            },
         {
           word: ["用户分析", "User Analysis"],
-          img: "../../static/an.png",
-          icon: "../../static/downcld.png",
-          flag: false,
-          address: [
-            ["累计用户", "Users"],
-            ["新增用户", "New users"],
-            ["活跃用户", "Active Users"]
-          ],
-          posi: [0, 630, 1920]
+          img: "../../static/an.png"
         },
         {
           word: ["交易数据", "Transaction Data"],
-          img: "../../static/an.png",
-          icon: "../../static/downcld.png",
-          flag: false,
-          address: [["交易笔数", "Transactions"], ["交易总额", "Volume"]],
-          posi: [0, 1300]
+          img: "../../static/an.png"
         },
-        // {word:['合约调用','Transactions'],img:'../../static/an.png',icon:'../../static/downcld.png',flag:false,address:[['调用次数','Transactions'],['实时调用','nowcall']],posi:[0,1350]}
-        { word: ["合约调用", "Transactions"], img: "../../static/an.png" }
+        { 
+            word: ["合约调用", "Transactions"], 
+            img: "../../static/an.png" 
+            },
+            { 
+            word: ["Dapp数据", "Dapp Data"], 
+            img: "../../static/an.png" 
+            }
       ],
       //路由数组
-      routearr: ["/detail", "/user", "/trade", "/usedapp"],
+      routearr: ["/chaindetail", "/chainuser", "/chaintrade", "/chainusedapp", "/chaindapp"],
       //改变宽度
       loww: "",
       //显示选中
@@ -94,41 +91,42 @@ export default {
 
     console.log(this.$route.path);
     this.mearr = [
-      { word: ["应用详情", "Details"], img: "../../static/an.png" },
-      {
-        word: ["用户分析", "User Analysis"],
-        img: "../../static/an.png",
-        icon: "../../static/downcld.png",
-        flag: false,
-        address: [
-          ["累计用户", "Users"],
-          ["新增用户", "New users"],
-          ["活跃用户", "Active Users"]
-        ],
-        posi: [0, 630, 1920]
-      },
-      {
-        word: ["交易数据", "Transaction Data"],
-        img: "../../static/an.png",
-        icon: "../../static/downcld.png",
-        flag: false,
-        address: [["交易笔数", "Transactions"], ["交易总额", "Volume"]],
-        posi: [0, 1300]
-      },
-      { word: ["合约调用", "Transactions"], img: "../../static/an.png" }
+      { 
+            word: ["公链详情", "Details"],
+            img: "../../static/an.png" 
+            },
+        {
+          word: ["用户分析", "User Analysis"],
+          img: "../../static/an.png"
+        },
+        {
+          word: ["交易数据", "Transaction Data"],
+          img: "../../static/an.png"
+        },
+        { 
+            word: ["合约调用", "Transactions"], 
+            img: "../../static/an.png" 
+            },
+            { 
+            word: ["Dapp数据", "Dapp Data"], 
+            img: "../../static/an.png" 
+            }
     ];
-    if (this.$route.path == "/detail") {
+    if (this.$route.path == "/chaindetail") {
       this.select = 0;
       this.mearr[0].img = "../../static/light.png";
-    } else if (this.$route.path == "/user") {
+    } else if (this.$route.path == "/chainuser") {
       this.select = 1;
       this.mearr[1].img = "../../static/light.png";
-    } else if (this.$route.path == "/trade") {
+    } else if (this.$route.path == "/chaintrade") {
       this.select = 2;
       this.mearr[2].img = "../../static/light.png";
-    } else if (this.$route.path == "/usedapp") {
+    } else if (this.$route.path == "/chainusedapp") {
       this.select = 3;
       this.mearr[3].img = "../../static/light.png";
+    } else if (this.$route.path == "/chaindapp") {
+      this.select = 4;
+      this.mearr[4].img = "../../static/light.png";
     }
     this.changeflag(this.select);
   },
@@ -169,41 +167,42 @@ export default {
         // this.mearr[2].img = '../../static/an.png'
         // this.mearr[3].img = '../../static/an.png'
         this.mearr = [
-          { word: ["应用详情", "Details"], img: "../../static/an.png" },
-          {
-            word: ["用户分析", "User Analysis"],
-            img: "../../static/an.png",
-            icon: "../../static/downcld.png",
-            flag: false,
-            address: [
-              ["累计用户", "Users"],
-              ["新增用户", "New users"],
-              ["活跃用户", "Active Users"]
-            ],
-            posi: [0, 630, 1920]
-          },
-          {
-            word: ["交易数据", "Transaction Data"],
-            img: "../../static/an.png",
-            icon: "../../static/downcld.png",
-            flag: false,
-            address: [["交易笔数", "Transactions"], ["交易总额", "Volume"]],
-            posi: [0, 1300]
-          },
-          { word: ["合约调用", "Transactions"], img: "../../static/an.png" }
+          { 
+            word: ["公链详情", "Details"],
+            img: "../../static/an.png" 
+            },
+        {
+          word: ["用户分析", "User Analysis"],
+          img: "../../static/an.png"
+        },
+        {
+          word: ["交易数据", "Transaction Data"],
+          img: "../../static/an.png"
+        },
+        { 
+            word: ["合约调用", "Transactions"], 
+            img: "../../static/an.png" 
+            },
+            { 
+            word: ["Dapp数据", "Dapp Data"], 
+            img: "../../static/an.png" 
+            }
         ];
         if (aa == 0) {
           this.mearr[aa].img = "../../static/light.png";
-          this.$router.push({ path: "/detail?id=" + this.urlid });
+          this.$router.push({ path: "/chaindetail?id=" + this.urlid });
         } else if (aa == 1) {
           this.mearr[aa].img = "../../static/light.png";
-          this.$router.push({ path: "/user?id=" + this.urlid });
+          this.$router.push({ path: "/chainuser?id=" + this.urlid });
         } else if (aa == 2) {
           this.mearr[aa].img = "../../static/light.png";
-          this.$router.push({ path: "/trade?id=" + this.urlid });
+          this.$router.push({ path: "/chaintrade?id=" + this.urlid });
         } else if (aa == 3) {
           this.mearr[aa].img = "../../static/light.png";
-          this.$router.push({ path: "/usedapp?id=" + this.urlid });
+          this.$router.push({ path: "/chainusedapp?id=" + this.urlid });
+        }else if (aa == 4) {
+          this.mearr[aa].img = "../../static/light.png";
+          this.$router.push({ path: "/chaindapp?id=" + this.urlid });
         }
         console.log(3333333333);
       }

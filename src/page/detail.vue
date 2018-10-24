@@ -1,18 +1,17 @@
 <template>
     <div  class="out" :style="{minHeight:geth,marginLeft:mglf}" >
+        <div style="position:fixed;width:100%;height:100%;background-color:#ccc;z-index:99;"  v-if="bigpic">
+
+        </div>
         <min-menu class="leftme" :style="{left:open}"></min-menu>
         <!-- <p class="alltitle">{{ttarr[10][$store.state.alllang]}}</p> -->
         <div class="contright" v-if="arr.title">
+          <div style="" class="showbigpic" v-if="bigpic">
+
+          </div>
             <!-- dapp介绍 -->
             <div class="dapp" style="minHeight:610px;">
-                <div class="outtitle">
-                    <img :src="'https://bkc-dapp-1252899312.cos.ap-hongkong.myqcloud.com/dappdata/static/icon/'+urlid+'.jpg'" alt="" class="titleimg" onerror="javascript:this.src='../../static/all1.png'">
-                    <div class="title">
-                        <p class="titlf">{{arr.title}}</p>
-                        <p class="titlty">{{arr.platform}} > {{arr.category}}</p>
-                    </div>
-                </div>
-
+                <p class="preview">{{ttarr[12][$store.state.alllang]}}</p>
                 <!-- 轮播图 -->
                 <div class="pic topnav_box" >
                     <ul :style="allleng" class="allpic"  v-show="picshow">
@@ -29,23 +28,47 @@
 
                     <div class="info">
                         <p style="color:rgb(33, 34, 41);font-weight:600;font-size:16px;margin-bottom:10px;">{{ttarr[1][$store.state.alllang]}}</p>
-                        <div  style="line-height:30px;font-size:14px;" class="cur base">
-                            <a :href="arr.website" target="_black" rel="noopener noreferrer">
-                                <img src="../../static/home.png" alt=""> {{ttarr[2][$store.state.alllang]}} 
-                                <div class="go"></div>
-                            </a>
+                        <div style="overflow:hidden;">
+                            <div  style="line-height:30px;font-size:14px;" class="cur base">
+                                <a :href="arr.website" target="_black" rel="noopener noreferrer">
+                                    <img src="../../static/home.png" alt=""> {{ttarr[2][$store.state.alllang]}} 
+                                    <div class="go"></div>
+                                    <span style="color:rgb(214, 222, 230);margin-left:20px;margin-right:20px;">|</span>
+                                    
+                                </a>
+                            </div>
+                            <div  style="line-height:30px;font-size:14px;" class="cur base">
+                                <a :href="arr.github?arr.github:'javascript:;'" :style="arr.github?{}:{color:'#ccc'}" target="_black" rel="noopener noreferrer">
+                                    <img src="../../static/GitHub.png" alt=""> {{ttarr[3][$store.state.alllang]}} 
+                                    <div class="go" v-if="arr.github"></div>
+                                </a>
+                            </div>
                         </div>
-                        <div  style="line-height:30px;font-size:14px;" class="cur base">
-                            <a :href="arr.github?arr.github:'javascript:;'" :style="arr.github?{}:{color:'#ccc'}" target="_black" rel="noopener noreferrer">
-                                <img src="../../static/GitHub.png" alt=""> {{ttarr[3][$store.state.alllang]}} 
-                                <div class="go" v-if="arr.github"></div>
-                            </a>
-                        </div>
-                        <div  style="line-height:30px;font-size:14px;" class="cur base">
-                            <a :href="theurl?theurl:'javascript:;'" target="_black" :style="theurl?{}:{color:'#ccc'}" rel="noopener noreferrer">
-                                <img src="../../static/dapp.png" alt=""> {{ttarr[4][$store.state.alllang]}} <div class="go" v-if="theurl"></div>
-                            </a>
-                        </div>
+                        
+                        <div class="tableout"> 
+                          <table width="100%" cellspacing='0' style="text-align: center;">
+                              <tr>
+                                  <th style="width:300px;" class="title">{{ttarr[4][$store.state.alllang]}}</th>
+                                  <th  class="title">{{ttarr[5][$store.state.alllang]}}</th>
+                              </tr>
+                              <tr v-for="(item,index) in arr.contracts" :key="index" v-if="index<=ctra">
+                                  <td class="all" v-if="index == 0">{{'contracts'+(index+1)}}</td>
+                                  <td class="all" v-if="index != 0"> </td>
+                                  <td class="all">
+                                    <a :href="'https://explorer.nebulas.io/#/address/'+item" v-if="arr.platform == 'NAS'" target="_black" rel="noopener noreferrer">{{item}}</a>
+                                    <a :href="'https://etherscan.io/address/'+item" v-if="arr.platform == 'ETH'" target="_black" rel="noopener noreferrer">{{item}}</a>
+                                    <a :href="'https://eospark.com/MainNet/account/'+item" v-if="arr.platform == 'EOS'" target="_black" rel="noopener noreferrer">{{item}}</a>
+                                  
+                                    
+                                  </td>
+                              </tr>
+                          </table>
+
+                          <div class="showcontract cur" @click="showctr(arr.contracts.length>1)" v-if="arr.contracts.length>1">
+                              {{ctra?ttarr[14][$store.state.alllang]:ttarr[6][$store.state.alllang]}}
+                              <img :src="ctra?'../../static/unshow.png':'../../static/show.png'" alt="" style="vertical-align:3px;margin-left:10px;">
+                          </div>
+                      </div>  
                     </div>
                 </div>
                 
@@ -53,19 +76,9 @@
                 
             </div>
 
-            <!-- 图表 -->
-            <div class="picture">
-                <p style="font-size: 16px;color: #212229;margin-bottom:30px;text-align:left;font-weight:600;">{{ttarr[11][$store.state.alllang]}}</p>
-                <div id="thirtychart" style="min-width:500px;height:500px"></div>
-            </div>  
 
             <!-- 动态和资讯 -->
-            <div class="news" style="minWidth:1150px">
-                <!-- <div class="newact">
-                    <p>最新动态</p>
-                    <p style="line-height:30px;font-size:14px;">基于星云链的新一代区块链游戏-恐龙乐园上线了！通过免费领取一颗龙蛋去孵化自己的龙宝宝，每个玩家限定免费领取一枚龙蛋！所有龙宝宝从龙蛋中孵化出来之后，力量、敏捷和速度值永远不会发生变化，体重初始值均为5KG。玩家还可以支付0.01NAS购买额外的龙蛋去孵化更多的龙宝宝，或者直接去市场中购买其他玩家挂售的稀有恐龙！玩家通过让自己的龙宝宝与其他恐龙进行PK，赢家将获得对方20%的体重，我们希望用更加公平的算法，通过所有玩家的共同努力，打造一条称霸宇宙的无敌霸王龙！还在等什么，快来恐龙乐园一起嗨吧！
-    --感谢设计师@B.Q，所有的恐龙均为原画  </p>
-                </div> -->
+            <div class="news" v-show="false">
                 <div class="newinfo">
                     <p style="color: #212229;font-weight: 600;">{{ttarr[5][$store.state.alllang]}}</p>
                     <p style="line-height:30px;font-size:14px;"></p>
@@ -76,510 +89,477 @@
 </template>
 
 <script>
-import minMenu from '../components/rank'
-import Highcharts from 'highcharts/highstock';
-import HighchartsMore from 'highcharts/highcharts-more';
-import HighchartsDrilldown from 'highcharts/modules/drilldown';
-import Highcharts3D from 'highcharts/highcharts-3d';
-import Axios from 'axios';
+import minMenu from "../components/rank";
+import Highcharts from "highcharts/highstock";
+import HighchartsMore from "highcharts/highcharts-more";
+import HighchartsDrilldown from "highcharts/modules/drilldown";
+import Highcharts3D from "highcharts/highcharts-3d";
+import Axios from "axios";
 
-HighchartsMore(Highcharts)
+HighchartsMore(Highcharts);
 HighchartsDrilldown(Highcharts);
 Highcharts3D(Highcharts);
 
 export default {
-    components:{
-            minMenu
-        },
-        data(){
-            return{
-                geth:'',
-                // 图片数组
-                picarr:[1,2,3,4],
-                allleng:'',
-                mglf:'',
-                open:'',
-                arr:'',
-                //请求数组
-                reqarr:['eth','eos','nas'],
-                reqAarr:['ETH','EOS','NAS'],
-                wrongarr:['../../static/1-0-1.jpg','../../static/1-0-2.jpg','../../static/1-0-24.jpg','../../static/1-0-28.jpg'],
-                ttarr:[['简介','Introduction'],
-                        ['基本信息','Basic Information'],
-                        ['访问主页','Homepage'],
-                        ['查看GitHub源码','GitHub'],
-                        ['查看智能合约','Smart contract'],
-                        ['最新资讯','Latest News'],
-                        ['累计用户','Users'],
-                        ['交易量','Volume'],
-                        ['调用次数','Transactions'],
-                        ['综合排行','Rankings'],
-                        ['应用详情','Details'],
-                        ['近 30 日排名','Rank History']],
-                code:'',
-                theurl:'',
-                xarr:[],
-                userarr:[],
-                tradearr:[],
-                usearr:[],
-                allarr:[],
-                urlid:'',
-                //统计图片数量
-                imgcount:0,
-                //轮播图显示
-                picshow:false
-            }
-        },
-        created(){
-            this.$store.commit('changemenuflag',false)
-            this.$store.commit('changeloadopacty',true)
-            this.$store.commit('changeloadflge',true)
-            this.geth = window.innerHeight - 60 + 'px',
-            this.allleng = {'width':this.wrongarr.length*370+'px'}
-                setTimeout(()=>{
-                    this.fornew()
-                },50)
-            if(this.$store.state.themenuflag){
-                    this.open = 253+'px'
-                    this.mglf = 503+'px'
-                }else{
-                    this.open = ''
-                    this.mglf = ''
-                }
-        },
-        mounted(){
-            setTimeout(()=>{
-                console.log(this.xarr)
-                console.log(this.$store.state.close)
-                
-                this.draw(this.xarr,this.userarr,this.usearr,this.tradearr,this.allarr,this.ttarr)
-                $('.outpic').each((a)=>{
-                    console.log($('.outpic').eq(a)[0].children)
-                    if($('.outpic').eq(a)[0].children[0].src.indexOf('jpg')!=-1||$('.outpic').eq(a)[0].children[0].src.indexOf('png')!=-1){
-                        this.imgcount++
-                    }
-                    if($('.outpic').eq(a)[0].children[1].src.indexOf('jpg')!=-1||$('.outpic').eq(a)[0].children[1].src.indexOf('png')!=-1){
-                        this.imgcount++
-                    }
-                })
-                console.log(this.imgcount)
-                if(this.imgcount){
-                    this.allleng = {'width':this.imgcount*370+'px'}
-                }else{
-                    this.allleng = {'width':this.wrongarr.length*370+'px'}
-                }
-                
-            },1000)
+  components: {
+    minMenu
+  },
+  data() {
+    return {
+      geth: "",
+      // 图片数组
+      picarr: [1, 2, 3, 4],
+      allleng: "",
+      mglf: "",
+      open: "",
+      arr: "",
+      //请求数组
+      reqarr: ["eth", "eos", "nas"],
+      reqAarr: ["ETH", "EOS", "NAS"],
+      wrongarr: [
+        "../../static/1-0-1.jpg",
+        "../../static/1-0-2.jpg",
+        "../../static/1-0-24.jpg",
+        "../../static/1-0-28.jpg"
+      ],
+      ttarr: [
+        ["简介", "Introduction"],
+        ["基本信息", "Basic Information"],
+        ["访问主页", "Homepage"],
+        ["查看GitHub源码", "GitHub"],
+        ["智能合约", "Smart contract"],
+        ["合约地址", "Contract address"],
+        ["展开", "Show"],
+        ["最新资讯", "Latest News"],
+        ["累计用户", "Users"],
+        ["交易量", "Volume"],
+        ["调用次数", "Transactions"],
+        ["应用详情", "Details"],
+        ["预览","Preview"],
+        ["展开","open"],
+        ["关闭","close"]
+      ],
+      code: "",
+      theurl: "",
+      xarr: [],
+      userarr: [],
+      tradearr: [],
+      usearr: [],
+      allarr: [],
+      urlid: "",
+      //统计图片数量
+      imgcount: 0,
+      //轮播图显示
+      picshow: false,
+       //控制合约显示
+      ctra:0,
+      now_show_type:'open',
+      //控制大图显示隐藏
+      bigpic:false
+    };
+  },
+  created() {
+    this.$store.commit("changemenuflag", false);
+    this.$store.commit("changeloadopacty", true);
+    this.$store.commit("changeloadflge", true);
+    (this.geth = window.innerHeight - 60 + "px"),
+      (this.allleng = { width: this.wrongarr.length * 370 + "px" });
+    setTimeout(() => {
+      this.fornew();
+    }, 50);
+    if (this.$store.state.themenuflag) {
+      this.open = 253 + "px";
+      this.mglf = 503 + "px";
+    } else {
+      this.open = "";
+      this.mglf = "";
+    }
+  },
+  mounted() {
+    setTimeout(() => {
+      console.log(this.xarr);
+      console.log(this.$store.state.close);
 
-            
-        },
-        computed:{
-            addclose(){
-                return this.$store.state.themenuflag 
-            },
-            thelang(){
-                return this.$store.state.alllang 
-            }
-        },
-        watch:{
-            addclose(n,o){
-                console.log(1111111111111)
-                if(n){
-                    this.open = 253+'px'
-                    this.mglf = 503+'px'
-                }else{
-                    this.open = ''
-                    this.mglf = ''
-                }
-               
-                var newchart = setInterval(()=>{
-                    window.chartsss.reflow()
-                },17)
-                setTimeout(()=>{
-                    clearInterval(newchart)
-                },1010)
-            },
-            thelang(n,o){
-                this.draw(this.xarr,this.userarr,this.usearr,this.tradearr,this.allarr,this.ttarr)
-            }
-        },
-        methods:{
-            draw(arr1,arr2,arr3,arr4,arr5,arr6) {
-		    //   var chartContainer = document.getElementById('mychart')
-			    var options={   //hchart的参数
-			        chart: {
-			            zoomType: 'xy'
-			        },
-                    colors:['#409efe','#00e175','#ff0a50','#f48421'],
-			        title: {
-			            text: ''
-			        },
-			        subtitle: {
-			            text: ''
-                    },
-                    credits: {
-                        enabled: false
-                    },
-			        xAxis: [{ //横坐标
-			            categories: arr1,
-			            crosshair: true
-			        }],
-			        yAxis: [
-				        { // Primary yAxis
-				            labels: {
-				                format: '{value}',
-				                style: {
-				                    color: '#409efe'
-				                }
-				            },
-				            title: {
-				                text: arr6[6][this.$store.state.alllang],
-				                style: {
-				                    color:'#409efe'
-				                }
-				            }
-				        },
-				        { // Secondary yAxis
-				            title: {
-				                text: arr6[7][this.$store.state.alllang],
-				                style: {
-				                    color:'#00e175'
-				                }
-				            },
-				            labels: {
-				                format: '{value}',
-				                style: {
-				                    color:'#00e175'
-				                }
-				            },
-				            opposite: true
-						},
-				        { // Secondary yAxis
-				            title: {
-				                text: arr6[8][this.$store.state.alllang],
-				                style: {
-				                    color:'#ff0a50'
-				                }
-				            },
-				            labels: {
-				                format: '{value}',
-				                style: {
-				                    color:'#ff0a50'
-				                }
-				            },
-				            opposite: true
-						},
-				        { // Secondary yAxis
-				            title: {
-				                text: arr6[9][this.$store.state.alllang],
-				                style: {
-				                    color:'#f48421'
-				                }
-				            },
-				            labels: {
-				                format: '{value}',
-				                style: {
-				                    color:'#f48421'
-				                }
-				            },
-				            opposite: true
-						}
-						
-			        ],
-			        tooltip: {
-                        shared: true,
-                        
-			        },
-			        series: [
-				        {
-				            name: arr6[6][this.$store.state.alllang],
-				            data: arr2,
-                            type: 'spline',
-                            
-				        },
-				        {  //纵坐标
-				            name: arr6[7][this.$store.state.alllang],
-				            data: arr4,
-				            type: 'spline',
-                            yAxis: 1,
-                            
-                            // tooltip:{
-                            //     valueDecimals: 2,
-                            //     valuePrefix: '$',
-                            //     valueSuffix: ' USD'
-                            // }
-				        },
-				        {  //纵坐标
-				            name: arr6[8][this.$store.state.alllang],
-				            data: arr3,
-				            type: 'spline',
-                            yAxis: 2,
-                            
-				        },
-				        {  //纵坐标
-				            name: arr6[9][this.$store.state.alllang],
-				            data: arr5,
-				            type: 'spline',
-                            yAxis: 3,
-                            
-				        }
-
-			        ]
-				}
-                // this.chart = new Highcharts.Chart(chartContainer, options)
-                window.chartsss = Highcharts.chart('thirtychart',options)
-                
-	        	    window.onresize = function () {
-	        	    	 window.chartsss.reflow();
-	        	    }
-            },
-            fornew(){
-                this.xarr = []
-                this.userarr = []
-                this.tradearr = []
-                this.usearr = []
-                this.allarr = []
-                console.log(this.$store.state.moneyty,this.$store.state.requesttime)
-                    var url = this.$store.state.requrl+'/'+this.$store.state.appid.split('_')[0].toLowerCase()+'/detail';
-                    console.log(url)
-                    Axios.post(url,{
-                                        "dapp_id":this.$store.state.appid
-                                    },{
-                                        headers: {'Content-Type': "application/x-www-form-urlencoded"}
-                                    }).then(res => {
-                                        setTimeout(()=>{
-                                            this.picshow = true
-                                        },1000)
-                                        console.log(res.data.msg)
-                                        this.arr = res.data.msg
-                                        this.urlid = res.data.msg.dapp_id
-                                        res.data.msg.day_30.forEach(e => {
-                                            var ddd = new Date(e.timestamp*1000-86400000)
-                                            var year = ddd.getFullYear()
-                                            var month = ddd.getMonth()+1
-                                            var day=ddd.getDate();
-                                            this.xarr.unshift(year+'/'+month+'/'+day)
-                                            this.userarr.unshift(e.day_info[0])
-                                            this.tradearr.unshift(e.day_info[2].toFixed(2)-0)
-                                            this.usearr.unshift(e.day_info[1])
-                                            this.allarr.unshift(e.rank_order)
-                                        });
-                                        if(this.arr.platform == 'NAS'){
-                                            this.theurl = 'https://explorer.nebulas.io/#/address/'+this.arr.contracts[0]
-                                        }else if(this.arr.platform == 'ETH'){
-                                            this.theurl = 'https://etherscan.io/address/'+this.arr.contracts[0]
-                                        }
-                                        this.$store.commit('changeloadopacty',false)
-                                    })
-            }
+      $(".outpic").each(a => {
+        console.log($(".outpic").eq(a)[0].children);
+        if (
+          $(".outpic")
+            .eq(a)[0]
+            .children[0].src.indexOf("jpg") != -1 ||
+          $(".outpic")
+            .eq(a)[0]
+            .children[0].src.indexOf("png") != -1
+        ) {
+          this.imgcount++;
         }
-}
+        if (
+          $(".outpic")
+            .eq(a)[0]
+            .children[1].src.indexOf("jpg") != -1 ||
+          $(".outpic")
+            .eq(a)[0]
+            .children[1].src.indexOf("png") != -1
+        ) {
+          this.imgcount++;
+        }
+      });
+      console.log(this.imgcount);
+      if (this.imgcount) {
+        this.allleng = { width: this.imgcount * 370 + "px" };
+      } else {
+        this.allleng = { width: this.wrongarr.length * 370 + "px" };
+      }
+    }, 1000);
+  },
+  computed: {
+    addclose() {
+      return this.$store.state.themenuflag;
+    },
+    thelang() {
+      return this.$store.state.alllang;
+    }
+  },
+  watch: {
+    now_show_type(){
+      
+    },
+    addclose(n, o) {
+      console.log(1111111111111);
+      if (n) {
+        this.open = 253 + "px";
+        this.mglf = 503 + "px";
+      } else {
+        this.open = "";
+        this.mglf = "";
+      }
+
+      var newchart = setInterval(() => {
+        window.chartsss.reflow();
+      }, 17);
+      setTimeout(() => {
+        clearInterval(newchart);
+      }, 1010);
+    },
+    thelang(n, o) {
+    }
+  },
+  methods: {
+    //合约显示
+      showctr(flag){
+        console.log(flag)
+        if(flag){
+          if(this.ctra){
+              this.ctra = 0
+          }else{
+              this.ctra = this.arr.contracts.length + 1
+          }
+        }  
+      },
+    fornew() {
+      this.xarr = [];
+      this.userarr = [];
+      this.tradearr = [];
+      this.usearr = [];
+      this.allarr = [];
+      console.log(this.$store.state.moneyty, this.$store.state.requesttime);
+      var url =
+        this.$store.state.requrl +
+        "/" +
+        this.$store.state.appid.split("_")[0].toLowerCase() +
+        "/detail";
+      console.log(url);
+      Axios.post(
+        url,
+        {
+          dapp_id: this.$store.state.appid,
+          flag:1
+        },
+        {
+          headers: { "Content-Type": "application/x-www-form-urlencoded" }
+        }
+      ).then(res => {
+        setTimeout(() => {
+          this.picshow = true;
+        }, 1000);
+        console.log(res.data.msg);
+        this.arr = res.data.msg;
+        this.urlid = res.data.msg.dapp_id;
+        res.data.msg.day_30.forEach(e => {
+          var ddd = new Date(e.timestamp * 1000 - 86400000);
+          var year = ddd.getFullYear();
+          var month = ddd.getMonth() + 1;
+          var day = ddd.getDate();
+          this.xarr.unshift(year + "/" + month + "/" + day);
+          this.userarr.unshift(e.day_info[0]);
+          this.tradearr.unshift(e.day_info[2].toFixed(2) - 0);
+          this.usearr.unshift(e.day_info[1]);
+          this.allarr.unshift(e.rank_order);
+        });
+        if (this.arr.platform == "NAS") {
+          this.theurl =
+            "https://explorer.nebulas.io/#/address/" + this.arr.contracts[0];
+        } else if (this.arr.platform == "ETH") {
+          this.theurl = "https://etherscan.io/address/" + this.arr.contracts[0];
+        }
+        this.$store.commit("changeloadopacty", false);
+      });
+    }
+  }
+};
 </script>
 
 <style scoped>
-.out{
-    margin-left: 321px;
-    margin-top: 102px;
-    padding-left: 1px;
-    margin-right: 30px;
-    box-sizing: border-box;
-    overflow: visible;
-    transition: all 0.5s;
+table {
+     table-layout:fixed;
+     }
+table tr{
+    background-color: #f9f9f9;
+    height: 55px;
+} 
+
+
+
+.out {
+  margin-left: 321px;
+  margin-top: 102px;
+  padding-left: 1px;
+  margin-right: 30px;
+  box-sizing: border-box;
+  overflow: visible;
+  transition: all 0.5s;
 }
-a{
+a {
   text-decoration: none;
   outline: none;
   color: #333;
 }
-.leftme{
-    position: fixed;
-    z-index: 100;
-    top: 60px;
-    left: 73px;
-    transition: all 0.5s;
+.leftme {
+  position: fixed;
+  z-index: 100;
+  top: 60px;
+  left: 73px;
+  transition: all 0.5s;
 }
-.alltitle{
-    margin-top: 50px;
-    margin-bottom: 30px;
+.alltitle {
+  margin-top: 50px;
+  margin-bottom: 30px;
+  text-align: left;
+  font-size: 24px;
+  color: #c1c7cd;
+}
+.contright {
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+}
+.showbigpic{
+  position:absolute;
+  width:100%;
+  height:100%;
+  z-index:100;
+  background-size:contain;
+}
+.dapp {
+  width: 100%;
+  background-color: #fff;
+  padding: 30px;
+  box-sizing: border-box;
+  position: relative;
+  box-shadow: 3px 2px 10px 0px rgba(37, 48, 76, 0.08);
+}
+.preview{
     text-align: left;
-    font-size: 24px;
-    color: #c1c7cd;
+    font-size: 16px;
+    color: #111;
+    font-weight: 600;
 }
-.contright{
-    width: 100%;
-    box-sizing: border-box;
+
+.pic {
+  height: 230px;
+  border-bottom: 1px solid #eff3f5;
+  margin-top: 20px;
+  overflow-x: scroll;
 }
-.dapp{
-    width: 100%;
-    background-color: #fff;
-    padding: 30px;
-    box-sizing: border-box;
+.topnav_box::-webkit-scrollbar {
+  width: 5px;
+  height: 4px;
+
+  background-color: #c1c1c1;
+}
+.topnav_box::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  background-color: #f1f1f1;
+}
+.topnav_box::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #c1c1c1;
+}
+
+.allpic {
+  height: 200px;
+  overflow-y: hidden;
+}
+.picwh {
+  width: 350px;
+  height: 200px;
+}
+.outpic {
+  float: left;
+  margin: 0 10px;
+}
+.inpic {
+  float: left;
+  margin: 0 10px;
+}
+.intro {
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
+  margin-top: 30px;
+  border-top: 1px solid #eff3f5;
+  padding-top: 30px;
+}
+.info {
+  text-align: left;
+  margin-top: 30px;
+}
+.picture {
+  width: 100%;
+  height: 585px;
+  background-color: #fff;
+  margin-top: 30px;
+  margin-right: 20px;
+  padding: 30px;
+  box-sizing: border-box;
+  box-shadow: 3px 2px 10px 0px rgba(37, 48, 76, 0.08);
+}
+.news {
+  width: 100%;
+  box-sizing: border-box;
+   
+}
+.newact {
+  padding: 30px;
+  float: left;
+  border-radius: 6px;
+  background-color: #fff;
+  width: 43%;
+  margin-right: 30px;
+  margin-top: 30px;
+}
+.newinfo {
+  padding: 30px;
+  background-color: #fff;
+  margin-top: 30px;
+  text-align: left;
+  box-shadow: 3px 2px 10px 0px rgba(37, 48, 76, 0.08);
+}
+.go {
+  width: 14px;
+  height: 14px;
+  background-image: url(../../static/go.png);
+  display: inline-block;
+}
+.base{
+  float: left;
+  margin-bottom: 20px;
+}
+.base:hover a {
+  color: #409efe;
+}
+.base:hover .go {
+  background-image: url(../../static/go1.png);
+}
+.tableout{
     position: relative;
-    box-shadow: 3px 2px 10px 0px 
-		rgba(37, 48, 76, 0.08);
 }
-.titleimg{
-    width:64px;
-    height:64px;
-    float:left;
-    margin-right: 10px;
+.showcontract{
+    position: absolute;
+    width: 67px;
+	height: 30px;
+	border-radius: 4px;
+    color: #49a5fb;
+    font-size: 14px;
+    line-height: 30px;
+    text-align: center;
+    top: 65px;
+    right: 24px;
 }
 .title{
-    float:left;
-    text-align: left;
-}
-.titlf{
-    font-size: 24px;
-    font-weight: 600;
+    border: 1px solid #ebecf0;
     color: #4f5f6e;
-    line-height: 34px;
+    font-size: 14px;
 }
-.titlty{
-    font-size: 16px;
+.title:nth-of-type(2){
+    border-left: 0;
+}
+.all{
+    border: 1px solid #ebecf0;
+    border-top: 0;
     color: #808c9b;
-    margin-top: 10px;
-}
-.outtitle{
-    height: 92px;
-    border-bottom: 1px solid #eff3f5;
-}
-.pic{
-    height: 230px; 
-    border-bottom: 1px solid #eff3f5; 
-    margin-top: 30px;     
-    overflow-X: scroll;                                                          
-}
-.topnav_box::-webkit-scrollbar
-{  
-    width: 5px;  
-    height:4px;     
-
-   background-color:#c1c1c1;
-
-}  
-.topnav_box::-webkit-scrollbar-track
-{  
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);  
-    border-radius: 10px; 
-    background-color:#f1f1f1;    
-    
-}
-.topnav_box::-webkit-scrollbar-thumb{
-    border-radius: 10px;  
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);  
-   background-color:#c1c1c1;
-} 
-
-.allpic{
-    height: 200px;
-}
-.picwh{
-    width: 350px;
-    height: 200px;
-}
-.outpic{
-    float: left;
-    margin: 0 10px;
-}
-.inpic{
-    float: left;
-    margin: 0 10px;
-}
-.intro{
-    width: 100%;
-    padding-right: 430px;
-    box-sizing: border-box;
-    text-align: left;
-    margin-top: 30px;
-    border-top: 1px solid #eff3f5;
-    padding-top: 30px;
-}
-.info{
-    width: 320px;
-    position: absolute;
-    top: 30px;
-    right: 10px;
-    text-align: left;
-}
-.picture{
-    width: 100%;
-    height: 585px;
     background-color: #fff;
-    margin-top: 30px;
-    margin-right: 20px;
-    padding: 30px;
-    box-sizing: border-box;
-    box-shadow: 3px 2px 10px 0px 
-		rgba(37, 48, 76, 0.08);
+    font-size: 14px;
 }
-.news{
-    width: 100%;
-    box-sizing: border-box;
-    overflow: hidden;
-    
+.all:nth-of-type(1){
+    border-bottom: 0px;
 }
-.newact{
-    padding: 30px;
-    float: left;
-    border-radius: 6px;
-    background-color: #fff;
-    width: 43%;
-    margin-right: 30px;
-    margin-top: 30px;
+.all:nth-of-type(2){
+    border-left: 0;
+    border-bottom: 0px;
+    cursor: pointer;
 }
-.newinfo{
-    padding: 30px;
-    float: left;
-    background-color: #fff;
-    width: 95%;
-    margin-top: 30px;
-    text-align: left;
-    box-shadow: 3px 2px 10px 0px 
-		rgba(37, 48, 76, 0.08);
+.all:nth-of-type(2) a{
+  color: #808c9b;
 }
-.go{
-    width: 14px;
-    height: 14px;
-    background-image: url(../../static/go.png);
-    display: inline-block;
+.all:nth-of-type(2) a:hover{
+    color: #48a5fb;
 }
-.base:hover a{
-    color: #409efe;
-}
-.base:hover .go{
-    background-image: url(../../static/go1.png);
+.tableout tr:nth-last-of-type(1) .all:nth-of-type(1),.tableout tr:nth-last-of-type(1) .all:nth-of-type(2){
+  border-bottom: 1px solid #ebecf0;
 }
 </style>
 <style>
-.el-input__inner{
-    border: 1px solid #f7f8fa;
+.el-input__inner {
+  border: 1px solid #f7f8fa;
 }
-.el-input__inner:hover{
-    border-color:#f7f8fa;
+.el-input__inner:hover {
+  border-color: #f7f8fa;
 }
-.el-range-editor.el-input__inner{
-    border-radius: 20px;
-    background-color: #f7f8fa;
+.el-range-editor.el-input__inner {
+  border-radius: 20px;
+  background-color: #f7f8fa;
 }
-.el-range-editor .el-range-input{
-    background-color: #f7f8fa;
+.el-range-editor .el-range-input {
+  background-color: #f7f8fa;
 }
-.el-pagination{
-    font-weight:400;
+.el-pagination {
+  font-weight: 400;
 }
-.el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
-    width:350px;
+.el-date-editor--daterange.el-input,
+.el-date-editor--daterange.el-input__inner,
+.el-date-editor--timerange.el-input,
+.el-date-editor--timerange.el-input__inner {
+  width: 350px;
 }
-.el-icon-date:before{
-    content:'';
+.el-icon-date:before {
+  content: "";
 }
-.el-pager li.active{
-    color:rgb(73,165,251);
+.el-pager li.active {
+  color: rgb(73, 165, 251);
 }
-.el-pager li:hover{
-    color:#49a5fb;
+.el-pager li:hover {
+  color: #49a5fb;
 }
-.el-pagination{
-    font-weight:400;
+.el-pagination {
+  font-weight: 400;
 }
+.el-dropdown-link {
+    cursor: pointer;
+    color: #409EFF;
+  }
+  .el-icon-arrow-down {
+    font-size: 12px;
+  }
 </style>

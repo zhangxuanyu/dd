@@ -2,9 +2,9 @@
     <div>
         <go-search class="top"></go-search>
         <the-menu class="menu"></the-menu>
-        <my-load v-if="$store.state.loadflag"></my-load>
+        <!-- <my-load v-if="$store.state.loadflag"></my-load> -->
         <router-view  class="cont"/>
-        <the-foot class="foot" :style="{paddingLeft:theleft}"></the-foot>
+        <the-foot class="foot"></the-foot>
     </div>
 </template>
 
@@ -20,34 +20,8 @@ export default {
                 theFoot,
                 myLoad
             },
-    data(){
-        return{
-            theleft:''
-        }
-    },
-    computed:{
-        inleft(){
-            return this.$store.state.themenuflag
-        }
-    },
-    watch:{
-        inleft(n,o){
-            this.cglf(n)
-        },
-       
-    },  
-    created(){
-        this.cglf(this.$store.state.themenuflag)
-    },
-    methods:{
-        cglf(n){
-            if(n){
-                this.theleft='330px'
-            }else{
-                this.theleft='70px'
-            }
-        },
-    }    
+  
+    
             
 }
 </script>
@@ -70,7 +44,6 @@ export default {
     overflow: hidden;
 }
 .foot{
-    padding-left: 300px;
     box-sizing: border-box;
     margin-top: 60px;
 }

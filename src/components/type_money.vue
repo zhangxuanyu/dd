@@ -1,24 +1,9 @@
 <template>
     <div style="overflow:hidden;padding-left:1px;height:45px;">
-         <div v-for="(item,index) in moneyarr" class="mytype cur" :style="mnysel == index?{color:'rgb(73,165,251)',backgroundColor:'#fff',border:'none'}:''" @click="changemny(index)">{{item}}</div>
-         <p class="right"><span style="margin-right:14px;font-size:14px;">{{time[$store.state.alllang]}}</span>
-            <el-date-picker
-            v-model="value1"
-            type="date"
-            placeholder="选择日期" style="font-size:16px;">
-            </el-date-picker>
-            <span v-if="showtype" style="margin-left:40px;margin-right:14px;font-size:14px;">{{tyarr[$store.state.alllang]}}</span>
-            <!-- <select v-model="type" class="myselect">
-                <option :value="index" v-for="(item,index) in typearr1" v-if="$store.state.moneyty == 0">{{item[$store.state.alllang]}}</option>
-                <option :value="index" v-for="(item,index) in typearr2" v-if="$store.state.moneyty == 1">{{item[$store.state.alllang]}}</option>
-                <option :value="index" v-for="(item,index) in typearr3" v-if="$store.state.moneyty == 2">{{item[$store.state.alllang]}}</option>
-            </select> -->
-            <el-select v-model="type"   class="top_right" v-if="showtype" >
-                <el-option :key="index" :label="item[$store.state.alllang]" :value="index" v-for="(item,index) in typearr1" v-if="$store.state.moneyty == 0">{{item[$store.state.alllang]}}</el-option>
-                <el-option :key="index" :label="item[$store.state.alllang]"  :value="index" v-for="(item,index) in typearr2" v-if="$store.state.moneyty == 1">{{item[$store.state.alllang]}}</el-option>
-                <el-option :key="index" :label="item[$store.state.alllang]"  :value="index" v-for="(item,index) in typearr3" v-if="$store.state.moneyty == 2">{{item[$store.state.alllang]}}</el-option>
-            </el-select>
-         </p>
+         <div v-for="(item,index) in moneyarr" class="mytype cur" :style="mnysel == index?{color:'rgb(73,165,251)',backgroundColor:'#fff',border:'none'}:''" @click="changemny(index)">
+             {{item}}
+             <span v-if="index == 1" style="font-size:12px;color:rgb(73, 165, 251)">(beta)</span>
+        </div>
     </div>
 </template>
 
@@ -27,12 +12,6 @@ export default {
     data(){
         return{
             moneyarr:['ETH','EOS','NAS'],
-            typearr1:[['全部','total'],['交易所','exchanges'],['游戏','game'],['高风险','high-rish'],['市场','marketplaces'],['博彩','gambling'],['其他','other']],
-            typearr2:[['全部','total'],['游戏','game'],['工具','tool'],['交易所','exchanges'],['其他','other']],
-            typearr3:[['全部','total'],['游戏','game'],['工具','tool'],['市场','marketplaces'],['其他','other']],
-            value1: '',
-            time:['日期','Date'],
-            tyarr:['分类','Categories'],
             type:'',
             //币种选择
             mnysel:0,
@@ -43,34 +22,10 @@ export default {
     },
     created(){
         this.mnysel = this.$store.state.moneyty
-        if(this.$store.state.requesttime){
-            this.value1 = new Date(this.$store.state.requesttime);
-        }else{
-             var now = new Date();
-            //小时,分钟，秒，毫秒
-            //凌晨2点50分50秒0毫秒
-            now.setHours(0, 0, 0, 0);
-            console.log(now.getTime());
-            this.$store.commit('gettime',now.getTime()-86400000)
-            this.value1 = new Date(this.$store.state.requesttime);
-        }
-       
-        if(this.$route.path == '/rank'){
-            this.showtype = false
-        }
         this.$store.commit('getdapptype',0)
         this.type = this.$store.state.dapptype
     },
     watch:{
-        value1(n,o){
-            console.log(n)
-            var date = new Date(n);
-            // 有三种方式获取，在后面会讲到三种方式的区别
-            var time1 = date.getTime();
-            //请求的时间戳
-            this.$store.commit('gettime',time1)
-            console.log(time1)
-        },
         type(n,o){
             console.log(n)
             this.$store.commit('getdapptype',n)

@@ -513,35 +513,39 @@ table td{
 } */
 </style>
 <style>
-.el-input__inner{
-    border: 1px solid #f7f8fa;
-}
-.el-input__inner:hover{
-    border-color:#f7f8fa;
-}
-.el-range-editor.el-input__inner{
+.dapp .el-range-editor.el-input__inner{
     border-radius: 20px;
     background-color: #f7f8fa;
 }
-.el-range-editor .el-range-input{
+.dapp .el-range-editor .el-range-input{
     background-color: #f7f8fa;
 }
-.el-pagination{
-    font-weight:400;
-}
-.el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
+ .dapp .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
     width:350px;
 }
-.el-icon-date:before{
+.dapp .el-icon-date:before{
     content:'';
 }
-.el-pager li.active{
+.dapp .el-input__inner{
+    border: 1px solid #f7f8fa;
+    font-size:14px;
+    color:#797b8e;
+    height: 30px;
+    line-height: 24px;
+}
+.dapp .el-date-editor .el-range-separator{
+    line-height: 24px;
+}
+.dapp .el-input__inner:hover{
+    border-color:#f7f8fa;
+}
+.dapp .el-pager li.active{
     color:rgb(73,165,251);
 }
 .el-pager li:hover{
     color:#49a5fb;
 }
-.el-pagination{
+.dapp .el-pagination{
     font-weight:400;
 }
 </style>

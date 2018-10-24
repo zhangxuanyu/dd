@@ -12,6 +12,14 @@ import trade from '../page/trade'
 import use from '../page/use'
 import usedapp from '../page/usedapp'
 import user from '../page/user'
+import report from '../page/report'
+import chain from '../page/comment_chain'
+import chaindetail from '../page/chaindetail'
+import chainuser from '../page/chainuser'
+import chainusedapp from '../page/chainuse'
+import chaintrade from '../page/chaintrade'
+import chaindata from '../page/chaindata'
+import pdf from '../page/pdf'
 import empty from '../page/empty'
 import Pcnotfond from '../page/notfound'
 
@@ -24,6 +32,13 @@ const router = new Router({
     { 
       path: '*', 
       component: Pcnotfond,
+      meta:{
+        title:'DappData'
+      }
+    },
+    { 
+      path: '/pdf', 
+      component: pdf,
       meta:{
         title:'DappData'
       }
@@ -70,6 +85,13 @@ const router = new Router({
           }
         },
         {
+          path:'/report',
+          component: report,
+          meta:{
+            title:'DappData'
+          }
+        },
+        {
           path:'/search',
           component: search,
           meta:{
@@ -107,6 +129,48 @@ const router = new Router({
         {
           path:'/empty',
           component: empty,
+          meta:{
+            title:'DappData'
+          }
+        },
+        {
+          path:'/chain',
+          component: chain,
+          meta:{
+            title:'DappData'
+          }
+        },
+        {
+          path:'/chaindetail',
+          component: chaindetail,
+          meta:{
+            title:'DappData'
+          }
+        },
+        {
+          path:'/chainuser',
+          component: chainuser,
+          meta:{
+            title:'DappData'
+          }
+        },
+        {
+          path:'/chainusedapp',
+          component: chainusedapp,
+          meta:{
+            title:'DappData'
+          }
+        },
+        {
+          path:'/chaintrade',
+          component: chaintrade,
+          meta:{
+            title:'DappData'
+          }
+        },
+        {
+          path:'/chaindapp',
+          component: chaindata,
           meta:{
             title:'DappData'
           }

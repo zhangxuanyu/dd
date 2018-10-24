@@ -1,37 +1,40 @@
 <template>
     <div class="out" :style="{minHeight:geth,marginLeft:mglf}">
-        <min-menu class="leftme" :style="{left:open}"></min-menu>
+        <chain-Menu class="leftme" :style="{left:open}"></chain-menu>
         <!-- <p class="alltitle">{{ttarr[4][$store.state.alllang]}}</p>  -->
         <div class="contright">
-            <!-- 用户总数图表 -->
-            <div class="dapp" style="height:600px;">
-                <p><span style="float:left;color: #212229;font-weight: 600;">{{ttarr[0][$store.state.alllang]}}</span> <span style="float:right;margin-top: -10px;margin-bottom: 30px;"><span style="margin-right:10px;font-size: 14px;color: #797b8e;">{{ttarr[1][$store.state.alllang]}}</span><el-date-picker
-                                                        v-model="value7"
-                                                        type="daterange"
-                                                        align="right"
-                                                        unlink-panels
-                                                        range-separator="至"
-                                                        start-placeholder="开始日期"
-                                                        end-placeholder="结束日期"
-                                                        :picker-options="pickerOptions2">
-                                                    </el-date-picker>
-                                        </span></p>
-                <div id="alluser"  style="min-width:500px;height:500px;margin-bottom:30px;"></div>
-            </div>
 
             <!-- 新用户数图表 -->
             <div class="dapp">
-                <p style="text-align:left;margin-bottom: 20px;color: #212229;font-weight: 600;">{{ttarr[2][$store.state.alllang]}}</p>
+                <div style="padding-top:5px;"><span style="float:left;color: #212229;font-weight: 600;">{{ttarr[0][$store.state.alllang]}}</span> 
+                    <div class="export" @click="defalutexcle(titlearr,arr)">导出</div>
+                    <span style="float:right;margin-top: -5px;margin-bottom: 30px;" class="type_sel">
+                        <span style="margin-right:10px;font-size: 14px;color: #797b8e;margin-left:40px;">
+                            分类
+                        </span>
+                        <el-select v-model="typedata"   class="cur" >
+                            <el-option :key="index" :label="item[$store.state.alllang]" :value="index" v-for="(item,index) in typearr1">{{item[$store.state.alllang]}}</el-option>
+                        </el-select>
+                    </span>
+                    <span style="float:right;margin-top: -5px;margin-bottom: 30px;" class="time_sel">
+                        <span style="margin-right:10px;font-size: 14px;color: #797b8e;vertical-align:5px;">
+                            {{ttarr[1][$store.state.alllang]}}
+                        </span>
+                        <el-date-picker v-model="value7" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions2"></el-date-picker>
+                    </span>
+                </div>
                 <div id="newuser"  style="min-width:500px;height:500px"></div>
 
-                <table  width="100%" cellspacing='0' style="text-align: center;">
+                <table  width="100%" cellspacing='0' style="text-align: center;margin-top:100px;">
                     <tr class="top bg pd">
                         <th  v-for="(item,index) in titlearr" class="title all topbt" :style="index == titlearr.length -1 ?{borderRight:'1px solid #ebecf0'}:''">{{item[$store.state.alllang]}}</th>
                     </tr>
-                    <tr class="top pd nbt" v-for="(item,index) in arr" v-if="index>=(currentPage1-1)*10&&index<currentPage1*10">
+                    <tr class="top pd nbt" v-for="(item,index) in arr" v-if="index>=(currentPage1-1)*10&&index<currentPage1*10" :key="index">
+                        <td class="title all" style="width:55px;">{{index+1}}</td>
                         <td class="title all">{{timeuse(item.timestamp-68400)}}</td>
                         <td class="title all">{{conversion(item.new_user.toString())}}</td>
                         <td class="title all">{{conversion((item.new_rate*100).toFixed(2))}}%</td>
+                        <td class="title all">{{conversion(item.total_user.toString())}}</td>
                         <td class="title all">{{conversion(item.total_user.toString())}}</td>
                         <td class="title all" style="border-right:1px solid #ebecf0;">{{conversion((item.new_user_ratio*100).toFixed(2))}}%</td>
                     </tr>
@@ -50,41 +53,6 @@
                 </div>
             </div>
 
-            <!-- 活跃用户 -->
-             <div class="dapp">
-                <p  style="text-align:left;margin-bottom: 20px;color: #212229;font-weight: 600;"><span>{{ttarr[3][$store.state.alllang]}}</span></p>
-                <div id="actuser"  style="min-width:500px;height:500px;margin-bottom:30px;"></div>
-
-                <table  width="100%" cellspacing='0' style="text-align: center;">
-                    <tr class="top bg pd">
-                        <th  v-for="(item,index) in titlearr1" class="title all topbt" :style="index == titlearr1.length -1 ?{borderRight:'1px solid #ebecf0'}:''">{{item[$store.state.alllang]}}</th>
-                    </tr>
-                    <tr class="top pd nbt" v-for="(item,index) in arr" v-if="index>=(currentPage2-1)*10&&index<currentPage2*10">
-                        <td class="title all">{{timeuse(item.timestamp-86400)}}</td>
-                        <td class="title all">{{conversion(item.active_user.toString())}}</td>
-                        <td class="title all">{{conversion((item.day_rate*100).toFixed(2))}}%</td>
-                        <td class="title all">{{conversion(item.week_user.toString())}}</td>
-                        <td class="title all">{{conversion((item.week_rate*100).toFixed(2))}}%</td>
-                        <td class="title all">{{conversion(item.month_user.toString())}}</td>
-                        <td class="title all">{{conversion((item.month_rate*100).toFixed(2))}}%</td>
-                        <td class="title all">{{conversion(item.lost_user.toString())}}</td>
-                        <td class="title all" style="border-right:1px solid #ebecf0;">{{conversion((item.lost_rate*100).toFixed(2))}}%</td> 
-                    </tr>
-                </table>
-                
-
-                <div style="width:300px;height:50px;margin:0 auto;margin-top:40px;" >
-                    <span style="float:left;margin-top:7px;font-size:12px;color:#4f5f6e;" v-if="$store.state.alllang == 0">共 {{arr.length}} 条</span>
-                    <span style="float:left;margin-top:7px;font-size:12px;color:#4f5f6e;" v-if="$store.state.alllang == 1">Total {{arr.length}} items</span>
-                    <el-pagination
-                        @current-change="actuserPage"
-                        :current-page.sync="currentPage2"
-                        :page-size="10"
-                        layout="prev, pager, next"
-                        :total="arr.length" style="width:200px;float:left;">
-                    </el-pagination>
-                </div>
-            </div>
 
              
         </div>
@@ -92,7 +60,7 @@
 </template>
 
 <script>
-import minMenu from '../components/rank'
+import chainMenu from "../components/chain_menu";
 import Highcharts from 'highcharts/highstock';
 import HighchartsMore from 'highcharts/highcharts-more';
 import HighchartsDrilldown from 'highcharts/modules/drilldown';
@@ -105,7 +73,7 @@ Highcharts3D(Highcharts);
 
 export default {
     components:{
-            minMenu
+            chainMenu
         },
     data(){
             return{
@@ -138,34 +106,20 @@ export default {
                         }
                     }]
                     },
-                    titlearr:[['日期','Date'],['新增用户','New users'],['增长率','Growth Rate'], ['累计用户','Users'],['新增用户占总用户比','New Users(Rate)']],
-                    titlearr1:[['日期','Date'],
-                            ['日活跃用户','DAU '],
-                            ['日活跃率','DAU(Rate)'], 
-                            ['周活跃用户','WAU'],
-                            ['周活跃率','WAU(Rate)'],
-                            ['月活跃用户','MAU'],
-                            ['月活跃率','MAU(Rate)'],
-                            ['流失用户','Churn'],
-                            ['流失率','Churn(Rate)'],
-                            ],
+                    titlearr:[[' ',' '],['日期','Date'],['累计用户','Users'],['新增用户','New users'],['增长率','Growth Rate'],['活跃用户','Active Users'], ['活跃度','(Rate)']],
                     arr:[],
                     ttarr:[['累计用户','Users'],['时间段','Period'],['新增用户','New users'],['活跃用户','Active Users'],['用户分析','User Analysis']],
                     currentPage1:1,
-                    currentPage2:1,
                     //伸展宽度
                     open:'',
                     mglf:'',
                     begintime:'',
                     endtime:'',
                     xarr:[],
-                    userarr:[],
-                    addarr:[],
                     newarr:[],
-                    actarr:[],
-                    newuserarr:[],
-                    actuserarr:[],
-                    fornewflag:false
+                    fornewflag:false,
+                    typedata:0,
+                    typearr1:[['累计用户','all user'],['新增用户','new user'],['增长率','addrate'],['活跃用户','active user']]
             }
         },
     created(){
@@ -207,6 +161,9 @@ export default {
             }
     },
     watch:{
+        typedata(){
+            this.drawall()
+        },
         addclose(n,o){
             if(n){
                 this.open = 253+'px'
@@ -217,12 +174,9 @@ export default {
             }
             // this.drawall()
             var newchart = setInterval(()=>{
-                window.allusechart.reflow()
                 window.newuser.reflow()
-                window.acuser.reflow()
             },17)
             setTimeout(()=>{
-                // this.initChart(this.xarr,this.etharr,this.nasarr,this.eosarr)
                 clearInterval(newchart)
             },1010)
         },
@@ -246,6 +200,43 @@ export default {
         }
     },
     methods:{ 
+        //导出excle
+        defalutexcle(titlearr,dataarr){
+            let str = ``
+            // let str = `姓名,电话,邮箱\n`;
+            titlearr.forEach((e,index )=> {
+                if(index < titlearr.length-1){
+                    str = str + `${e[this.$store.state.alllang ] + ','}`
+                }else{
+                    str = str + `${e[this.$store.state.alllang ] + '\n'}`
+                }
+                
+            });
+            
+            //增加\t为了不让表格显示科学计数法或者其他格式
+            for(let i = 0 ; i < dataarr.length ; i++ ){
+                str+=`${i+1 + '\t'},`; 
+                str+=`${this.timeuse(dataarr[i].timestamp-68400)  + '\t'},`; 
+                str+=`${dataarr[i].new_user.toString()  + '\t'},`; 
+                str+=`${(dataarr[i].new_rate*100).toFixed(2)  + '\t'},`; 
+                str+=`${dataarr[i].total_user.toString()  + '\t'},`; 
+                str+=`${dataarr[i].total_user.toString() + '\t'},`; 
+                str+=`${(dataarr[i].new_user_ratio*100).toFixed(2) +'%' + '\t'},`; 
+
+                str+='\n';
+            }
+            
+            //encodeURIComponent解决中文乱码
+            let uri = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(str);
+            //通过创建a标签实现
+            var link = document.createElement("a");
+            link.href = uri;
+            //对下载的文件命名
+            link.download = this.typearr1[this.typedata][this.$store.state.alllang] +'.csv';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        },
         //数字字符串添加逗号
                 conversion(str){
                     if(/\./.test(str)){
@@ -255,14 +246,8 @@ export default {
                     }
                 },
         drawall(){
-            setTimeout(()=>{
-                    this.drawuser('alluser',this.xarr,this.userarr,this.addarr,'allusechart')
-                },1000)
                 setTimeout(()=>{
-                    this.drawuser1('newuser',this.xarr,this.newarr,this.ttarr[2][this.$store.state.alllang],'newuser')
-                },1000)
-                setTimeout(()=>{
-                    this.drawuser1('actuser',this.xarr,this.actarr,this.ttarr[3][this.$store.state.alllang],'acuser')
+                    this.drawuser1('newuser',this.xarr,this.newarr,this.typearr1[this.typedata][this.$store.state.alllang],'newuser')
                 },1000)
         },
         timeuse(aaa){
@@ -277,82 +262,6 @@ export default {
                 day = '0' + day
             }
             return year+'-'+month+'-'+day
-        },
-        drawuser(aa,arr1,arr2,arr3,windname){
-             var options={   //hchart的参数
-			        chart: {
-			            zoomType: 'xy'
-                    },
-                    colors:['#409efe','#00e175','#ff0a50','black'],
-			        title: {
-			            text: ''
-			        },
-			        subtitle: {
-			            text: ''
-                    },
-                    credits: {
-                        enabled: false
-                    },
-			        xAxis: [{ //横坐标
-			            categories: arr1,
-			            crosshair: true
-			        }],
-			        yAxis: [
-				        { // Primary yAxis
-				            labels: {
-				                format: '{value}',
-				                style: {
-				                    color: '#409efe'
-				                }
-				            },
-				            title: {
-				                text: this.titlearr[3][this.$store.state.alllang],
-				                style: {
-				                    color:'#409efe'
-				                }
-				            }
-				        },
-				        { // Secondary yAxis
-				            title: {
-				                text: this.titlearr[2][this.$store.state.alllang],
-				                style: {
-				                    color:'#00e175'
-				                }
-				            },
-				            labels: {
-				                format: '{value}%',
-				                style: {
-				                    color:'#00e175'
-				                }
-				            },
-				            opposite: true
-						}
-						
-			        ],
-			        tooltip: {
-			            shared: true
-			        },
-			        series: [
-				        {
-				            name: this.titlearr[3][this.$store.state.alllang],
-				            data: arr2,
-				            type: 'spline',
-				        },
-				        {  //纵坐标
-				            name: this.titlearr[2][this.$store.state.alllang],
-				            data: arr3,
-				            type: 'spline',
-				            yAxis: 1,
-				        }
-
-			        ]
-				}
-                // this.chart = new Highcharts.Chart(chartContainer, options)
-                window[windname] = Highcharts.chart(aa,options)
-                
-	        	    window.onresize = function () {
-	        	    	 window[windname].reflow();
-	        	    }
         },
         drawuser1(aa,arr1,arr2,string,windowname){
              var options={   //hchart的参数
@@ -391,7 +300,10 @@ export default {
 			        ],
 			        tooltip: {
 			            shared: true
-			        },
+                    },
+                    legend:{
+                        enabled:false
+                    },
 			        series: [
 				        {
 				            name: string,
@@ -416,10 +328,7 @@ export default {
         },
         fornew(){
             this.xarr = []
-            this.userarr = []
-            this.addarr = []
             this.newarr = []
-            this.actarr = []
             this.arr = []
             console.log(this.$store.state.moneyty,this.$store.state.requesttime)
                     var url = this.$store.state.requrl+'/'+this.$store.state.appid.split('_')[0].toLowerCase()+'/user';
@@ -445,10 +354,7 @@ export default {
                                             var month = ddd.getMonth()+1
                                             var day=ddd.getDate();
                                             this.xarr.unshift(year+'/'+month+'/'+day)
-                                            this.userarr.unshift(e.total_user)
-                                            this.addarr.unshift((e.total_rate*100).toFixed(3)-0) 
                                             this.newarr.unshift(e.new_user)
-                                            this.actarr.unshift(e.active_user)
                                         });
                                         this.drawall()
                                         this.$store.commit('changeloadopacty',false)
@@ -496,6 +402,19 @@ export default {
     box-shadow: 3px 2px 10px 0px 
 		rgba(37, 48, 76, 0.08);
 }
+.export{
+    width: 70px;
+	height: 30px;
+	background-color: #4da7fb;
+	border-radius: 4px;
+    float: right;
+	font-size: 14px;
+	line-height: 30px;
+	color: #ffffff;
+    margin-top: -5px;
+    margin-left: 40px;
+    cursor: pointer;
+}
 .top{
     height: 55px;
     line-height: 51px;
@@ -534,39 +453,47 @@ export default {
 }
 </style>
 <style>
-.dapp .el-range-editor.el-input__inner{
+.time_sel .el-range-editor.el-input__inner{
     border-radius: 20px;
     background-color: #f7f8fa;
+    height: 30px;
 }
-.dapp .el-range-editor .el-range-input{
+.time_sel .el-date-editor .el-range-separator{
+    line-height: 22px;
+}
+.time_sel .el-date-editor .el-range__close-icon{
+    line-height: 22px;
+}
+.type_sel .el-input--suffix .el-input__inner{
+    border-radius: 20px;
+    background-color: #f7f8fa;
+    height: 30px;
+}
+.type_sel .el-input__icon{
+    line-height: 30px;
+}
+.el-range-editor .el-range-input{
     background-color: #f7f8fa;
 }
- .dapp .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
+.el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
     width:350px;
 }
-.dapp .el-icon-date:before{
+.el-icon-date:before{
     content:'';
 }
-.dapp .el-input__inner{
+.el-input__inner{
     border: 1px solid #f7f8fa;
-    font-size:14px;
-    color:#797b8e;
-    height: 30px;
-    line-height: 24px;
 }
-.dapp .el-date-editor .el-range-separator{
-    line-height: 24px;
-}
-.dapp .el-input__inner:hover{
+.el-input__inner:hover{
     border-color:#f7f8fa;
 }
-.dapp .el-pager li.active{
+.el-pager li.active{
     color:rgb(73,165,251);
 }
 .el-pager li:hover{
     color:#49a5fb;
 }
-.dapp .el-pagination{
+.el-pagination{
     font-weight:400;
 }
 </style>

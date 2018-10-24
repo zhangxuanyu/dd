@@ -1,14 +1,15 @@
 <template>
     <div class="out"  :style="{marginLeft:theleft,minWidth: '1144px'}">
         <!-- <p class="alltitle">{{toparr[$store.state.alllang]}}</p> -->
-        <the-sel></the-sel>
+        
         <div class="ranktb"  style="minHeight:955px;">
-            <div class="top" style="font-weight:600;color:#212229;margin-bottom:30px;">
-                 {{toparr[$store.state.alllang]}}
+            <span style="line-height:800px;font-size:50px;">COMMING &nbsp;&nbsp;&nbsp; SOON...</span> 
+            <div class="top" style="font-weight:600;color:#212229;margin-bottom:30px;" v-show="false">
+                 {{toparr[0][$store.state.alllang]}}
                 <the-time></the-time>
 
             </div>
-            <table  width="100%" cellspacing='0' style="text-align: center;">
+            <table  width="100%" cellspacing='0' style="text-align: center;" v-show="false">
                 <tr class="top" style="color: #464a58;background-color:#f7fafc;">
                     <th  v-for="(item,index) in titlearr" class="title all" 
                     :style="{width:stylearr[index],borderBottom:'2px solid #ebecf0'}" 
@@ -33,11 +34,12 @@
                     <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{conversion(item.active_user.toString())}}</td>
                     <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{conversion(item.vol.toFixed(2))}}</td>
                     <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{conversion(item.call.toString())}}</td>
-                    <td class="title all" :style="index == arr.length -1 ?{border:'none',textTransform:'capitalize'}:{textTransform:'capitalize'}">{{item.category}}</td>
+                    <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{conversion(item.call.toString())}}</td>
+                    <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{conversion(item.call.toString())}}</td>
                 </tr>
             </table>
            
-            <div style="width:400px;height:50px;margin:0 auto;margin-top:40px;"  v-if="arr.length>=1">
+            <div style="width:400px;height:50px;margin:0 auto;margin-top:40px;"  v-if="arr.length>=1" v-show="false">
                 <span style="float:left;margin-top:7px;font-size:12px;color:#4f5f6e;" v-if="$store.state.alllang == 0">共 {{all}} 条</span>
                 <span style="float:left;margin-top:7px;font-size:12px;color:#4f5f6e;" v-if="$store.state.alllang == 1">Total {{all}} items</span>
                 <el-pagination
@@ -51,6 +53,18 @@
             </div>
             
         </div>
+
+        <!-- 曲线图 -->
+        <div class="picture" v-show="false">
+            <p style="margin-right: -15px;margin-bottom:60px;"><span class="left lefttips">{{toparr[1][$store.state.alllang]}}</span>
+            <el-select v-model="type"   class="right cur righttype" >
+                    <el-option :key="index" :label="item[$store.state.alllang]" :value="index" v-for="(item,index) in typearr1">{{item[$store.state.alllang]}}</el-option>
+                </el-select>
+                <span style="margin-left:40px;margin-right:14px;font-size:14px;lineHeight:30px;"  class="right cur righttype">{{toparr[2][$store.state.alllang]}}</span>
+                
+            </p>
+            <div id="mychart" style="min-width:400px;height:400px"></div>
+        </div> 
         
     </div>
 </template>
@@ -59,22 +73,30 @@
 import theSel from '../components/type_money'
 import theTime from '../components/time_type'
 import Axios from 'axios';
+import Highcharts from "highcharts/highstock";
+import HighchartsMore from "highcharts/highcharts-more";
+import HighchartsDrilldown from "highcharts/modules/drilldown";
+import Highcharts3D from "highcharts/highcharts-3d";
+
+HighchartsMore(Highcharts);
+HighchartsDrilldown(Highcharts);
+Highcharts3D(Highcharts);
 export default {
     components:{
                theSel,theTime
             },
             data(){
                 return{
-                    toparr:['综合排行','Rankings'],
-                    titlearr:[[' ',' '],['名称','Name'],['新增用户','New Users'],['活跃用户','Active Users'],['交易量','Volume'],['调用次数','Transactions'],['分类','Category']],
+                    toparr:[['公链数据','chain'],['整体趋势','Trand'],['其他','other']],
+                    titlearr:[[' ',' '],['名称','Name'],['新增用户','New Users'],['活跃用户','Active Users'],['交易量','Volume'],['调用次数','Transactions'],['Dapp交易量','Dapp Trade'],['Dapp调用次数','Dapp Used']],
                     // 排序功能图片数组
                     rankpic_arr:[
                         '../../static/sort1.png','../../static/sort2.png','../../static/sort3.png'
                         ],
                     // 排序功能控制数组 
-                    ranknum:[-1,-1,0,0,0,0,-1],
+                    ranknum:[-1,-1,0,0,0,0,-1,-1],
                     arr:[],
-                    allmoney:[['total','exchanges','games','high-risk','marketplaces','gambling','other'],['total','game','tool','exchange','marketplaces','gambling','high-rish','other'],['total','Game','Tool','Market','Other']],
+                    allmoney:[['total','exchanges','games','high-risk','marketplaces','gambling','other'],['total','game','tool','exchange','other'],['total','Game','Tool','Market','Other']],
                     currentPage1: 1,
                      //请求数组
                     reqarr:['eth','eos','nas'],
@@ -84,7 +106,19 @@ export default {
                     theleft:'280px',
                     idimg:'',
                     //是否有通过id命名的icon
-                    picfalt:false
+                    picfalt:false,
+                    // 图表重绘
+                    redrawflag: true,
+                    //分类
+                    type:0,
+                    typearr1:[["新增用户","New User"],["交易量","vol"],["调用次数","usetimes"],["Dapp交易量","Dapp trade"],["Dapp调用次数","Dapp Used"]],
+                    //x轴
+                    xarr:[1,2,3,4,5,6,7,8,9,10],
+                    //试验数据
+                    etharr:[121,323,344,345,344,23,678,798,64,436],
+                    nasarr:[151,567,234,33,356,235,67,98,364,36],
+                    eosarr:[171,678,679,789,797,723,378,298,864,736],
+                    bbarr:[171,678,679,789,797,723,378,298,864,736]
                 }
             },
             computed:{
@@ -116,6 +150,17 @@ export default {
                 },
                 thetype(n,o){
                     this.fornew()
+                },
+                redrawflag() {
+                    setTimeout(() => {
+                        this.initChart(this.xarr,[{word:'eth',arr:this.etharr},{word:'nas',arr:this.nasarr},{word:'eos',arr:this.eosarr},{word:'bbarr',arr:this.bbarr}])
+                    }, 1000);
+                },
+                type(n,o){
+                    console.log(n)
+                    setTimeout(() => {
+                        this.initChart(this.xarr,[{word:'eth',arr:this.etharr},{word:'nas',arr:this.nasarr},{word:'eos',arr:this.eosarr},{word:'bbarr',arr:this.bbarr}])
+                    }, 1000);
                 }
                 
             },
@@ -130,6 +175,80 @@ export default {
             },
             
             methods:{
+                initChart(arr1, argument) {
+                    var obj = this.chart_series(argument)
+      var options1 = {
+        //hchart的参数
+        chart: {
+          zoomType: "xy"
+        },
+        colors: ["#409efe", "#00e175", "#ff0a50"],
+        title: {
+          text: ""
+        },
+        subtitle: {
+          text: ""
+        },
+        credits: {
+          enabled: false
+        },
+        xAxis: [
+          {
+            //横坐标
+            categories: arr1,
+            crosshair: true
+          }
+        ],
+        yAxis: [
+          {
+            // Primary yAxis
+            labels: {
+              format: "{value}"
+            },
+            title: {
+              text: "ETH"
+            }
+          }
+        ],
+        tooltip: {
+          shared: true
+        },
+        series: obj
+      };
+      window.chartsss = Highcharts.chart("mychart", options1);
+
+      window.onresize = function() {
+        // chart.reflow();
+
+        window.chartsss.reflow();
+      };
+    },
+    //根据数组的长度，组装chart参数
+    chart_series(argument){
+        // arguments的数据类型
+        // arguments = [
+        //     {
+        //         word:"eos",
+        //         arr:[],
+        //         visible: false
+        //     },
+        //     {
+        //         word:"nas",
+        //         arr:[]
+        //     }
+        // ]
+        var series_obj = []
+        argument.forEach((e,index) => {
+            console.log(index)
+            series_obj.push({
+                name: e.word,
+                data: e.arr,
+                type: "spline",
+                visible:index<=2?true:false
+            })
+        });
+        return series_obj
+    },
                 rankdata(index){
                     console.log(this.ranknum[index])
                     if(index>1&&index<6){
@@ -185,7 +304,7 @@ export default {
                     this.fornew()
                 },
                 gotodetail(a){
-                    this.$router.push({path:'/detail?id='+a});
+                    this.$router.push({path:'/chaindetail?id='+a});
                 },
                 //请求数据函数
                 fornew(){
@@ -215,6 +334,7 @@ export default {
                                             this.picfalt = true
                                         },1000)
                                         this.$store.commit('changeloadopacty',false)
+                                        this.redrawflag = !this.redrawflag;
                                     })
                 }
             }
@@ -308,7 +428,39 @@ table td{
     top: 27px;
     left: 27px;
 }
-
+.picture {
+  width: 100%;
+  height: 500px;
+  background-color: #fff;
+  margin-top: 30px;
+  float: right;
+  margin-right: 30px;
+  padding: 27px 30px 30px 60px;
+  box-sizing: border-box;
+  box-shadow: 3px 2px 10px 0px rgba(37, 48, 76, 0.08);
+}
+.left {
+  float: left;
+}
+.lefttips {
+  color: #212229;
+  font-weight: 600;
+  font-size: 16px;
+}
+.righttype {
+  color: #808c9b;
+  font-size: 14px;
+  line-height: 24px;
+  height: 24px;
+}
+.right {
+  float: right;
+  margin: 0 15px;
+}
+#mychart {
+  width: 100%;
+  height: 500px;
+}
 
 </style>
 
