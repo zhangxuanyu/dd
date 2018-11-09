@@ -16,11 +16,11 @@
                     </th>
                 </tr>
                 <tr  class="top pd" v-for="(item,index) in arr">
-                    <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{index+1+(currentPage1-1)*10}}</td>
-                   <td class="title all hhvv cur" @click="gotodetail(item.dapp_id)" :style="index == arr.length -1 ?{border:'none'}:''"><div class="ttimg"><img :src="'https://bkc-dapp-1252899312.cos.ap-hongkong.myqcloud.com/dappdata/static/icon/'+item.dapp_id+'.jpg'" alt="" onerror="javascript:this.src='../../static/all1.png'" style="width:26px;height:26px;position:absolute;"></div>{{item.title}}</td>
+                    <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{index+1+(currentPage1-1)*pagesize}}</td>
+                   <td class="title all hhvv cur" @click="gotodetail(item.dapp_id)" :style="index == arr.length -1 ?{border:'none'}:''"><div class="ttimg"><img :src="'https://bkc-dapp-1252899312.cos.ap-hongkong.myqcloud.com/dappdata/static/icon/'+item.dapp_id+'.jpg'" alt="" onerror="javascript:this.src='../../static/all1.png'" style="width:26px;height:26px;position:absolute;"></div>{{item.title[$store.state.alllang]}}</td>
                     <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{conversion(item.total_vol.toFixed(2))}}</td>
                     <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{conversion(item.day_vol.toFixed(2))}}</td>
-                    <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{conversion(item.day_vol_rate.toFixed(2))}}</td>
+                    <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{conversion(item.day_vol_rate.toFixed(2))}}%</td>
                     <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{conversion(item.average_vol.toFixed(2))}}</td>
                     <td class="title all" :style="index == arr.length -1 ?{border:'none',textTransform:'capitalize'}:{textTransform:'capitalize'}">{{item.category}}</td>
                 </tr>
@@ -33,7 +33,7 @@
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :current-page.sync="currentPage1"
-                    :page-size="10"
+                    :page-size="pagesize"
                     layout="prev, pager, next"
                     :total="all" style="width:200px;float:left;">
                 </el-pagination>
@@ -67,9 +67,10 @@ export default {
                     reqAarr:['ETH','EOS','NAS'],
                     all:'',
                     // typearr:['total','game','tool','market','other'],
-                    allmoney:[['total','exchanges','games','high-risk','marketplaces','gambling','other'],['total','game','tool','exchange','marketplaces','gambling','high-rish','other'],['total','Game','Tool','Market','Other']],
+                    allmoney:[['total','exchanges','games','high-risk','marketplaces','gambling','other'],['total','game','tool','exchange','marketplaces','gambling','high-risk','other'],['total','Game','Tool','Market','Other']],
                     theleft:'280px',
-                    stylearr:['','','100px','','','','','']
+                    stylearr:['','','200px','','','','',''],
+                    pagesize:30
                     
                 }
             },
@@ -168,6 +169,7 @@ export default {
                                         "page":this.currentPage1,
                                         "timestamp":this.$store.state.requesttime/1000+86400,
                                         "order_by":'vol',
+                                        "num":this.pagesize,
                                         "category":this.allmoney[this.$store.state.moneyty][this.$store.state.dapptype]
                                     },{
                                         headers: {'Content-Type': "application/x-www-form-urlencoded"}

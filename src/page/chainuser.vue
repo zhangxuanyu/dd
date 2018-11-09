@@ -123,7 +123,6 @@ export default {
             }
         },
     created(){
-            this.$store.commit('changemenuflag',false)
             this.$store.commit('changeloadopacty',true)
             this.$store.commit('changeloadflge',true)
             this.geth = window.innerHeight - 60 + 'px'

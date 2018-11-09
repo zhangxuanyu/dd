@@ -97,20 +97,4 @@ select option:hover{
 }
 </style>
 
-<style>
-.el-date-editor.el-input, .el-date-editor.el-input__inner{
-    width: 194px;
-}
-.el-input--suffix .el-input__inner{
-    border-radius: 20px;
-    background-color: #e8ecf2;
-    width: 200px;
-}
-.el-input__suffix{
-    right:25px;
-}
-.el-input__inner{
-    font-size:14px;
-    color:#797b8e;
-}
-</style>
+

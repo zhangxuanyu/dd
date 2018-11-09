@@ -55,7 +55,7 @@
                     <tr class="top bg pd fixwd">
                         <th class="title all topbt">{{titlearr1[0][$store.state.alllang]}}</th>
                         <th class="title all topbt" style="width:50px;" v-if="urlid == 'NAS'">{{titlearr1[1][$store.state.alllang]}}</th>
-                        <th class="title all topbt" style="width:120px;">{{titlearr1[2][$store.state.alllang]}}</th>
+                        <th class="title all topbt" style="width:135px;">{{titlearr1[2][$store.state.alllang]}}</th>
                         <th class="title all topbt">{{titlearr1[3][$store.state.alllang]}}</th>
                         <th class="title all topbt">{{titlearr1[4][$store.state.alllang]}}</th>
                         <th class="title all topbt" style="width:40px;border-right:1px solid #ebecf0;">{{titlearr1[5][$store.state.alllang]}}</th>
@@ -66,9 +66,9 @@
                         <td class="title all fs"  v-if="urlid == 'ETH'">{{item.TXHash}}</td>
                         <td class="title all fs"  v-if="urlid == 'EOS'">{{item.tx_hash}}</td>
                         <td class="title all fs" style="width:50px;"  v-if="urlid == 'NAS'">{{item.Data.block.height}}</td>
-                        <td class="title all fs" style="width:120px;"  v-if="urlid == 'NAS'">{{timeuse1(item.Timestamp)}}</td>
-                        <td class="title all fs" style="width:120px;"  v-if="urlid == 'ETH'">{{timeuse1(item.TimeStamp)}}</td>
-                        <td class="title all fs" style="width:120px;"  v-if="urlid == 'EOS'">{{timeuse1(item.timestamp)}}</td>
+                        <td class="title all fs" style="width:135px;"  v-if="urlid == 'NAS'">{{timeuse1(item.Timestamp)}}</td>
+                        <td class="title all fs" style="width:135px;"  v-if="urlid == 'ETH'">{{timeuse1(item.TimeStamp)}}</td>
+                        <td class="title all fs" style="width:135px;"  v-if="urlid == 'EOS'">{{timeuse1(item.timestamp)}}</td>
                         <td class="title all fs"  v-if="urlid == 'NAS'">{{item.From_address}}</td>
                         <td class="title all fs"  v-if="urlid == 'ETH'">{{item.From}}</td>
                         <td class="title all fs"  v-if="urlid == 'EOS'">{{item.from}}</td>
@@ -168,7 +168,6 @@ export default {
             }
         },
     created(){
-            this.$store.commit('changemenuflag',false)
             this.$store.commit('changeloadopacty',true)
             this.$store.commit('changeloadflge',true)
             this.geth = window.innerHeight - 60 + 'px'
@@ -520,7 +519,7 @@ table td{
 .dapp .el-range-editor .el-range-input{
     background-color: #f7f8fa;
 }
- .dapp .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
+ .dapp .el-date-editor--daterange.el-input,.dapp .el-date-editor--daterange.el-input__inner,.dapp .el-date-editor--timerange.el-input,.dapp .el-date-editor--timerange.el-input__inner{
     width:350px;
 }
 .dapp .el-icon-date:before{

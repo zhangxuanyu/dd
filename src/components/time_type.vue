@@ -21,8 +21,8 @@ export default {
     data(){
         return{
             moneyarr:['ETH','EOS','NAS'],
-            typearr1:[['全部','total'],['交易所','exchanges'],['游戏','game'],['高风险','high-rish'],['市场','marketplaces'],['博彩','gambling'],['其他','other']],
-            typearr2:[['全部','total'],['游戏','game'],['工具','tool'],['交易所','exchanges'],['市场','marketplaces'],['博彩','gambling'],['高风险','high-rish'],['其他','other']],
+            typearr1:[['全部','total'],['交易所','exchanges'],['游戏','game'],['高风险','high-risk'],['市场','marketplaces'],['博彩','gambling'],['其他','other']],
+            typearr2:[['全部','total'],['游戏','game'],['工具','tool'],['交易所','exchanges'],['市场','marketplaces'],['博彩','gambling'],['高风险','high-risk'],['其他','other']],
             typearr3:[['全部','total'],['游戏','game'],['工具','tool'],['市场','marketplaces'],['其他','other']],
             value1: '',
             time:['日期','Date'],
@@ -154,7 +154,7 @@ select option:hover{
     background-color: #f7f8fa;
     width: 200px;
 }
-.right .el-input__suffix{
+.right .el-input__suffix{ 
     right:25px;
 }
 .right .el-input__inner{

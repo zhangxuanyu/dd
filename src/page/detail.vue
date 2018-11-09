@@ -15,22 +15,24 @@
                 <!-- 轮播图 -->
                 <div class="pic topnav_box" >
                     <ul :style="allleng" class="allpic"  v-show="picshow">
-                        <li v-for="(item,index) in picarr" class="outpic" v-show="imgcount"><img :src="'https://bkc-dapp-1252899312.cos.ap-hongkong.myqcloud.com/dappdata/static/'+urlid+'/'+item+'.png'" alt="" onerror="javascript:this.src=''"  class="picwh"><img :src="'https://bkc-dapp-1252899312.cos.ap-hongkong.myqcloud.com/dappdata/static/'+urlid+'/'+item+'.jpg'" alt="" onerror="javascript:this.src=''"  class="picwh"> </li>
-                        <li v-for="(item,index) in picarr" class="inpic" v-show="!imgcount"><img :src="wrongarr[index]" alt="" onerror="javascript:this.src=''"  class="picwh"></li>
+                        <li v-for="(item,index) in picarr" class="outpic" v-show="imgcount">
+                          <img :src="'https://bkc-dapp-1252899312.cos.ap-hongkong.myqcloud.com/dappdata/static/'+urlid+'/'+item+'.png'" alt="" onerror="javascript:this.src=''"  class="picwh" @click="show_dapp_pic('https://bkc-dapp-1252899312.cos.ap-hongkong.myqcloud.com/dappdata/static/'+urlid+'/'+item+'.png')">
+                          <img :src="'https://bkc-dapp-1252899312.cos.ap-hongkong.myqcloud.com/dappdata/static/'+urlid+'/'+item+'.jpg'" alt="" onerror="javascript:this.src=''"  class="picwh" @click="show_dapp_pic('https://bkc-dapp-1252899312.cos.ap-hongkong.myqcloud.com/dappdata/static/'+urlid+'/'+item+'.jpg')"> </li>
+                        <li v-for="(item,index) in picarr" class="inpic" v-show="!imgcount" ><img :src="wrongarr[index]" alt="" onerror="javascript:this.src=''"  class="picwh" @click="show_dapp_pic(wrongarr[index])"></li>
                     </ul>
                 </div>
                 
                 <div style="position:relative;">
                     <div class="intro">
                         <p style="color:rgb(33, 34, 41);font-weight:600;font-size:16px;margin-bottom:10px;">{{ttarr[0][$store.state.alllang]}}</p>
-                        <p style="line-height:30px;font-size:14px; color: #797b8e;">{{arr.description}}</p>
+                        <p style="line-height:30px;font-size:14px; color: #797b8e;">{{arr.en_cn[$store.state.alllang].description}}</p>
                     </div>
 
                     <div class="info">
                         <p style="color:rgb(33, 34, 41);font-weight:600;font-size:16px;margin-bottom:10px;">{{ttarr[1][$store.state.alllang]}}</p>
                         <div style="overflow:hidden;">
                             <div  style="line-height:30px;font-size:14px;" class="cur base">
-                                <a :href="arr.website" target="_black" rel="noopener noreferrer">
+                                <a :href="arr.website.indexOf('http')==-1?'http://'+arr.website:arr.website" target="_black" rel="noopener noreferrer">
                                     <img src="../../static/home.png" alt=""> {{ttarr[2][$store.state.alllang]}} 
                                     <div class="go"></div>
                                     <span style="color:rgb(214, 222, 230);margin-left:20px;margin-right:20px;">|</span>
@@ -57,9 +59,7 @@
                                   <td class="all">
                                     <a :href="'https://explorer.nebulas.io/#/address/'+item" v-if="arr.platform == 'NAS'" target="_black" rel="noopener noreferrer">{{item}}</a>
                                     <a :href="'https://etherscan.io/address/'+item" v-if="arr.platform == 'ETH'" target="_black" rel="noopener noreferrer">{{item}}</a>
-                                    <a :href="'https://eospark.com/MainNet/account/'+item" v-if="arr.platform == 'EOS'" target="_black" rel="noopener noreferrer">{{item}}</a>
-                                  
-                                    
+                                    <a :href="'https://eospark.com/MainNet/account/'+item" v-if="arr.platform == 'EOS'" target="_black" rel="noopener noreferrer">{{item}}</a>  
                                   </td>
                               </tr>
                           </table>
@@ -244,6 +244,12 @@ export default {
     }
   },
   methods: {
+    //展示图片
+    show_dapp_pic(url){
+      console.log(url)
+      this.$store.commit("changepicshow", true);
+      this.$store.commit("changeurl",url)
+    },
     //合约显示
       showctr(flag){
         console.log(flag)
@@ -519,47 +525,4 @@ a {
 .tableout tr:nth-last-of-type(1) .all:nth-of-type(1),.tableout tr:nth-last-of-type(1) .all:nth-of-type(2){
   border-bottom: 1px solid #ebecf0;
 }
-</style>
-<style>
-.el-input__inner {
-  border: 1px solid #f7f8fa;
-}
-.el-input__inner:hover {
-  border-color: #f7f8fa;
-}
-.el-range-editor.el-input__inner {
-  border-radius: 20px;
-  background-color: #f7f8fa;
-}
-.el-range-editor .el-range-input {
-  background-color: #f7f8fa;
-}
-.el-pagination {
-  font-weight: 400;
-}
-.el-date-editor--daterange.el-input,
-.el-date-editor--daterange.el-input__inner,
-.el-date-editor--timerange.el-input,
-.el-date-editor--timerange.el-input__inner {
-  width: 350px;
-}
-.el-icon-date:before {
-  content: "";
-}
-.el-pager li.active {
-  color: rgb(73, 165, 251);
-}
-.el-pager li:hover {
-  color: #49a5fb;
-}
-.el-pagination {
-  font-weight: 400;
-}
-.el-dropdown-link {
-    cursor: pointer;
-    color: #409EFF;
-  }
-  .el-icon-arrow-down {
-    font-size: 12px;
-  }
 </style>

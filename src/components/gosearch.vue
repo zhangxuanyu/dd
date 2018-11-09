@@ -1,28 +1,32 @@
 <template>
     <div class="top"  :style="{paddingLeft:open}">
         <div class="left cur" @click="closemenu"></div>
-        <div class="middle" :style="{top:srhtop+'px'}">
+        <!-- <div class="middle" :style="{top:srhtop+'px'}"> -->
+            <div class="middle" :style="{top:srhtop+'px'}">
             <div class="fllt cur cls" style="margin-top:2px;"  @click="showsearch(false)"></div>
             
-            <input type="text" autofocus  class="fllt" v-model="searchcont" :placeholder="ttarr[$store.state.alllang]" @keyup.13="gotoserh()">
+            <input type="text"  class="fllt" v-model="searchcont" :placeholder="ttarr[$store.state.alllang]" @keyup.13="gotoserh()" ref="content" @blur="showsearch(false)">
            
-            <div class="fllt cur serh" style="margin-top:-2px;" @click="gotoserh"></div>
+            <div class="fllt cur serh" style="margin-top:-2px;" @click="gotoserh()"></div>
         </div>
         <!-- 中英文 -->
-            <div class="myselect cur" @click="showlang">
+            <div class="myselect cur" @mouseenter="showlang" @mouseleave="showlang">
                 <img :src="langarr[$store.state.alllang]" alt="" style="width:30px;">
                 <div class="selectbox">
-                    <div v-if="headlang"  v-for="(item,index) in langarr" @click="cglang(index)" style="width:90px;height:40px;backgroundColor:#fff;">
-                        <p>
-                            <img :src="item" alt="" style="width:20px;float:left;marginTop:10px;margin-left:20px;">
-                            <span style="float:right;font-size:14px;line-height:40px;margin-right:14px;color:#797b8e;">{{choose[index]}}</span>
-                        </p>
+                    <div class="selectboxshaw">
+                        <div v-if="headlang"  v-for="(item,index) in langarr" @click="cglang(index)" style="width:90px;height:40px;backgroundColor:#fff;">
+                            <p>
+                                <img :src="item" alt="" style="width:20px;float:left;marginTop:10px;margin-left:20px;">
+                                <span style="float:right;font-size:14px;line-height:40px;margin-right:14px;color:#797b8e;">{{choose[index]}}</span>
+                            </p>
+                        </div>
                     </div>
+                    
                 </div>
                 
             </div>
             
-        <div class="right cur rightser" @click="showsearch(true)" v-if="!this.showflag">
+        <div class="right cur rightser" @click="showsearch(true)" v-show="!this.showflag">
 
         </div>
 
@@ -95,29 +99,37 @@ export default {
         cglang(a){
             this.lang = a
             this.$store.commit('changlang',a)
+            this.showlang()
         },
         showsearch(aa){
-            this.showflag = !this.showflag
-            this.searchcont = ''
-            if(aa){
-                var topinterval = setInterval(()=>{
-                    this.srhtop = this.srhtop + 4
-                    if(this.srhtop >= 0){
-                        this.srhtop = 0
-                        clearInterval(topinterval)
-                    }
-                },17)
-                
-            }else{
+            setTimeout(()=>{
+                this.searchcont = ''
+                if(aa){
+                    this.showflag = true
+                    var topinterval = setInterval(()=>{
+                        this.srhtop = this.srhtop + 4
+                        if(this.srhtop >= 0){
+                            this.srhtop = 0
+                            clearInterval(topinterval)  
+                        }
+                        //避免触发失去焦点事件
+                        
+                                this.$refs.content.focus()
+                         
+                    },17)
+                }else{
+                    this.showflag = false
+                    var topinterval = setInterval(()=>{
+                        this.srhtop = this.srhtop - 4
+                        if(this.srhtop <= -60){
+                            this.srhtop = -60
+                            clearInterval(topinterval)
+                            
+                        }
+                    },17)
+                }
 
-                var topinterval = setInterval(()=>{
-                    this.srhtop = this.srhtop - 4
-                    if(this.srhtop <= -60){
-                        this.srhtop = -60
-                        clearInterval(topinterval)
-                    }
-                },17)
-            }
+            },50)
         },
         
         gotoserh(){
@@ -237,8 +249,12 @@ input{
 }
 .selectbox{
     position: absolute;
-    top: 50px;
+    padding-top: 20px;
+    top: 30px;
     right:0px;
+    
+}
+.selectboxshaw{
     box-shadow: 3px 2px 10px 0px 
 		rgba(37, 48, 76, 0.08);
 }

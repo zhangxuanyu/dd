@@ -20,7 +20,7 @@ export default {
     data(){
         return{
             leftgap:'70px',
-            tipsarr:[['联系我们','CONTACT US'],['如果您有任何意见和建议，或希望与网站进行业务合作，可通过此邮箱联系我们','If you have any comments or Suggestions or wish to do business with the website, please contact us through this email']]
+            tipsarr:[['联系我们','Contract us'],['如果您有任何意见和建议，或希望与网站进行业务合作，可通过此邮箱联系我们','If you have any comments or Suggestions or wish to do business with the website, please contact us through this email']]
         }
     },
     computed:{

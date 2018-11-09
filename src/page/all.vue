@@ -65,7 +65,7 @@
 
         <!-- 曲线图 -->
         <div style="overflow:hidden;margin-bottom:30px;">
-            <div class="picture">
+          <div class="picture">
               <p style="margin-right: -15px;margin-bottom:60px;"><span class="left lefttips">{{pictt[$store.state.alllang]}}</span>
               <span class="right cur righttype" @click="chat(2)" :style="color3">{{adduser[$store.state.alllang]}}</span>
               <span class="right cur righttype" @click="chat(1)"  :style="color2">{{alluser[$store.state.alllang]}}</span>
@@ -312,9 +312,9 @@ export default {
       calltimes: ["调用次数", "Transactions"],
       dappnumtips: ["Dapps数量", "Dapps"],
       blocktitle: [
-        ["热门公链", "New"],
+        ["热门公链", "BlockChian"],
         ["热门Dapp", "Most Dapp"],
-        ["研究报告", "report"],
+        ["研究报告", "Report"],
         ["查看全部","more"],
         ["新增用户数","New Users"],
         ["活跃用户数","Active Users"]
@@ -338,6 +338,7 @@ export default {
     //loading初始化
     this.$store.commit("changeloadopacty", true);
     this.$store.commit("changeloadflge", true);
+    
   },
   mounted() {
     console.log('==========='+this.$store.state.alllang)

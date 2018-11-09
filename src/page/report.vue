@@ -45,6 +45,7 @@ export default {
   },
   mounted() {
     const that = this;
+    this.$store.commit('changeloadopacty',false)
   },
   computed: {
     inleft() {

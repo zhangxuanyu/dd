@@ -2,7 +2,8 @@
     <div>
         <go-search class="top"></go-search>
         <the-menu class="menu"></the-menu>
-        <!-- <my-load v-if="$store.state.loadflag"></my-load> -->
+        <my-load v-if="$store.state.loadflag"></my-load>
+        <my-pic v-if="$store.state.picshowflag"></my-pic>
         <router-view  class="cont"/>
         <the-foot class="foot"></the-foot>
     </div>
@@ -13,12 +14,14 @@ import goSearch from './gosearch'
 import theMenu from './menu'
 import theFoot from './allfoot'
 import myLoad from './loading';
+import myPic from './picture'
 export default {
     components:{
                 goSearch,
                 theMenu,
                 theFoot,
-                myLoad
+                myLoad,
+                myPic
             },
   
     

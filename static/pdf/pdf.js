@@ -4,6 +4,6 @@ var pdfarr=[
         src:'http://dappdata.io/report/1/1.pdf',
         img_index:'../../static/index_1.png',
         img_report:'../../static/report_1.png',
-        time:'2018.10.1'
+        time:'2018-10-01'
     }
 ]

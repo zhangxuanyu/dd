@@ -22,14 +22,19 @@
                     
                 </tr>
             </table>
+
+            <div style="width:400px;height:50px;margin:0 auto;margin-top:40px;"  v-if="arr.length>=1">
+            <span style="float:left;margin-top:7px;font-size:12px;color:#4f5f6e;" v-if="$store.state.alllang == 0">共 {{all}} 条</span>
+            <span style="float:left;margin-top:7px;font-size:12px;color:#4f5f6e;" v-if="$store.state.alllang == 1">Total {{all}} items</span>
             <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page.sync="currentPage1"
                 :page-size="10"
-                layout="total, prev, pager, next"
+                layout="prev, pager, next"
                 :total="all" style="margin-top:30px;">
             </el-pagination>
+            </div>
         </div>
         
     </div>

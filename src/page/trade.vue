@@ -148,7 +148,6 @@ export default {
             }
         },
     created(){
-            this.$store.commit('changemenuflag',false)
             this.$store.commit('changeloadopacty',true)
             this.$store.commit('changeloadflge',true)
             this.geth = window.innerHeight - 60 + 'px'
@@ -174,7 +173,7 @@ export default {
                 }
         },
         mounted(){
-            this.drawall() 
+            
         },
         computed:{
             addclose(){
@@ -349,6 +348,9 @@ export default {
                                             
                                         });
                                         this.$store.commit('changeloadopacty',false)
+                                        setTimeout(()=>{
+                                            this.drawall() 
+                                        },100)
                                     })
         }
     }
@@ -438,7 +440,7 @@ export default {
 .dapp .el-range-editor .el-range-input{
     background-color: #f7f8fa;
 }
- .dapp .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
+ .dapp .el-date-editor--daterange.el-input,.dapp .el-date-editor--daterange.el-input__inner,.dapp .el-date-editor--timerange.el-input,.dapp .el-date-editor--timerange.el-input__inner{
     width:350px;
 }
 .dapp .el-icon-date:before{

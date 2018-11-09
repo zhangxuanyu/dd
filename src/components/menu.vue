@@ -117,6 +117,10 @@ export default {
         }
     },
     $route(to, from) {
+      console.log('-----------------------------')
+      console.log(to)
+      console.log(from)
+      this.jump_menu(from.path,to.path)
       this.routechange(true);
     },
     flgmenu(n, o) {
@@ -128,6 +132,22 @@ export default {
     }
   },
   methods: {
+    //控制菜单栏伸缩
+    jump_menu(from,to){
+      if(from =='/'||from =='/rank'||from =='/num'||from =='/money'||from =='/use'||from =='/search'||from =='/report'||from =='/chain' ){
+        if(to =='/'||to =='/rank'||to =='/num'||to =='/money'||to =='/use'||to =='/search'||to =='/report'||to =='/chain'){
+
+        }else if(to =='/detail'||to =='/user'||to =='/trade'||to =='/usedapp'||to =='/chaindetail'||to =='/chainuser'||to =='/chainusedapp'||to =='/chaintrade'||to =='/chaindapp'){
+          this.$store.commit('changemenuflag',false)
+        }
+      }else if(from =='/detail'||from =='/user'||from =='/trade'||from =='/usedapp'||from =='/chaindetail'||from =='/chainuser'||from =='/chainusedapp'||from =='/chaintrade'||from =='/chaindapp'){
+        if(to =='/'||to =='/rank'||to =='/num'||to =='/money'||to =='/use'||to =='/search'||to =='/report'||to =='/chain'){
+          this.$store.commit('changemenuflag',true)
+        }else if(to =='/detail'||to =='/user'||to =='/trade'||to =='/usedapp'||to =='/chaindetail'||to =='/chainuser'||to =='/chainusedapp'||to =='/chaintrade'||to =='/chaindapp'){
+
+        }
+      }
+    },
       //图片赋值
       pic_src(aa,bb){
           if(bb == 1){
@@ -385,7 +405,7 @@ export default {
   width: 70px;
   height: 70px;
   float: left;
-  line-height: 70px;
+  line-height: 0px;
   margin-bottom: 10px;
   color: #4f5f6e;
 }

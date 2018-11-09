@@ -19,6 +19,9 @@ export default new Vuex.Store({
         //控制loading
         loadflag:true,
         loadopacty:true,
+        //控制详情图片显示
+        picshowflag:false,
+        picurl:''
         
     },
     mutations:{
@@ -56,6 +59,12 @@ export default new Vuex.Store({
         },
         changeloadopacty(state,page){
             state.loadopacty = page
+        },
+        changepicshow(state,ctl){
+            state.picshowflag = ctl
+        },
+        changeurl(state,url){
+            state.picurl = url
         }
     }
 })

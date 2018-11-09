@@ -16,10 +16,10 @@
                     </th>
                 </tr>
                 <tr  class="top pd" v-for="(item,index) in arr">
-                    <td class="title all"  :style="index == arr.length -1 ?{border:'none'}:''">{{index+1+(currentPage1-1)*10}}</td>
-                    <td class="title all hhvv cur" @click="gotodetail(item.dapp_id)"  :style="index == arr.length -1 ?{border:'none'}:''"><div class="ttimg"><img :src="'https://bkc-dapp-1252899312.cos.ap-hongkong.myqcloud.com/dappdata/static/icon/'+item.dapp_id+'.jpg'" alt="" onerror="javascript:this.src='../../static/all1.png'" style="width:26px;height:26px;position:absolute;"></div>{{item.title}}</td>
+                    <td class="title all"  :style="index == arr.length -1 ?{border:'none'}:''">{{index+1+(currentPage1-1)*pagesize}}</td>
+                    <td class="title all hhvv cur" @click="gotodetail(item.dapp_id)"  :style="index == arr.length -1 ?{border:'none'}:''"><div class="ttimg"><img :src="'https://bkc-dapp-1252899312.cos.ap-hongkong.myqcloud.com/dappdata/static/icon/'+item.dapp_id+'.jpg'" alt="" onerror="javascript:this.src='../../static/all1.png'" style="width:26px;height:26px;position:absolute;"></div>{{item.title[$store.state.alllang]}}</td>
                     <td class="title all"  :style="index == arr.length -1 ?{border:'none'}:''">
-                    {{item.total_user}}</td>
+                    {{conversion(item.total_user.toString())}}</td>
                     <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{conversion(item.new_user.toString())}}</td>
                     <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{conversion(item.active_user.toString())}}</td>
                     <!-- <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{item.active_rate.toFixed(2)}}</td> -->
@@ -35,7 +35,7 @@
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :current-page.sync="currentPage1"
-                    :page-size="10"
+                    :page-size="pagesize"
                     layout="prev, pager, next"
                     :total="all" style="width:200px;float:left;">
                 </el-pagination>
@@ -58,14 +58,14 @@ export default {
             data(){
                 return{
                     toparr:['用户数量排行','Users'],
-                    titlearr:[[' ',' '],['名称','Name'],['累计用户','Total Users'],['新增用户','New users'],['活跃用户','Active Users'],['分类','Category']],
+                    titlearr:[[' ',' '],['名称','Name'],['累计用户','Total Users'],['新增用户','New Users'],['活跃用户','Active Users'],['分类','Category']],
                     arr:[],
                     currentPage1: 1,
                      //请求数组
                     reqarr:['eth','eos','nas'],
                     reqAarr:['ETH','EOS','NAS'],
                     // typearr:['total','game','tool','market','other'],
-                    allmoney:[['total','exchanges','games','high-risk','marketplaces','gambling','other'],['total','game','tool','exchange','marketplaces','gambling','high-rish','other'],['total','Game','Tool','Market','Other']],
+                    allmoney:[['total','exchanges','games','high-risk','marketplaces','gambling','other'],['total','game','tool','exchange','marketplaces','gambling','high-risk','other'],['total','Game','Tool','Market','Other']],
                     all:'',
                     theleft:'280px',
                     stylearr:['','','100px','','','',''],
@@ -74,7 +74,9 @@ export default {
                         '../../static/sort1.png','../../static/sort2.png','../../static/sort3.png'
                         ],
                     // 排序功能控制数组 
-                    ranknum:[-1,-1,0,0,0,0,-1]
+                    ranknum:[-1,-1,0,0,0,0,-1],
+                    //pagesize
+                    pagesize:30
                 }
             },
             computed:{
@@ -171,6 +173,7 @@ export default {
                                             "page":this.currentPage1,
                                             "timestamp":this.$store.state.requesttime/1000+86400,
                                             "order_by":'user',
+                                            "num":this.pagesize,
                                             "category":this.allmoney[this.$store.state.moneyty][this.$store.state.dapptype]
                                         },{
                                             headers: {'Content-Type': "application/x-www-form-urlencoded"}
