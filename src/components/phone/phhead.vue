@@ -19,6 +19,7 @@
             <div class="search"  v-if="!length"></div>
             <input type="text" v-model="value" placeholder="请输入搜索内容" @focus="showinput(true)" @blur="showinput(false)">
         </div> -->
+        <img src="../../../static/phone/search.png" alt="" style="float:right;width:0.38rem;height:0.4rem;margin-top:0.4rem;margin-right:0.4rem;" @click="gotoother(2,3)">
 
         <div  @touchmove.prevent class="menudetail" :style="showflag?{}:{height:'0rem'}">
             <div v-for="(item,index) in mearr" :key="index" class="mutitle">
@@ -147,7 +148,10 @@ export default {
       
     },
     gotoother(index, block) {
-      if (block == 1) {
+      if(block == 3){
+        this.$router.push({ path: "/search" });
+      }else{
+        if (block == 1) {
         if (index == 0) {
           this.$router.push({ path: "/rank" });
         } else if (index == 1) {
@@ -174,6 +178,8 @@ export default {
       }
       this.$store.commit("savepage", 1);
       this.showmenu();
+      }
+      
     }
   }
 };

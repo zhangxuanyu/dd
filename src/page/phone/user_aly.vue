@@ -6,13 +6,13 @@
             <span style="float:left;"></span>
         </div>
         <div style="overflow:hidden;position:relative;">
-          <div @click="openPicker" class="timein">
+          <div class="timein">
           <span style="float:left;margin-right:0.3rem;">{{ttarr[5][$store.state.alllang]}}</span>
-          <div class="timebox">{{dateTime}}</div>
+          <input type="text" id="first_date" v-model="timevalue"  style="float:left;color:#797b8e;width: 3.2rem;text-align:center;height: 0.6rem;border: 1px solid #dfe4ed;border-radius: 0.3rem;box-sizing: border-box;"/>
         </div> 
-        <div @click="openPicker1" class="timein">
+        <div class="timein">
           <span style="float:left;margin-right:0.3rem;">{{ttarr[6][$store.state.alllang]}}</span>
-          <div class="timebox" :style="$store.state.alllang == 1?{marginLeft:'0.2rem'}:{}">{{dateTime1}}</div>
+          <input type="text" id="last_date" v-model="timevalue1"  style="float:left;color:#797b8e;width: 3.2rem;text-align:center;height: 0.6rem;border: 1px solid #dfe4ed;border-radius: 0.3rem;box-sizing: border-box;"/>
         </div>
 
           <div class="confram" @click="request()">
@@ -154,16 +154,7 @@
             </p>
         </div>
 
-        <mt-datetime-picker
-          ref="picker"
-          type="date"
-          v-model="pickerValue"  @confirm="handleConfirm" style="font-size:0.26rem;background-color:#fff;width:100%;margin-left:-0.3rem;overflow:hidden;position:fixed;bottom:0px;" @touchmove.prevent>
-        </mt-datetime-picker>
-        <mt-datetime-picker
-          ref="picker1"
-          type="date"
-          v-model="pickerValue1"  @confirm="handleConfirm1" style="font-size:0.26rem;background-color:#fff;width:100%;margin-left:-0.3rem;overflow:hidden;position:fixed;bottom:0px;" @touchmove.prevent>
-        </mt-datetime-picker>
+        
     </div>
 </template>
 
@@ -211,15 +202,17 @@ export default {
       thepage1:1,
       toparr:[['综合排行','Rankings'],['上一页','pre'],['下一页','next'],['第','page'],['页','']],
       titlearr1:[['日期','Date'],
-                            ['日活跃用户','DAU '],
-                            ['日活跃率','DAU(Rate)'], 
-                            ['周活跃用户','WAU'],
-                            ['周活跃率','WAU(Rate)'],
-                            ['月活跃用户','MAU'],
-                            ['月活跃率','MAU(Rate)'],
-                            ['流失用户','Churn'],
-                            ['流失率','Churn(Rate)'],
+                  ['日活跃用户','DAU '],
+                  ['日活跃率','DAU(Rate)'], 
+                  ['周活跃用户','WAU'],
+                  ['周活跃率','WAU(Rate)'],
+                  ['月活跃用户','MAU'],
+                  ['月活跃率','MAU(Rate)'],
+                  ['流失用户','Churn'],
+                  ['流失率','Churn(Rate)'],
                             ],
+      timevalue:'',
+      timevalue1:''
     };
   },
   created(){
@@ -236,20 +229,46 @@ export default {
             this.pickerValue = new Date(this.begintime)
             this.pickerValue1 = new Date(this.endtime)
             // 显示时间
-            this.dateTime = this.timeday(new Date(this.begintime))
-            this.dateTime1 = this.timeday(new Date(this.endtime))
-            console.log(this.dateTime,this.dateTime1)
+            this.timevalue = this.timeday(new Date(this.begintime))
+            this.timevalue1 = this.timeday(new Date(this.endtime))
             setTimeout(()=>{
                     this.fornew()
             },50)
   },
   mounted() {
-
+    var theme = "ios";
+        var mode = "scroller";
+        var display = "bottom";
+        var lang="zh";
+        var that = this
+        $('#first_date').mobiscroll().date({
+            
+            theme: theme,
+            mode: mode,
+            display: display,
+            lang: lang,
+            onSelect:function(textVale,inst){ //选中时触发事件
+               var now = new Date(textVale);
+                that.begintime = now.getTime()
+                that.timevalue = that.timeday(now);
+            }
+        })
+        $('#last_date').mobiscroll().date({
+            theme: theme,
+            mode: mode,
+            display: display,
+            lang: lang,
+            onSelect:function(textVale,inst){ //选中时触发事件
+                var now = new Date(textVale);
+                that.endtime = now.getTime()
+                that.timevalue1 = that.timeday(now);
+            }
+        })
   },
   computed:{
     thelang(){
-                return this.$store.state.alllang 
-            }
+          return this.$store.state.alllang 
+        }
   },
   watch: {
     thelang(){
@@ -269,9 +288,9 @@ export default {
         var time = this.begintime
         this.begintime = this.endtime
         this.endtime = time
-        var showtime = this.dateTime
-        this.dateTime = this.dateTime1
-        this.dateTime1 = showtime
+        var showtime = this.timevalue
+        this.timevalue = this.timevalue1
+        this.timevalue1 = showtime
       }
       this.fornew()
     },
@@ -457,26 +476,6 @@ export default {
         window[windowname].reflow();
       };
     },
-    openPicker() {
-      this.$refs.picker.open();
-    },
-    openPicker1() {
-      this.$refs.picker1.open();
-    },
-    handleConfirm() {
-      var now = new Date(this.pickerValue);
-      this.begintime = now.getTime()
-      console.log(now.getTime());
-      console.log(now.getFullYear());
-      this.dateTime = this.timeday(now);
-    },
-    handleConfirm1() {
-      var now = new Date(this.pickerValue1);
-      this.endtime = now.getTime()
-      console.log(now.getTime());
-      console.log(now.getFullYear());
-      this.dateTime1 = this.timeday(now);
-    },
     //时间处理
     timeday(time) {
       var year = time.getFullYear();
@@ -488,7 +487,7 @@ export default {
       if (day < 10) {
         day = "0" + day;
       }
-      return year + "-" + month + "-" + day;
+      return year + "/" + month + "/" + day;
     },
     timeuse(aaa){
             var ddd = new Date(aaa*1000)
@@ -556,6 +555,11 @@ export default {
 </script>
 
 <style scoped>
+input{  
+	background:none;  
+	outline:none;  
+	border:0px;  
+}
 .time {
   font-size: 0.26rem;
   color: #797b8e;

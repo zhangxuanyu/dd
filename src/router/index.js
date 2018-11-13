@@ -37,6 +37,7 @@ import phuseraly from '../page/phone/user_aly.vue'
 import phtradealy from '../page/phone/trade_aly.vue'
 import phusedappaly from '../page/phone/usedapp_aly.vue'
 import phreport from '../page/phone/report.vue'
+import phsearch from '../page/phone/search.vue'
 
 Vue.use(Router)
 
@@ -242,13 +243,6 @@ var myroutelist = [
           }
         },
         {
-          path: '/search',
-          component: search,
-          meta: {
-            title: 'DappData'
-          }
-        },
-        {
           path: '/detail',
           component: phdetail,
           meta: {
@@ -326,6 +320,13 @@ var myroutelist = [
           }
         }
       ]
+    },
+    {
+      path: '/search',
+      component: phsearch,
+      meta: {
+        title: 'DappData'
+      }
     },
     {
       path: '*',

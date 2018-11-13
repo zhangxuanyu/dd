@@ -6,13 +6,13 @@
             <span style="float:left;"></span>
         </div>
         <div style="overflow:hidden;position:relative;">
-          <div @click="openPicker" class="timein">
+          <div class="timein">
           <span style="float:left;margin-right:0.3rem;">{{ttarr[5][$store.state.alllang]}}</span>
-          <div class="timebox">{{dateTime}}</div>
+          <input type="text" id="first_date" v-model="timevalue"  style="float:left;color:#797b8e;width: 3.2rem;text-align:center;height: 0.6rem;border: 1px solid #dfe4ed;border-radius: 0.3rem;box-sizing: border-box;"/>
         </div> 
-        <div @click="openPicker1" class="timein">
+        <div class="timein">
           <span style="float:left;margin-right:0.3rem;">{{ttarr[6][$store.state.alllang]}}</span>
-          <div class="timebox" :style="$store.state.alllang == 1?{marginLeft:'0.2rem'}:{}">{{dateTime1}}</div>
+          <input type="text" id="last_date" v-model="timevalue1"  style="float:left;color:#797b8e;width: 3.2rem;text-align:center;height: 0.6rem;border: 1px solid #dfe4ed;border-radius: 0.3rem;box-sizing: border-box;"/>
         </div>
 
           <div class="confram" @click="request()">
@@ -171,16 +171,6 @@
             </p>
         </div>
 
-        <mt-datetime-picker
-          ref="picker"
-          type="date"
-          v-model="pickerValue"  @confirm="handleConfirm" style="font-size:0.26rem;background-color:#fff;width:100%;margin-left:-0.3rem;overflow:hidden;position:fixed;bottom:0px;" @touchmove.prevent>
-        </mt-datetime-picker>
-        <mt-datetime-picker
-          ref="picker1"
-          type="date"
-          v-model="pickerValue1"  @confirm="handleConfirm1" style="font-size:0.26rem;background-color:#fff;width:100%;margin-left:-0.3rem;overflow:hidden;position:fixed;bottom:0px;" @touchmove.prevent>
-        </mt-datetime-picker>
     </div>
 </template>
 
@@ -207,10 +197,8 @@ export default {
       ],
       titlearr:[['日期','Date'],['当日调用次数','Daily Transactions'],['总调用次数','Transactions'], ['增长率','Growth Rate']], 
       date: "",
-      pickerValue: "",
-      pickerValue1: "",
-      dateTime: "",
-      dateTime1: "",
+      timevalue: "",
+      timevalue1: "",
       begintime: "",
       endtime: "",
       xarr : [],
@@ -246,9 +234,9 @@ export default {
     this.pickerValue = new Date(this.begintime)
     this.pickerValue1 = new Date(this.endtime)
     // 显示时间
-    this.dateTime = this.timeday(new Date(this.begintime));
-    this.dateTime1 = this.timeday(new Date(this.endtime));
-    console.log(this.dateTime, this.dateTime1);
+    this.timevalue = this.timeday(new Date(this.begintime));
+    this.timevalue1 = this.timeday(new Date(this.endtime));
+    console.log(this.timevalue, this.timevalue1);
     setTimeout(() => {
       this.fornew();
     }, 50);
@@ -265,7 +253,36 @@ export default {
                     this.urlid = num1
                 }
   },
-  mounted() {},
+  mounted() {
+    var theme = "ios";
+        var mode = "scroller";
+        var display = "bottom";
+        var lang="zh";
+        var that = this
+        $('#first_date').mobiscroll().date({
+            
+            theme: theme,
+            mode: mode,
+            display: display,
+            lang: lang,
+            onSelect:function(textVale,inst){ //选中时触发事件
+               var now = new Date(textVale);
+                that.begintime = now.getTime()
+                that.timevalue = that.timeday(now);
+            }
+        })
+        $('#last_date').mobiscroll().date({
+            theme: theme,
+            mode: mode,
+            display: display,
+            lang: lang,
+            onSelect:function(textVale,inst){ //选中时触发事件
+                var now = new Date(textVale);
+                that.endtime = now.getTime()
+                that.timevalue1 = that.timeday(now);
+            }
+        })
+  },
   computed: {
     thelang() {
       return this.$store.state.alllang;
@@ -289,9 +306,9 @@ export default {
         var time = this.begintime;
         this.begintime = this.endtime;
         this.endtime = time;
-        var showtime = this.dateTime;
-        this.dateTime = this.dateTime1;
-        this.dateTime1 = showtime;
+        var showtime = this.timevalue;
+        this.timevalue = this.timevalue1;
+        this.timevalue1 = showtime;
       }
       this.fornew();
     },
@@ -379,26 +396,6 @@ export default {
       window.onresize = function() {
         window[windowname].reflow();
       };
-    },
-    openPicker() {
-      this.$refs.picker.open();
-    },
-    openPicker1() {
-      this.$refs.picker1.open();
-    },
-    handleConfirm() {
-      var now = new Date(this.pickerValue);
-      this.begintime = now.getTime();
-      console.log(now.getTime());
-      console.log(now.getFullYear());
-      this.dateTime = this.timeday(now);
-    },
-    handleConfirm1() {
-      var now = new Date(this.pickerValue1);
-      this.endtime = now.getTime();
-      console.log(now.getTime());
-      console.log(now.getFullYear());
-      this.dateTime1 = this.timeday(now);
     },
     //时间处理
     timeday(time) {
@@ -508,6 +505,11 @@ export default {
 </script>
 
 <style scoped>
+input{  
+	background:none;  
+	outline:none;  
+	border:0px;  
+}
 .time {
   font-size: 0.26rem;
   color: #797b8e;

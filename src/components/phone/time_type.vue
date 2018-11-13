@@ -1,9 +1,10 @@
 <template>
     <div style="padding-left:1px;height:0.6rem;">
          <div class="rightph"><span style="margin-right:0.14rem;font-size:0.26rem;float:left;margin-top: 0.15rem;margin-bottom:0.3rem;">{{time[$store.state.alllang]}}</span>
-            <div @click="openPicker" class="timein" :style="$store.state.alllang == 1?{marginLeft:'0.74rem'}:{}">
+            <!-- <div @click="openPicker" class="timein" :style="$store.state.alllang == 1?{marginLeft:'0.74rem'}:{}">
                 <div class="timebox">{{dateTime}}</div>
-            </div>
+            </div> -->
+            <input type="text" id="demo_date" v-model="timevalue"  style="float:left;color:#797b8e;padding-left:0.3rem;margin-bottom:0.35rem;width: 2.4rem;height: 0.6rem;border: 1px solid #dfe4ed;border-radius: 0.3rem;box-sizing: border-box;"/>
 
             <div style="float:left;margin-bottom:0.3rem;">
                 <span style="margin-right:0.14rem;font-size:0.26rem;margin-top: 0.15rem;float:left" v-if="showtype">{{tyarr[$store.state.alllang]}}</span>
@@ -18,11 +19,6 @@
             
          </div>
 
-         <mt-datetime-picker
-          ref="picker"
-          type="date"
-          v-model="pickerValue"  @confirm="handleConfirm" style="font-size:0.26rem;background-color:#fff;width:100%;margin-left:-0.3rem;overflow:hidden;position:fixed;bottom:0px;" @touchmove.prevent>
-        </mt-datetime-picker>
     </div>
 </template>
 
@@ -44,23 +40,26 @@ export default {
             showtype:true,
             dateTime:'',
             pickerValue:'',
+            timevalue:''
         }
     },
     created(){
         this.mnysel = this.$store.state.moneyty
         // this.timeday(new Date(this.begintime))
         if(this.$store.state.requesttime){
-            this.pickerValue = new Date(this.$store.state.requesttime)
-            this.dateTime = this.timeday(new Date(this.$store.state.requesttime));
+            // this.pickerValue = new Date(this.$store.state.requesttime)
+            // this.dateTime = this.timeday(new Date(this.$store.state.requesttime));
+            this.timevalue = this.timeday(new Date(this.$store.state.requesttime));
         }else{
              var now = new Date();
             //小时,分钟，秒，毫秒
             //凌晨2点50分50秒0毫秒
             now.setHours(0, 0, 0, 0);
-            this.pickerValue = new Date(now.getTime()-86400000)
+            // this.pickerValue = new Date(now.getTime()-86400000)
             console.log(now.getTime());
             this.$store.commit('gettime',now.getTime()-86400000)
-            this.dateTime = this.timeday(new Date(this.$store.state.requesttime));
+            // this.dateTime = this.timeday(new Date(this.$store.state.requesttime));
+            this.timevalue = this.timeday(new Date(this.$store.state.requesttime));
         }
        
         if(this.$route.path == '/chain'){
@@ -68,6 +67,28 @@ export default {
         }
         this.$store.commit('getdapptype',0)
         this.type = this.$store.state.dapptype
+    },
+    mounted(){
+        var theme = "ios";
+        var mode = "scroller";
+        var display = "bottom";
+        var lang="zh";
+        var that = this
+        $('#demo_date').mobiscroll().date({
+            
+            theme: theme,
+            mode: mode,
+            display: display,
+            lang: lang,
+            // dateFormat:"yyyy-mm-dd",
+            // minDate: new Date(2018,3,10),
+            // maxDate: new Date(2030,7,30),
+            // stepMinute: 1
+            onSelect:function(textVale,inst){ //选中时触发事件
+                that.requesttime(textVale)
+            }
+        })
+        
     },
     computed:{
         thetype_money(){
@@ -90,9 +111,16 @@ export default {
         type(n,o){
             console.log(n)
             this.$store.commit('getdapptype',n)
-        }
+        },
+        
     },
     methods:{
+    requesttime(textVale){
+        var now = new Date(textVale)
+            now.setHours(0, 0, 0, 0)
+            console.log(now.getTime())
+            this.$store.commit('gettime',now.getTime())
+    },
         //时间处理
     timeday(time) {
       var year = time.getFullYear();
@@ -104,7 +132,7 @@ export default {
       if (day < 10) {
         day = "0" + day;
       }
-      return year + "-" + month + "-" + day;
+      return year + "/" + month + "/" + day;
     },
         openPicker(){
             this.$refs.picker.open();
@@ -129,6 +157,11 @@ export default {
 </script>
 
 <style scoped>
+input{  
+	background:none;  
+	outline:none;  
+	border:0px;  
+}
 select {
 /*Chrome和Firefox里面的边框是不一样的，所以复写了一下*/
 border: solid 1px #ccc;

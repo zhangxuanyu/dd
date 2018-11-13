@@ -6,6 +6,7 @@
             type="date"
             placeholder="选择日期" style="font-size:16px;margin-right:10px;">
             </el-date-picker>
+            
             <span style="margin-left:30px;margin-right:14px;font-size:14px;" v-if="showtype">{{tyarr[$store.state.alllang]}}</span>
             <el-select v-model="type"   class="top_right"  v-if="showtype">
                 <el-option :key="index" :label="item[$store.state.alllang]" :value="index" v-for="(item,index) in typearr1" v-if="$store.state.moneyty == 0">{{item[$store.state.alllang]}}</el-option>
@@ -54,6 +55,9 @@ export default {
         }
         this.$store.commit('getdapptype',0)
         this.type = this.$store.state.dapptype
+    },
+    mounted(){
+        
     },
     computed:{
         thetype_money(){
