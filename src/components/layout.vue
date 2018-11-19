@@ -2,8 +2,8 @@
     <div>
         <go-search class="top"></go-search>
         <the-menu class="menu"></the-menu>
-        <!-- <my-load v-if="$store.state.loadflag"></my-load>
-        <my-pic v-if="$store.state.picshowflag"></my-pic> -->
+        <!-- <my-load v-if="$store.state.loadflag"></my-load> -->
+        <my-pic v-if="$store.state.picshowflag"></my-pic>
         <router-view  class="cont"/>
         <the-foot class="foot"></the-foot>
     </div>
