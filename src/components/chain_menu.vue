@@ -1,13 +1,13 @@
 <template>
     <div class="menu" :style="{minHeight:geth,width:loww}">
         <div class="outtitle">
-            <img :src="'https://bkc-dapp-1252899312.cos.ap-hongkong.myqcloud.com/dappdata/static/icon/'+showDapp.dapp_id+'.jpg'" alt="" class="titleimg" onerror="javascript:this.src='../../static/all1.png'">
+            <img :src="'../../static/'+showDapp.blockchain.toUpperCase()+'-1.png'" alt="" class="titleimg">
             <div class="title">
-                <p class="titlf" style="width:120px;">{{showDapp.title}}</p>
-                <p class="titlty">{{showDapp.platform}} | {{showDapp.category}}</p>
+                <p class="titlf" style="width:120px;">{{showDapp.blockchain.toUpperCase()}}</p>
+                <!-- <p class="titlty">{{showDapp.platform}} | {{showDapp.category}}</p> -->
             </div>
             <div class="title_tips">
-              {{showDapp.title}}
+              {{showDapp.blockchain.toUpperCase()}}
             </div>
         </div>
         <div v-for="(item,index) in mearr" class="outlock">
@@ -138,16 +138,13 @@ export default {
   methods: {
     request() {
       var url =
-        this.$store.state.requrl +
-        "/" +
-        this.$store.state.appid.split("_")[0].toLowerCase() +
-        "/detail";
+        this.$store.state.requrlnew +
+        "/" +'chain/detail';
       console.log(url);
       Axios.post(
         url,
         {
-          dapp_id: this.$store.state.appid,
-          flag: 0
+          "blockchain":this.$store.state.appid
         },
         {
           headers: { "Content-Type": "application/x-www-form-urlencoded" }
@@ -307,12 +304,19 @@ export default {
 }
 .title_tips{
   position: absolute;
-  width: 180px;
+	height: 22px;
+	box-shadow: 2px 2px 4px 0px 
+		rgba(118, 118, 118, 0.3);
+	border: solid 1px #767676;
   background-color: #fff;
-  padding: 20px;
   display: none;
-  top: 0px;
-  left: 0px;
+  padding: 0 10px;
+  top: 28px;
+  left: 81px;
+  font-size: 12px;
+	color: #4f5f6e;
+  line-height: 22px;
+  white-space:nowrap;
 }
 .outlock {
   overflow: hidden;

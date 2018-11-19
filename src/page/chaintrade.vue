@@ -1,5 +1,5 @@
 <template>
-    <div class="out" :style="{minHeight:geth,marginLeft:mglf}">
+    <div class="out" :style="{minHeight:geth,marginLeft:mglf,minWidth:'1000px'}">
         <chain-Menu class="leftme" :style="{left:open}"></chain-menu>
         <!-- <p class="alltitle">{{ttarr[4][$store.state.alllang]}}</p>  -->
         <div class="contright">
@@ -7,10 +7,10 @@
             <!-- 新用户数图表 -->
             <div class="dapp">
                 <div style="padding-top:5px;"><span style="float:left;color: #212229;font-weight: 600;">{{ttarr[0][$store.state.alllang]}}</span> 
-                    <div class="export " @click="defalutexcle(titlearr,arr)">导出</div>
+                    <div class="export " @click="defalutexcle(titlearr,arr)">{{type_exp[1][$store.state.alllang]}}</div>
                     <span style="float:right;margin-top: -5px;margin-bottom: 30px;" class="type_sel">
                         <span style="margin-right:10px;font-size: 14px;color: #797b8e;margin-left:40px;">
-                            分类
+                            {{type_exp[0][$store.state.alllang]}}
                         </span>
                         <el-select v-model="typedata"   class="cur" >
                             <el-option :key="index" :label="item[$store.state.alllang]" :value="index" v-for="(item,index) in typearr1">{{item[$store.state.alllang]}}</el-option>
@@ -31,13 +31,13 @@
                     </tr>
                     <tr class="top pd nbt" v-for="(item,index) in arr" v-if="index>=(currentPage1-1)*10&&index<currentPage1*10" :key="index">
                         <td class="title all" style="width:55px;">{{index+1}}</td>
-                        <td class="title all">{{timeuse(item.timestamp-68400)}}</td>
-                        <td class="title all">{{conversion(item.new_user.toString())}}</td>
-                        <td class="title all">{{conversion((item.new_rate*100).toFixed(2))}}%</td>
-                        <td class="title all">{{conversion(item.total_user.toString())}}</td>
-                        <td class="title all">{{conversion(item.total_user.toString())}}</td>
-                        <td class="title all">{{conversion(item.total_user.toString())}}</td>
-                        <td class="title all" style="border-right:1px solid #ebecf0;">{{conversion((item.new_user_ratio*100).toFixed(2))}}%</td>
+                        <td class="title all">{{timeuse(item.timestamp)}}</td>
+                        <td class="title all">{{conversion(item.chain_total_tx.toString())}}</td>
+                        <td class="title all">{{conversion(item.chain_day_tx.toString())}}</td>
+                        <td class="title all">{{conversion((item.chain_tx_rate*100).toFixed(2))}}%</td>
+                        <td class="title all">{{conversion(item.chain_total_vol.toFixed(3))}}</td>
+                        <td class="title all">{{conversion(item.chain_day_vol.toFixed(3))}}</td>
+                        <td class="title all" style="border-right:1px solid #ebecf0;">{{conversion((item.chain_vol_rate*100).toFixed(2))}}%</td>
                     </tr>
                 </table>
                 
@@ -107,9 +107,9 @@ export default {
                         }
                     }]
                     },
-                    titlearr:[['',''],['日期','Date'],['累计交易笔数','transactions'],['当日交易笔数','transactions(24H)'],['增长率','Growth Rate'],['累计交易量','volume'],['当日交易量','volume(24H)'], ['增长率','Growth Rate']],
+                    titlearr:[['',''],['日期','Date'],['累计交易笔数','Total Tx'],['当日交易笔数','Daily Tx'],['增长率','Growth Rate'],['累计交易量','Total Vol'],['当日交易量','Daily Vol'], ['增长率','Growth Rate']],
                     arr:[],
-                    ttarr:[['交易数据','volume'],['时间段','Period'],['新增用户','New users'],['活跃用户','Active Users'],['用户分析','User Analysis']],
+                    ttarr:[['交易数据','Transaction Data'],['时间段','Period'],['新增用户','New users'],['活跃用户','Active Users'],['用户分析','User Analysis']],
                     currentPage1:1,
                     //伸展宽度
                     open:'',
@@ -119,8 +119,9 @@ export default {
                     xarr:[],
                     newarr:[],
                     fornewflag:false,
-                    typedata:0,
-                    typearr1:[['累计交易笔','trade times'],['当日交易笔数','trade times(24H)'],['增长率','addrate'],['累计交易量','all trade'],['当日交易量','trade(24H)']]
+                    typedata:1,
+                    type_exp:[['分类','Other'],['导出','Export']],
+                    typearr1:[['累计交易笔','Total Tx'],['当日交易笔数','Daily Tx'],['增长率','Growth Rate'],['累计交易量','Total Vol'],['当日交易量','Daily Vol']]
             }
         },
     created(){
@@ -149,7 +150,6 @@ export default {
                 }
         },
         mounted(){
-            
             
         },
     computed:{
@@ -216,13 +216,13 @@ export default {
             //增加\t为了不让表格显示科学计数法或者其他格式
             for(let i = 0 ; i < dataarr.length ; i++ ){
                 str+=`${i+1 + '\t'},`; 
-                str+=`${this.timeuse(dataarr[i].timestamp-68400)  + '\t'},`; 
-                str+=`${dataarr[i].new_user.toString()  + '\t'},`; 
-                str+=`${(dataarr[i].new_rate*100).toFixed(2)  + '\t'},`; 
-                str+=`${dataarr[i].total_user.toString()  + '\t'},`; 
-                str+=`${dataarr[i].total_user.toString() + '\t'},`; 
-                str+=`${dataarr[i].total_user.toString() + '\t'},`; 
-                str+=`${(dataarr[i].new_user_ratio*100).toFixed(2) +'%' + '\t'},`; 
+                str+=`${this.timeuse(dataarr[i].timestamp)  + '\t'},`; 
+                str+=`${dataarr[i].chain_total_tx.toString()  + '\t'},`; 
+                str+=`${(dataarr[i].chain_day_tx).toString()  + '\t'},`; 
+                str+=`${(dataarr[i].chain_tx_rate*100).toFixed(2) + '%'  + '\t'},`; 
+                str+=`${dataarr[i].chain_total_vol.toFixed(3) + '\t'},`; 
+                str+=`${dataarr[i].chain_day_vol.toFixed(3) + '\t'},`; 
+                str+=`${(dataarr[i].chain_vol_rate*100).toFixed(2) +'%' + '\t'},`; 
 
                 str+='\n';
             }
@@ -248,7 +248,7 @@ export default {
                 },
         drawall(){
                 setTimeout(()=>{
-                    this.drawuser1('newuser',this.xarr,this.newarr,this.typearr1[this.typedata][this.$store.state.alllang],'newuser')
+                    this.drawuser1('newuser',this.xarr,this.newarr[this.typedata],this.typearr1[this.typedata][this.$store.state.alllang],'newuser')
                 },1000)
         },
         timeuse(aaa){
@@ -332,30 +332,42 @@ export default {
             this.newarr = []
             this.arr = []
             console.log(this.$store.state.moneyty,this.$store.state.requesttime)
-                    var url = this.$store.state.requrl+'/'+this.$store.state.appid.split('_')[0].toLowerCase()+'/user';
+                    var url = this.$store.state.requrlnew+'/chain';
                     console.log(url)
                     Axios.post(url,{
-                                        "dapp_id":this.$store.state.appid,
-                                        "start":this.begintime/1000,
-                                        "last":this.endtime/1000+86400
+                                        "blockchain": "nas",
+                                        "begin":this.begintime/1000,
+                                        "end":this.endtime/1000+86400,
+                                        "type":"tx"
                                     },{
                                         headers: {'Content-Type': "application/x-www-form-urlencoded"}
                                     }).then(res => {
                                         console.log(res.data.msg)
-                                        res.data.msg.item.forEach((a,bb) => {
-                                            if(bb < res.data.msg.item.length -1){
-                                                this.arr.push(a)
+                                        res.data.msg.data.forEach((a,bb) => {
+                                            if(bb < res.data.msg.data.length -1){
+                                                this.arr.unshift(a)
                                             }
                                             
                                         })
                                         console.log(this.arr)
+                                        this.newarr = [
+                                            [],
+                                            [],
+                                            [],
+                                            [],
+                                            []
+                                        ]
                                         this.arr.forEach(e => {
-                                            var ddd = new Date(e.timestamp*1000-86400000)
+                                            var ddd = new Date(e.timestamp*1000)
                                             var year = ddd.getFullYear()
                                             var month = ddd.getMonth()+1
                                             var day=ddd.getDate();
                                             this.xarr.unshift(year+'/'+month+'/'+day)
-                                            this.newarr.unshift(e.new_user)
+                                            this.newarr[0].unshift(e.chain_total_tx)
+                                            this.newarr[1].unshift(e.chain_day_tx)
+                                            this.newarr[2].unshift(e.chain_tx_rate)
+                                            this.newarr[3].unshift(e.chain_total_vol)
+                                            this.newarr[4].unshift(e.chain_day_vol)
                                         });
                                         this.drawall()
                                         this.$store.commit('changeloadopacty',false)
@@ -456,7 +468,7 @@ export default {
 <style>
 .time_sel .el-range-editor.el-input__inner{
     border-radius: 20px;
-    background-color: #f7f8fa;
+    background-color: #eef2f5;
     height: 30px;
 }
 .time_sel .el-date-editor .el-range-separator{
@@ -467,14 +479,14 @@ export default {
 }
 .type_sel .el-input--suffix .el-input__inner{
     border-radius: 20px;
-    background-color: #f7f8fa;
+    background-color: #eef2f5;
     height: 30px;
 }
 .type_sel .el-input__icon{
     line-height: 30px;
 }
 .el-range-editor .el-range-input{
-    background-color: #f7f8fa;
+    background-color: #eef2f5;
 }
 .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
     width:350px;

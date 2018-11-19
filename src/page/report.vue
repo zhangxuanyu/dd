@@ -45,7 +45,10 @@ export default {
   },
   mounted() {
     const that = this;
-    this.$store.commit('changeloadopacty',false)
+    setTimeout(() => {
+      this.$store.commit('changeloadopacty',false)
+    }, 1000);
+    
   },
   computed: {
     inleft() {

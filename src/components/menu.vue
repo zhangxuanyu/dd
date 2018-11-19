@@ -57,12 +57,12 @@ export default {
             { word: ["总览", "Overview"], img: "../../static/all2.png" }
           ]
         },
-        // {
-        //   title: ["公链", "Chain"],
-        //   content: [
-        //     { word: ["公链数据", "Chain"], img: "../../static/data1.png" }
-        //   ]
-        // },
+        {
+          title: ["公链", "Chain"],
+          content: [
+            { word: ["公链数据", "Chain"], img: "../../static/data1.png" }
+          ]
+        },
         {
           title: ["Dapp", "Dapp"],
           content: [
@@ -150,7 +150,7 @@ export default {
     },
       //图片赋值
       pic_src(aa,bb){
-          if(bb == 1){
+          if(bb == 2){
           if (aa == 0) {
             this.mearr[bb].content[aa].img = "../../static/rank1.png";
             this.$router.push({ path: "/rank" });
@@ -170,13 +170,13 @@ export default {
             this.$router.push({ path: "/" });
           }
       }
-      // else if(bb == 1){
-      //     if(aa == 0){
-      //       this.mearr[bb].content[aa].img = "../../static/data2.png";
-      //       this.$router.push({ path: "/chain" });
-      //     }
-      // }
-      else if(bb == 2){
+      else if(bb == 1){
+          if(aa == 0){
+            this.mearr[bb].content[aa].img = "../../static/data2.png";
+            this.$router.push({ path: "/chain" });
+          }
+      }
+      else if(bb == 3){
           if(aa == 0){
             this.mearr[bb].content[aa].img = "../../static/report1.png";
             this.$router.push({ path: "/report" });
@@ -193,7 +193,7 @@ export default {
       console.log(111111111111111);
       console.log(this.imglist);
       console.log(this.mearr);
-      if(bb == 1){
+      if(bb == 2){
           if (aa == 0) {
             this.mearr[bb].content[aa].img = "../../static/rank1.png";
             
@@ -213,13 +213,13 @@ export default {
             
           }
       }
-      // else if(bb == 1){
-      //     if(aa == 0){
-      //       this.mearr[bb].content[aa].img = "../../static/data2.png";
+      else if(bb == 1){
+          if(aa == 0){
+            this.mearr[bb].content[aa].img = "../../static/data2.png";
             
-      //     }
-      // }
-      else if(bb == 2){
+          }
+      }
+      else if(bb == 3){
           if(aa == 0){
             this.mearr[bb].content[aa].img = "../../static/report2.png";
             
@@ -249,12 +249,12 @@ export default {
             { word: ["总览", "Overview"], img: "../../static/all1.png" }
           ]
         },
-        // {
-        //   title: ["公链", "Chain"],
-        //   content: [
-        //     { word: ["公链数据", "Chain"], img: "../../static/data1.png" }
-        //   ]
-        // },
+        {
+          title: ["公链", "Chain"],
+          content: [
+            { word: ["公链数据", "Chain"], img: "../../static/data1.png" }
+          ]
+        },
         {
           title: ["Dapp", "Dapp"],
           content: [
@@ -289,12 +289,12 @@ export default {
             { word: ["总览", "Overview"], img: "../../static/all1.png" }
           ]
         },
-        // {
-        //   title: ["公链", "Chain"],
-        //   content: [
-        //     { word: ["公链数据", "Chain"], img: "../../static/data1.png" }
-        //   ]
-        // },
+        {
+          title: ["公链", "Chain"],
+          content: [
+            { word: ["公链数据", "Chain"], img: "../../static/data1.png" }
+          ]
+        },
         {
           title: ["Dapp", "Dapp"],
           content: [
@@ -320,20 +320,20 @@ export default {
         this.mearr[0].content[0].img = "../../static/all2.png";
       } else if (this.$route.path == "/rank") {
         this.select = 0;
-        this.outselect = 1
-        this.mearr[1].content[0].img = "../../static/rank1.png";
+        this.outselect = 2
+        this.mearr[2].content[0].img = "../../static/rank1.png";
       } else if (this.$route.path == "/num") {
         this.select = 1;
-        this.outselect = 1
-        this.mearr[1].content[1].img = "../../static/user2.png";
+        this.outselect = 2
+        this.mearr[2].content[1].img = "../../static/user2.png";
       } else if (this.$route.path == "/money") {
         this.select = 2;
-        this.outselect = 1
-        this.mearr[1].content[2].img = "../../static/money1.png";
+        this.outselect = 2
+        this.mearr[2].content[2].img = "../../static/money1.png";
       } else if (this.$route.path == "/use") {
         this.select = 3;
-        this.outselect = 1
-        this.mearr[1].content[3].img = "../../static/use1.png";
+        this.outselect = 2
+        this.mearr[2].content[3].img = "../../static/use1.png";
       } else if (
         this.$route.path == "/detail" ||
         this.$route.path == "/user" ||
@@ -345,8 +345,8 @@ export default {
         this.select = -1;
       }else if (this.$route.path == "/report"){
         this.select = 0;
-        this.outselect = 2
-        this.mearr[2].content[0].img = "../../static/report2.png";
+        this.outselect = 3
+        this.mearr[3].content[0].img = "../../static/report2.png";
       }else if (this.$route.path == "/chain"){
         this.select = 0;
         this.outselect = 1

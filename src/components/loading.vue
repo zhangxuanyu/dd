@@ -48,7 +48,7 @@ export default {
        therouter(width){
            if(this.$route.path == '/'||this.$route.path == '/rank'||this.$route.path == '/num'||this.$route.path == '/money'||this.$route.path == '/use'||this.$route.path == '/search'||this.$route.path == '/report'){
                 this.theleft = width
-            }else if(this.$route.path == '/detail'||this.$route.path == '/user'||this.$route.path == '/trade'||this.$route.path == '/usedapp'){
+            }else if(this.$route.path == '/detail'||this.$route.path == '/user'||this.$route.path == '/trade'||this.$route.path == '/usedapp'||this.$route.path == '/chaindetail'||this.$route.path == '/chainuser'||this.$route.path == '/chaintrade'||this.$route.path == '/chainusedapp'||this.$route.path == '/chaindapp'){
                 this.theleft = width + 220
             }
        },

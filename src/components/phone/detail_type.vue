@@ -46,7 +46,7 @@ export default {
             long_length = long_length + $('.top_type')[index].offsetWidth + 1
         });
         console.log(long_length)
-        $('.report_long')[0].style.width = long_length + 15 +'px'
+        $('.report_long')[0].style.width = long_length + 20+'px'
       },100)
       
   },

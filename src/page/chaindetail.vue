@@ -1,15 +1,15 @@
 <template>
-    <div  class="out" :style="{minHeight:geth,marginLeft:mglf}" >
+    <div  class="out" :style="{minHeight:geth,marginLeft:mglf,minWidth:'1000px'}" >
         <chain-menu class="leftme" :style="{left:open}"></chain-menu>
-        <div class="contright" v-if="arr.title">
+        <div class="contright" v-if="arr.blockchain">
             <!-- dapp介绍 -->
             <div class="dapp" style="">
                 <p class="preview">{{ttarr[0][$store.state.alllang]}}</p>
-                <p class="chain_content">基于星云链的新一代区块链游戏-恐龙乐园上线了！通过免费领取一颗龙蛋去孵化自己的龙宝宝，每个玩家限定免费领取一枚龙蛋！所有龙宝宝从龙蛋中孵化出来之后，力量、敏捷和速度值永远不会发生变化，体重初始值均为5KG。玩家还可以支付0.01NAS购买额外的龙蛋去孵化更多的龙宝宝，或者直接去市场中购买其他玩家挂售的稀有恐龙！玩家通过让自己的龙宝宝与其他恐龙进行PK，赢家将获得对方20%的体重，我们希望用更加公平的算法，通过所有玩家的共同努力，打造一条称霸宇宙的无敌霸王龙！还在等什么，快来恐龙乐园一起嗨吧！</p>
+                <p class="chain_content">{{arr.description[$store.state.alllang]}}</p>
                 <p class="preview">{{ttarr[1][$store.state.alllang]}}</p>
                 <div class="info">
                         <div  style="line-height:30px;font-size:14px;" class="cur base" v-for="(item,index) in infoarr" :key="index">
-                            <a :href="arr.website" target="_black" rel="noopener noreferrer">
+                            <a :href="item" target="_black" rel="noopener noreferrer">
                                 <img :src="infopicarr[index]" alt=""> {{ttarr[2+index][$store.state.alllang]}} 
                                 <div class="go"></div>
                             </a>
@@ -17,7 +17,7 @@
                         </div>
                 </div>
 
-                <div class="tableout"> 
+                <!-- <div class="tableout"> 
                     <table width="100%" cellspacing='0' style="text-align: center;">
                         <tr>
                             <th style="width:300px;" class="title">{{ttarr[4][$store.state.alllang]}}</th>
@@ -31,7 +31,7 @@
                     <div class="showcontract cur" @click="showctr">
                         {{ttarr[6][$store.state.alllang]}} 
                     </div>
-                </div>      
+                </div>       -->
             </div>
             
             <!-- 24小时概况 -->
@@ -39,9 +39,9 @@
                 <p class="preview">{{ttarr[7][$store.state.alllang]}}</p>
                <div v-for="(item,index) in dayarr" :key="index" class="daydata">
                    <p>{{item.title[$store.state.alllang]}}</p>
-                   <p>(24H)</p>
-                   <p>{{item.value}}</p>
-                   <p :style="item.rate>0?{color:'#1ccfa7'}:{color:'#f85e70'}"><img :src="item.rate>=0?'../../static/up.png':'../../static/down.png'" alt=""> {{item.rate}}</p>
+                   <p>(24h)</p>
+                   <p>{{item.value.toFixed(0)}}</p>
+                   <p :style="item.rate>0?{color:'#1ccfa7'}:item.rate<0?{color:'#f85e70'}:{color:'#797b8e'}"><img :src="item.rate>0?'../../static/up.png':item.rate<0?'../../static/down.png':''" alt=""> {{item.rate.toFixed(5)}}%</p>
                </div>
             </div>
 
@@ -50,25 +50,41 @@
             <span>{{ttarr[8][$store.state.alllang]}}</span>
             <span @click="gotodapp(1,'')">{{ttarr[9][$store.state.alllang]}} ></span>
         </p>
-        <div class="hotdapp">
-            <div v-for="(item,index) in hotarr" :key="index" class="hotbox" @click="gotodapp(2,index)">
+
+           <div class="hotdapp">
+            <div v-for="(item,index) in hotarr" :key="index" class="hotbox" @click="gotodapp(2,item.dapp_id)" v-if="hotarr.length>0">
                 <div class="hot_content cur">
                     <div class="hot_left">
-                        <div class="left_img" :style="{background:' url('+item.img+') no-repeat',backgroundSize:'contain'}">
-
+                        <div class="left_img" >
+                          <img :src="'https://bkc-dapp-1252899312.cos.ap-hongkong.myqcloud.com/dappdata/static/icon/'+item.dapp_id+'.jpg'" alt="" onerror="javascript:this.src='../../static/all1.png'" style="width:50px;height:50px;float:left;">
                         </div>
-                        <p>{{item.name}}</p>
-                        <p>{{item.plat}}&nbsp;|&nbsp;{{item.categories}}</p>
+                        <p style="overflow : hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;">{{item.en_cn[$store.state.alllang].title}}</p>
+                        <p>{{item.blockchain.toUpperCase()}}&nbsp;|&nbsp;{{item.category}}</p>
                     </div>
                     <div class="hot_right">
-                        <div class="hot_right_left" v-for="(it,id) in item.content" :key="id">
-                            <p>{{blocktitle[id][$store.state.alllang]}}</p>
+                        <div class="hot_right_left">
+                            <p>{{blocktitle[0][$store.state.alllang]}}</p>
                             <p>(24h)</p>
-                            <p>{{it.value}}</p>
-                            <p  :style="it.rate>0?{color:'#1ccfa7'}:{color:'#f85e70'}">
-                                <img src="../../static/up.png" alt="" class="mgt" v-if="it.rate>=0">
-                                <img src="../../static/down.png" alt="" class="mgt" v-else>
-                                {{it.rate}}%
+                            <p>{{item.new_user}}</p>
+                            <p :style="item.new_user_rate>0?{color:'#1ccfa7'}:item.new_user_rate<0?{color:'#f85e70'}:{color:'#797b8e'}">
+                                <img src="../../static/up.png" alt="" class="mgt" v-if="item.new_user_rate>0">
+                                <img src="../../static/down.png" alt="" class="mgt" v-if="item.new_user_rate<0">
+                                {{item.new_user_rate.toFixed(3)}}%
+                            </p>
+                        </div>
+
+                        <div class="hot_right_left">
+                            <p>{{blocktitle[1][$store.state.alllang]}}</p>
+                            <p>(24h)</p>
+                            <p>{{item.active_user}}</p>
+                            <p :style="item.active_user_rate>0?{color:'#1ccfa7'}:item.new_user_rate<0?{color:'#f85e70'}:{color:'#797b8e'}">
+                                <img src="../../static/up.png" alt="" class="mgt" v-if="item.active_user_rate>0">
+                                <img src="../../static/down.png" alt="" class="mgt" v-if="item.active_user_rate<0">
+                                {{item.active_user_rate.toFixed(3)}}%
                             </p>
                         </div>
                         
@@ -77,8 +93,6 @@
             </div>
 
         </div>
-
-           
             
         </div>
     </div>
@@ -105,7 +119,30 @@ export default {
       geth: "",
       mglf: "",
       open: "",
-      arr: "",
+      arr: {
+          "hour24_item":{
+            "dapp_vol": 0.0105,
+            "dapp_vol_rate": 0,
+            "blockchain": "nas",
+            "call_rate": -0.00027901785714285713,
+            "new_user": 53,
+            "active_user": 141,
+            "active_user_rate": 0,
+            "vol": 152997.07778567,
+            "dapp_call": 3424,
+            "new_user_rate": 0,
+            "vol_rate": 0,
+            "call": 3583,
+            "dapp_call_rate": -0.00029197080291970805
+            },
+            "blockchain":"nas",
+            "website": "https://nebulas.io",
+            "contract": "",
+            "chain_total_user": 155241,
+            "dapp_num": 977,
+            "chain_total_call": 9849032,
+            "chain_total_vol": 234989895.25352845 
+      },
       //请求数组
       reqarr: ["eth", "eos", "nas"],
       reqAarr: ["ETH", "EOS", "NAS"],
@@ -124,7 +161,6 @@ export default {
         ["近 30 日排名", "Rank History"],
         ["预览","Preview"]
       ],
-      urlid: "",
       infoarr:[],
       infopicarr:['../../static/home.png','../../static/GitHub.png','../../static/dapp.png'],
       dayarr:[
@@ -134,123 +170,32 @@ export default {
             rate:5.23
           },
           {
-            title:['新增用户','new user'],
+            title:['活跃用户','active user'],
             value:51651,
             rate:5.23
           },
           {
-            title:['新增用户','new user'],
+            title:['交易量','volume'],
             value:51651,
             rate:5.23
           },
           {
-            title:['新增用户','new user'],
+            title:['调用次数','transaction'],
             value:51651,
             rate:5.23
           },
           {
-            title:['新增用户','new user'],
+            title:['Dapp交易量','dapp vol'],
             value:51651,
             rate:5.23
           },
           {
-            title:['新增用户','new user'],
+            title:['Dapp调用次数','dapp tx'],
             value:51651,
             rate:5.23
           }
       ],
-       hotarr:[
-          {
-              img:'../../static/logo1.png',
-              name:'恐龙乐园',
-                plat:'NAS',
-                categories:'game',
-                content:[
-                    {
-                        value:65115,
-                        rate:5.34
-                    },{
-                        value:65115,
-                        rate:5.34
-                    }
-                ]
-          },
-          {
-              img:'../../static/logo1.png',
-              name:'恐龙乐园',
-                plat:'NAS',
-                categories:'game',
-                content:[
-                    {
-                        value:65115,
-                        rate:5.34
-                    },{
-                        value:65115,
-                        rate:5.34
-                    }
-                ]
-          },
-          {
-              img:'../../static/logo1.png',
-              name:'恐龙乐园',
-                plat:'NAS',
-                categories:'game',
-                content:[
-                    {
-                        value:65115,
-                        rate:5.34
-                    },{
-                        value:65115,
-                        rate:5.34
-                    }
-                ]
-          },
-          {
-              img:'../../static/logo1.png',
-              name:'恐龙乐园',
-                plat:'NAS',
-                categories:'game',
-                content:[
-                    {
-                        value:65115,
-                        rate:5.34
-                    },{
-                        value:65115,
-                        rate:5.34
-                    }
-                ]
-          },
-          {
-              img:'../../static/logo1.png',
-              name:'恐龙乐园',
-                plat:'NAS',
-                categories:'game',
-                content:[
-                    {
-                        value:65115,
-                        rate:5.34
-                    },{
-                        value:65115,
-                        rate:5.34
-                    }
-                ]
-          },
-          {
-              img:'../../static/logo1.png',
-              name:'恐龙乐园',
-                plat:'NAS',
-                categories:'game',
-                content:[
-                    {
-                        value:65115,
-                        rate:5.34
-                    },{
-                        value:65115,
-                        rate:5.34
-                    }
-                ]
-          }
-      ],
+      hotarr:[],
       blocktitle: [
         ["新增用户数","New Users"],
         ["活跃用户数","Active Users"]
@@ -265,8 +210,18 @@ export default {
     this.$store.commit("changeloadflge", true);
     this.geth = window.innerHeight - 60 + "px"
     setTimeout(() => {
+        let href = window.location.href;
+        if (href.indexOf("?") > -1) {
+        console.log(window.location.href.split("?")[1].split("=" || "&"));
+        var code = window.location.href.split("?")[1].split("=")[0];
+        var num = window.location.href.split("?")[1].split("=")[1];
+        this.urlid = num;
+        this.$store.commit("theappid", num);
+        }
       this.fornew();
-    }, 50);
+      this.fornewdapp()
+    }, 200);
+
     if (this.$store.state.themenuflag) {
       this.open = 253 + "px";
       this.mglf = 503 + "px";
@@ -321,22 +276,20 @@ export default {
         if(type == 1){
             this.$router.push({ path: "/rank" });
         }else if(type == 2){
-            this.$router.push({ path: "/detail?id="+'ETH_'+(id+365) });
+            this.$router.push({ path: "/detail?id="+id });
         }
     },
     fornew() {
       console.log(this.$store.state.moneyty, this.$store.state.requesttime);
+      console.log(this.$store.state.appid)
       var url =
-        this.$store.state.requrl +
-        "/" +
-        this.$store.state.appid.split("_")[0].toLowerCase() +
-        "/detail";
+        this.$store.state.requrlnew +
+        "/" +'chain/detail';
       console.log(url);
       Axios.post(
         url,
         {
-          dapp_id: this.$store.state.appid,
-          flag:1
+            "blockchain":this.$store.state.appid
         },
         {
           headers: { "Content-Type": "application/x-www-form-urlencoded" }
@@ -344,16 +297,65 @@ export default {
       ).then(res => {
         console.log(res.data.msg);
         this.arr = res.data.msg;
-        this.urlid = res.data.msg.dapp_id;
-        res.data.msg.day_30.forEach(e => {
-          var ddd = new Date(e.timestamp * 1000 - 86400000);
-          var year = ddd.getFullYear();
-          var month = ddd.getMonth() + 1;
-          var day = ddd.getDate();
-        });
+        this.dayarr=[
+          {
+            title:['新增用户','New User'],
+            value:this.arr.hour24_item.new_user,
+            rate:this.arr.hour24_item.new_user_rate
+          },
+          {
+            title:['活跃用户','Active User'],
+            value:this.arr.hour24_item.active_user,
+            rate:this.arr.hour24_item.active_user_rate,
+          },
+          {
+            title:['交易量','Volume'],
+            value:this.arr.hour24_item.vol,
+            rate:this.arr.hour24_item.vol_rate,
+          },
+          {
+            title:['调用次数','Transaction'],
+            value:this.arr.hour24_item.call,
+            rate:this.arr.hour24_item.call_rate,
+          },
+          {
+            title:['Dapp交易量','Dapp Vol'],
+            value:this.arr.hour24_item.dapp_vol,
+            rate:this.arr.hour24_item.dapp_vol_rate,
+          },
+          {
+            title:['Dapp调用次数','Dapp Tx'],
+            value:this.arr.hour24_item.dapp_call,
+            rate:this.arr.hour24_item.dapp_call_rate,
+          }
+      ]
+        // res.data.msg.hour24_item.forEach(e => {
+        //   var ddd = new Date(e.timestamp * 1000 - 86400000);
+        //   var year = ddd.getFullYear();
+        //   var month = ddd.getMonth() + 1;
+        //   var day = ddd.getDate();
+        // });
         this.$store.commit("changeloadopacty", false);
         this.infoarr = [this.arr.website,this.arr.github]
       });
+    },
+    fornewdapp(){
+      Axios.post(
+        this.$store.state.requrlnew + "/hotdapp/test",
+        {
+          "num":6,
+          "order":"active_user",
+          "blockchain":this.$store.state.appid
+         },
+        {
+          headers: { "Content-Type": "application/x-www-form-urlencoded" }
+        }
+      ).then(res => {
+        console.log(res)
+        res.data.msg.data.forEach(element => {
+          this.hotarr.unshift(element)
+        });
+      })
     }
   }
 };
@@ -571,6 +573,7 @@ a {
     border-radius: 50%;
     margin: 0 auto;
     margin-bottom: 20px;
+    overflow: hidden;
 }
 
 .hot_left p:nth-of-type(1){

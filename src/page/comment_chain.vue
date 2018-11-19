@@ -2,14 +2,14 @@
     <div class="out"  :style="{marginLeft:theleft,minWidth: '1144px'}">
         <!-- <p class="alltitle">{{toparr[$store.state.alllang]}}</p> -->
         
-        <div class="ranktb"  style="minHeight:955px;">
-            <span style="line-height:800px;font-size:50px;">COMMING &nbsp;&nbsp;&nbsp; SOON...</span> 
-            <div class="top" style="font-weight:600;color:#212229;margin-bottom:30px;" v-show="false">
+        <div class="ranktb"  style="">
+            
+            <div class="top" style="font-weight:600;color:#212229;margin-bottom:30px;">
                  {{toparr[0][$store.state.alllang]}}
                 <the-time></the-time>
 
             </div>
-            <table  width="100%" cellspacing='0' style="text-align: center;" v-show="false">
+            <table  width="100%" cellspacing='0' style="text-align: center;">
                 <tr class="top" style="color: #464a58;background-color:#f7fafc;">
                     <th  v-for="(item,index) in titlearr" class="title all" 
                     :style="{width:stylearr[index],borderBottom:'2px solid #ebecf0'}" 
@@ -21,25 +21,24 @@
                         <img :src="rankpic_arr[ranknum[index]]" alt="" style="width:6px;height:12px;vertical-align: -1px;margin-left:6px;" v-if="rankpic_arr[ranknum[index]]" >
                     </th>
                 </tr>
-                <tr class="top pd" v-for="(item,index) in arr" :key="index">
-                    <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{index+1+(currentPage1-1)*10}}</td>
+                <tr class="top pd" v-for="(item,index) in chainarr" :key="index">
+                    <td class="title all" :style="index == chainarr.length -1 ?{border:'none'}:''">{{index+1+(currentPage1-1)*10}}</td>
 
 
                     <!-- icon选择 -->
-                    <td class="title all hhvv cur " @click="gotodetail(item.dapp_id)" :style="index == arr.length -1 ?{border:'none'}:''"><div class="ttimg picfalse" v-show="picfalt">
-                        <img :src="'https://bkc-dapp-1252899312.cos.ap-hongkong.myqcloud.com/dappdata/static/icon/'+item.dapp_id+'.jpg'" alt="" onerror="javascript:this.src=''" style="width:26px;height:26px;position:absolute;">
-                         <img :src="'https://bkc-dapp-1252899312.cos.ap-hongkong.myqcloud.com/dappdata/static/icon/'+item.title+'.jpg'" alt="" onerror="javascript:this.src='../../static/all1.png'" style="width:26px;height:26px;position:absolute;">
-                    </div>{{item.title}}</td>
-                    <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{conversion(item.new_user.toString())}}</td>
-                    <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{conversion(item.active_user.toString())}}</td>
-                    <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{conversion(item.vol.toFixed(2))}}</td>
-                    <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{conversion(item.call.toString())}}</td>
-                    <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{conversion(item.call.toString())}}</td>
-                    <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{conversion(item.call.toString())}}</td>
+                    <td class="title all hhvv cur " @click="gotodetail(item.blockchain)" :style="index == chainarr.length -1 ?{border:'none'}:''"><div class="ttimg picfalse">
+                        <img :src="'../../static/'+item.blockchain.toUpperCase()+'-1.png'" alt="" style="width:26px;height:26px;position:absolute;">
+                    </div>{{item.blockchain.toUpperCase()}}</td>
+                    <td class="title all" :style="index == chainarr.length -1 ?{border:'none'}:''">{{conversion(item.chain_new_user.toString())}}</td>
+                    <td class="title all" :style="index == chainarr.length -1 ?{border:'none'}:''">{{conversion(item.chain_active_user.toString())}}</td>
+                    <td class="title all" :style="index == chainarr.length -1 ?{border:'none'}:''">{{conversion(item.chain_day_vol.toFixed(2))}}</td>
+                    <td class="title all" :style="index == chainarr.length -1 ?{border:'none'}:''">{{conversion(item.chain_day_call.toString())}}</td>
+                    <td class="title all" :style="index == chainarr.length -1 ?{border:'none'}:''">{{conversion(item.dapp_vol.toFixed(2))}}</td>
+                    <td class="title all" :style="index == chainarr.length -1 ?{border:'none'}:''">{{conversion(item.dapp_call.toString())}}</td>
                 </tr>
             </table>
            
-            <div style="width:400px;height:50px;margin:0 auto;margin-top:40px;"  v-if="arr.length>=1" v-show="false">
+            <!-- <div style="width:400px;height:50px;margin:0 auto;margin-top:40px;"  v-if="chainarr.length>=1">
                 <span style="float:left;margin-top:7px;font-size:12px;color:#4f5f6e;" v-if="$store.state.alllang == 0">共 {{all}} 条</span>
                 <span style="float:left;margin-top:7px;font-size:12px;color:#4f5f6e;" v-if="$store.state.alllang == 1">Total {{all}} items</span>
                 <el-pagination
@@ -50,12 +49,12 @@
                     layout="prev, pager, next"
                     :total="all" style="width:200px;float:left;">
                 </el-pagination>
-            </div>
+            </div> -->
             
         </div>
 
         <!-- 曲线图 -->
-        <div class="picture" v-show="false">
+        <div class="picture">
             <p style="margin-right: -15px;margin-bottom:60px;"><span class="left lefttips">{{toparr[1][$store.state.alllang]}}</span>
             <el-select v-model="type"   class="right cur righttype" >
                     <el-option :key="index" :label="item[$store.state.alllang]" :value="index" v-for="(item,index) in typearr1">{{item[$store.state.alllang]}}</el-option>
@@ -87,8 +86,8 @@ export default {
             },
             data(){
                 return{
-                    toparr:[['公链数据','chain'],['整体趋势','Trand'],['其他','other']],
-                    titlearr:[[' ',' '],['名称','Name'],['新增用户','New Users'],['活跃用户','Active Users'],['交易量','Volume'],['调用次数','Transactions'],['Dapp交易量','Dapp Trade'],['Dapp调用次数','Dapp Used']],
+                    toparr:[['公链数据','Chain'],['整体趋势','Trend'],['其他','Other']],
+                    titlearr:[[' ',' '],['名称','Name'],['新增用户','New Users'],['活跃用户','Active Users'],['交易量','Volume'],['调用次数','Transactions'],['Dapp交易量','Dapp Vol'],['Dapp调用次数','Dapp Tx']],
                     // 排序功能图片数组
                     rankpic_arr:[
                         '../../static/sort1.png','../../static/sort2.png','../../static/sort3.png'
@@ -96,29 +95,61 @@ export default {
                     // 排序功能控制数组 
                     ranknum:[-1,-1,0,0,0,0,-1,-1],
                     arr:[],
-                    allmoney:[['total','exchanges','games','high-risk','marketplaces','gambling','other'],['total','game','tool','exchange','other'],['total','Game','Tool','Market','Other']],
+                    chainarr:[
+                        // {
+                        //     "blockchain": "eth",
+                        //     "chain_day_call": 8197,
+                        //     "chain_new_user": 907,
+                        //     "chain_active_user": 907,
+                        //     "timestamp": 1526832000,
+                        //     "chain_day_vol": 39469.070700464865,
+                        //     "dapp_call": 2790,
+                        //     "dapp_vol": 609.9636106634775
+                        // },{
+                        //     "blockchain": "eos",
+                        //     "chain_day_call": 8197,
+                        //     "chain_new_user": 907,
+                        //     "chain_active_user": 907,
+                        //     "timestamp": 1526832000,
+                        //     "chain_day_vol": 39469.070700464865,
+                        //     "dapp_call": 2790,
+                        //     "dapp_vol": 609.9636106634775
+                        // },{
+                        //     "blockchain": "nas",
+                        //     "chain_day_call": 8197,
+                        //     "chain_new_user": 907,
+                        //     "chain_active_user": 907,
+                        //     "timestamp": 1526832000,
+                        //     "chain_day_vol": 39469.070700464865,
+                        //     "dapp_call": 2790,
+                        //     "dapp_vol": 609.9636106634775
+                        // }
+                    ],
                     currentPage1: 1,
                      //请求数组
-                    reqarr:['eth','eos','nas'],
-                    reqAarr:['ETH','EOS','NAS'],
                     stylearr:['','','100px','','','',''],
-                    all:'',
+                    all:3,
                     theleft:'280px',
                     idimg:'',
-                    //是否有通过id命名的icon
-                    picfalt:false,
                     // 图表重绘
                     redrawflag: true,
                     //分类
-                    type:0,
-                    typearr1:[["新增用户","New User"],["交易量","vol"],["调用次数","usetimes"],["Dapp交易量","Dapp trade"],["Dapp调用次数","Dapp Used"]],
+                    type:2,
+                    typearr1:[["新增用户","New User"],["交易量","Volume"],["调用次数","Transactions"],["Dapp交易量","Dapp Vol"],["Dapp调用次数","Dapp Tx"]],
                     //x轴
-                    xarr:[1,2,3,4,5,6,7,8,9,10],
+                    xarr:[],
                     //试验数据
                     etharr:[121,323,344,345,344,23,678,798,64,436],
                     nasarr:[151,567,234,33,356,235,67,98,364,36],
                     eosarr:[171,678,679,789,797,723,378,298,864,736],
-                    bbarr:[171,678,679,789,797,723,378,298,864,736]
+                    bbarr:[171,678,679,789,797,723,378,298,864,736],
+                    //画图数组
+                    drawarr:[
+                        // {word:'eth',arr:this.etharr},
+                        // {word:'nas',arr:this.nasarr},
+                        // {word:'eos',arr:this.eosarr},
+                        // {word:'bbarr',arr:this.bbarr}
+                    ]
                 }
             },
             computed:{
@@ -132,8 +163,8 @@ export default {
                 inleft(){
                     return this.$store.state.themenuflag
                 },
-                thetype(){
-                    return this.$store.state.dapptype
+                thelang(){
+                    return this.$store.state.alllang 
                 }
             },
             watch:{
@@ -147,19 +178,27 @@ export default {
                 inleft(n,o){
                     console.log(n)
                     this.cglf(n)
-                },
-                thetype(n,o){
-                    this.fornew()
+                    var newchart = setInterval(()=>{
+                            window.trend.reflow()
+                        },17)
+                        setTimeout(()=>{
+                            clearInterval(newchart)
+                        },1010)
                 },
                 redrawflag() {
                     setTimeout(() => {
-                        this.initChart(this.xarr,[{word:'eth',arr:this.etharr},{word:'nas',arr:this.nasarr},{word:'eos',arr:this.eosarr},{word:'bbarr',arr:this.bbarr}])
+                        this.initChart(this.xarr,this.drawarr)
                     }, 1000);
                 },
                 type(n,o){
                     console.log(n)
                     setTimeout(() => {
-                        this.initChart(this.xarr,[{word:'eth',arr:this.etharr},{word:'nas',arr:this.nasarr},{word:'eos',arr:this.eosarr},{word:'bbarr',arr:this.bbarr}])
+                        this.initChart(this.xarr,this.drawarr)
+                    }, 1000);
+                },
+                thelang(){
+                    setTimeout(() => {
+                        this.initChart(this.xarr,this.drawarr)
                     }, 1000);
                 }
                 
@@ -177,6 +216,8 @@ export default {
             methods:{
                 initChart(arr1, argument) {
                     var obj = this.chart_series(argument)
+                    console.log('-----------------------')
+                    console.log(obj)
       var options1 = {
         //hchart的参数
         chart: {
@@ -206,7 +247,7 @@ export default {
               format: "{value}"
             },
             title: {
-              text: "ETH"
+              text: this.typearr1[this.type][this.$store.state.alllang]
             }
           }
         ],
@@ -215,12 +256,11 @@ export default {
         },
         series: obj
       };
-      window.chartsss = Highcharts.chart("mychart", options1);
+      window.trend = Highcharts.chart("mychart", options1);
 
       window.onresize = function() {
         // chart.reflow();
-
-        window.chartsss.reflow();
+        window.trend.reflow();
       };
     },
     //根据数组的长度，组装chart参数
@@ -241,8 +281,8 @@ export default {
         argument.forEach((e,index) => {
             console.log(index)
             series_obj.push({
-                name: e.word,
-                data: e.arr,
+                name: e.word.toUpperCase(),
+                data: e.arr[this.type],
                 type: "spline",
                 visible:index<=2?true:false
             })
@@ -308,31 +348,53 @@ export default {
                 },
                 //请求数据函数
                 fornew(){
-                    this.all = []
                     this.arr = ''
-                    this.picfalt = false
+                    this.xarr = []
                     console.log(this.$store.state.moneyty,this.$store.state.requesttime)
-                    var url =  this.$store.state.requrl+'/'+this.reqarr[this.$store.state.moneyty]+'/rank';
+                    var url =  this.$store.state.requrlnew+'/chain/rank';
                     Axios.post(url,{
-                                        "page":this.currentPage1,
+                                        "page_num":this.currentPage1,
                                         "timestamp":this.$store.state.requesttime/1000+86400,
-                                        "order_by":'total',
-                                        "category":this.allmoney[this.$store.state.moneyty][this.$store.state.dapptype]
+                                        "order":'chain_new_user',
+                                        "page_size":30
                                     },{
                                         headers: {'Content-Type': "application/x-www-form-urlencoded"}
                                     }).then(res => {
                                         console.log(res.data.msg)
-                                        this.all = res.data.msg.count
-                                        this.arr = res.data.msg.info
+                                        this.all = res.data.msg.search.length
+                                        // this.arr = res.data.msg.info
                                         // this.rankarr(1,'rank_order')
-                                        setTimeout(()=>{
-                                            $('.picfalse').each((a)=>{
-                                                if($('.picfalse').eq(a)[0].children[0].src.indexOf('jpg')!=-1){
-                                                    $('.picfalse').eq(a)[0].children[1].style.width = '0px'
-                                                }
+                                        this.drawarr = []
+                                        res.data.msg.day30.forEach((e)=>{
+                                            this.drawarr.push({
+                                                "word":e.blockchain,
+                                                "arr":[
+                                                    [],
+                                                    [],
+                                                    [],
+                                                    [],
+                                                    []
+                                                ]
                                             })
-                                            this.picfalt = true
-                                        },1000)
+                                            
+                                                e.day30.forEach(el => {
+                                                    var ddd = new Date(el.timestamp*1000)
+                                                    var year = ddd.getFullYear()
+                                                    var month = ddd.getMonth()+1
+                                                    var day=ddd.getDate();
+                                                    this.xarr.unshift(year+'/'+month+'/'+day)
+                                                    this.drawarr[this.drawarr.length-1]["arr"][0].unshift(el.chain_new_user)
+                                                    this.drawarr[this.drawarr.length-1]["arr"][1].unshift(el.chain_day_vol)
+                                                    this.drawarr[this.drawarr.length-1]["arr"][2].unshift(el.chain_day_call)
+                                                    this.drawarr[this.drawarr.length-1]["arr"][3].unshift(el.dapp_vol)
+                                                    this.drawarr[this.drawarr.length-1]["arr"][4].unshift(el.dapp_call)
+                                                });
+                                            
+                                            
+                                        })
+                                        console.log('++++++++++++++++++++++++++++++++++++++')
+                                        console.log(this.drawarr)
+                                        this.chainarr = res.data.msg.search
                                         this.$store.commit('changeloadopacty',false)
                                         this.redrawflag = !this.redrawflag;
                                     })
@@ -434,7 +496,7 @@ table td{
   background-color: #fff;
   margin-top: 30px;
   float: right;
-  margin-right: 30px;
+  margin-right: 25px;
   padding: 27px 30px 30px 60px;
   box-sizing: border-box;
   box-shadow: 3px 2px 10px 0px rgba(37, 48, 76, 0.08);

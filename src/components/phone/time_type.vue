@@ -1,10 +1,10 @@
 <template>
     <div style="padding-left:1px;height:0.6rem;">
-         <div class="rightph"><span style="margin-right:0.14rem;font-size:0.26rem;float:left;margin-top: 0.15rem;margin-bottom:0.3rem;">{{time[$store.state.alllang]}}</span>
+         <div class="rightph"><span :style="$store.state.alllang == 1?{marginRight:'0.85rem'}:{}" class="timetext">{{time[$store.state.alllang]}}</span>
             <!-- <div @click="openPicker" class="timein" :style="$store.state.alllang == 1?{marginLeft:'0.74rem'}:{}">
                 <div class="timebox">{{dateTime}}</div>
             </div> -->
-            <input type="text" id="demo_date" v-model="timevalue"  style="float:left;color:#797b8e;padding-left:0.3rem;margin-bottom:0.35rem;width: 2.4rem;height: 0.6rem;border: 1px solid #dfe4ed;border-radius: 0.3rem;box-sizing: border-box;"/>
+            <input type="text" id="demo_date" v-model="timevalue"  style="float:left;color:#797b8e;padding-left:0.3rem;margin-bottom:0.35rem;width: 2.4rem;height: 0.6rem;border: 1px solid #dfe4ed;border-radius: 0.3rem;box-sizing: border-box;margin-right:1rem;"/>
 
             <div style="float:left;margin-bottom:0.3rem;">
                 <span style="margin-right:0.14rem;font-size:0.26rem;margin-top: 0.15rem;float:left" v-if="showtype">{{tyarr[$store.state.alllang]}}</span>
@@ -209,6 +209,13 @@ select option:hover{
   text-align: left;
   float: left;
   box-sizing: border-box;
+}
+.timetext{
+    margin-right:0.14rem;
+    font-size:0.26rem;
+    float:left;
+    margin-top: 0.15rem;
+    margin-bottom:0.3rem;
 }
 </style>
 

@@ -11,6 +11,7 @@ export default new Vuex.Store({
         dapptype:0,
         themenuflag:true,
         requrl:'http://service.dappdata.io',
+        requrlnew:'http://service.dappdata.io/v2',
         appid:'',
         // 语言
         alllang:1,

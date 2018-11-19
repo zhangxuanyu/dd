@@ -3,11 +3,52 @@
         <!-- 币种 -->
         <p class="new">
             <span>{{blocktitle[0][$store.state.alllang]}}</span>
-            <!-- <span @click="gotoother(1,'')">{{blocktitle[3][$store.state.alllang]}} ></span> -->
-            <span></span>
+            <span @click="gotoother(1,'')">{{blocktitle[3][$store.state.alllang]}} ></span>
         </p>
         <div class="card_flex">
             <!-- <div class="card cur" v-for="(item,index) in arr" :style="{width:cdwd}" :key="index" @click="gotoother(5,'ETH_'+360)"> -->
+            <!-- <div class="card cur" v-for="(item,index) in chainallarr" :style="{width:cdwd}" :key="index" >
+                <p class="title">{{item.blockchain.toUpperCase()}} <span v-if="item.flag" style="color:rgb(73, 165, 251);font-size:14px;font-weight:400;">(beta)</span> </p>
+                <div class="dappnum">{{dappnumtips[$store.state.alllang]}}：{{item.dapp_num}}</div>
+                <div  class="card_out">
+                    <div class="card_in">
+                        <p class="subtitle"><img src="" alt="" :style="index == 2?{position:'absolute',top:'-1px',left:'0px'}:{position:'absolute',top:'-1px',left:'5px'}">{{chainarr[0][$store.state.alllang]}}</p>
+                        <p class="tips">(24h)</p>
+                        <p class="numbers">{{item.active_user}}</p>
+                        <p class="subtitle" :style="item.active_user_rate > 0?{color:'#1ccfa7'}:item.active_user_rate < 0?{color:'#f85e70'}:{color: 'rgb(167, 174, 182);'}">
+                        <img src="../../static/up.png" alt="" v-if="item.active_user_rate > 0" class="mgt">
+                        <img src="../../static/down.png" alt="" v-if="item.active_user_rate < 0" class="mgt" >
+                        {{(item.active_user_rate>0?'+'+item.active_user_rate:item.active_user_rate).toFixed(2)}}%
+                        </p>
+                    </div>
+
+                    <div class="card_in">
+                        <p class="subtitle"><img :src="'../../static/'+item.blockchain.toUpperCase()+'-1.png'" alt="" :style="index == 2?{position:'absolute',top:'-1px',left:'0px'}:{position:'absolute',top:'-1px',left:'5px'}">{{chainarr[1][$store.state.alllang]}}</p>
+                        <p class="tips">(24h)</p>
+                        <p class="numbers">{{item.vol.toFixed(0)}}</p>
+                        <p class="subtitle" :style="item.vol_rate > 0?{color:'#1ccfa7'}:item.vol_rate < 0?{color:'#f85e70'}:{color: 'rgb(167, 174, 182);'}">
+                        <img src="../../static/up.png" alt="" v-if="item.vol_rate > 0" class="mgt">
+                        <img src="../../static/down.png" alt="" v-if="item.vol_rate < 0" class="mgt" >
+                        {{(item.vol_rate>0?'+'+item.vol_rate:item.vol_rate).toFixed(2)}}%
+                        </p>
+                    </div>
+
+
+                    <div class="card_in">
+                        <p class="subtitle"><img src="" alt="" :style="index == 2?{position:'absolute',top:'-1px',left:'0px'}:{position:'absolute',top:'-1px',left:'5px'}">{{chainarr[2][$store.state.alllang]}}</p>
+                        <p class="tips">(24h)</p>
+                        <p class="numbers">{{item.call}}</p>
+                        <p class="subtitle" :style="item.call_rate > 0?{color:'#1ccfa7'}:item.call_rate < 0?{color:'#f85e70'}:{color: 'rgb(167, 174, 182);'}">
+                        <img src="../../static/up.png" alt="" v-if="item.call_rate > 0" class="mgt">
+                        <img src="../../static/down.png" alt="" v-if="item.call_rate < 0" class="mgt" >
+                        {{(item.call_rate>0?'+'+item.call_rate:item.call_rate).toFixed(2)}}%
+                        </p>
+                    </div>
+                </div>
+                
+            </div> -->
+
+
             <div class="card cur" v-for="(item,index) in arr" :style="{width:cdwd}" :key="index" >
 
 
@@ -25,34 +66,47 @@
                         </p>
                     </div>
                 </div>
-                
             </div>
-
         </div>
         <!-- 热门dapp -->
-        <p class="hot" v-show="false">
+        <p class="hot">
             <span>{{blocktitle[1][$store.state.alllang]}}</span>
             <span @click="gotoother(2,'')">{{blocktitle[3][$store.state.alllang]}} ></span>
         </p>
-        <div class="hotdapp" v-show="false">
-            <div v-for="(item,index) in hotarr" :key="index" class="hotbox" @click="gotoother(4,'ETH_'+360)">
+        <div class="hotdapp">
+            <div v-for="(item,index) in hotarr" :key="index" class="hotbox" @click="gotoother(4,item.dapp_id)">
                 <div class="hot_content cur">
                     <div class="hot_left">
-                        <div class="left_img" :style="{background:' url('+item.img+') no-repeat',backgroundSize:'contain'}">
-
+                        <div class="left_img" >
+                          <img :src="'https://bkc-dapp-1252899312.cos.ap-hongkong.myqcloud.com/dappdata/static/icon/'+item.dapp_id+'.jpg'" alt="" onerror="javascript:this.src='../../static/all1.png'" style="width:50px;height:50px;float:left;">
                         </div>
-                        <p>{{item.name}}</p>
-                        <p>{{item.plat}}&nbsp;|&nbsp;{{item.categories}}</p>
+                        <p style="overflow : hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;">{{item.en_cn[$store.state.alllang].title}}</p>
+                        <p>{{item.blockchain.toUpperCase()}}&nbsp;|&nbsp;{{item.category}}</p>
                     </div>
                     <div class="hot_right">
-                        <div class="hot_right_left" v-for="(it,id) in item.content" :key="id">
-                            <p>{{blocktitle[id+4][$store.state.alllang]}}</p>
+                        <div class="hot_right_left">
+                            <p>{{blocktitle[4][$store.state.alllang]}}</p>
                             <p>(24h)</p>
-                            <p>{{it.value}}</p>
-                            <p :style="it.rate>0?{color:'#1ccfa7'}:{color:'#f85e70'}">
-                                <img src="../../static/up.png" alt="" class="mgt" v-if="it.rate>=0">
-                                <img src="../../static/down.png" alt="" class="mgt" v-else>
-                                {{it.rate}}%
+                            <p>{{item.new_user}}</p>
+                            <p :style="item.new_user_rate>0?{color:'#1ccfa7'}:item.new_user_rate<0?{color:'#f85e70'}:{color:'#797b8e'}">
+                                <img src="../../static/up.png" alt="" class="mgt" v-if="item.new_user_rate>0">
+                                <img src="../../static/down.png" alt="" class="mgt" v-if="item.new_user_rate<0">
+                                {{item.new_user_rate.toFixed(3)}}%
+                            </p>
+                        </div>
+
+                        <div class="hot_right_left">
+                            <p>{{blocktitle[5][$store.state.alllang]}}</p>
+                            <p>(24h)</p>
+                            <p>{{item.active_user}}</p>
+                            <p :style="item.active_user_rate>0?{color:'#1ccfa7'}:item.new_user_rate<0?{color:'#f85e70'}:{color:'#797b8e'}">
+                                <img src="../../static/up.png" alt="" class="mgt" v-if="item.active_user_rate>0">
+                                <img src="../../static/down.png" alt="" class="mgt" v-if="item.active_user_rate<0">
+                                {{item.active_user_rate.toFixed(3)}}%
                             </p>
                         </div>
                         
@@ -62,17 +116,6 @@
 
         </div>
         
-
-        <!-- 曲线图 -->
-        <div style="overflow:hidden;margin-bottom:30px;">
-          <div class="picture">
-              <p style="margin-right: -15px;margin-bottom:60px;"><span class="left lefttips">{{pictt[$store.state.alllang]}}</span>
-              <span class="right cur righttype" @click="chat(2)" :style="color3">{{adduser[$store.state.alllang]}}</span>
-              <span class="right cur righttype" @click="chat(1)"  :style="color2">{{alluser[$store.state.alllang]}}</span>
-              <span class="right cur righttype" @click="chat(0)"  :style="color1">{{calltimes[$store.state.alllang]}}</span></p>
-              <div id="mychart" style="min-width:400px;height:400px"></div>
-          </div>
-        </div>
          
 
         <!-- 研究报告 -->
@@ -116,6 +159,45 @@ Highcharts3D(Highcharts);
 export default {
   data() {
     return {
+      //公链数据
+      chainarr:[
+        ["活跃用户", "Active Users"],
+        ["交易量", "Volume"],
+        ["调用次数", "Transactions"]
+      ],
+      chainallarr:[
+        {
+          "vol": 168779.44533753,
+          "call_rate": -0.0005496015388843089,
+          "call": 3637,
+          "active_user": 91,
+          "active_user_rate": -0.010869565217391304,
+          "dapp_num": 977,
+          "vol_rate": -0.00849117658568601,
+          "blockchain": "eth",
+          "flag":""
+        },{
+          "vol": 168779.44533753,
+          "call_rate": -0.0005496015388843089,
+          "call": 3637,
+          "active_user": 91,
+          "active_user_rate": -0.010869565217391304,
+          "dapp_num": 977,
+          "vol_rate": -0.00849117658568601,
+          "blockchain": "eos",
+          "flag":"beta"
+        },{
+          "vol": 168779.44533753,
+          "call_rate": -0.0005496015388843089,
+          "call": 3637,
+          "active_user": 91,
+          "active_user_rate": -0.010869565217391304,
+          "dapp_num": 977,
+          "vol_rate": -0.00849117658568601,
+          "blockchain": "nas",
+          "flag":""
+        }
+      ],
       arr: [
         {
           word: "ETH",
@@ -190,138 +272,21 @@ export default {
           ]
         }
       ],
-      hotarr:[
-          {
-              img:'../../static/logo1.png',
-              name:'恐龙乐园',
-                plat:'NAS',
-                categories:'game',
-                content:[
-                    {
-                        value:65115,
-                        rate:5.34
-                    },{
-                        value:65115,
-                        rate:5.34
-                    }
-                ]
-          },
-          {
-              img:'../../static/logo1.png',
-              name:'恐龙乐园',
-                plat:'NAS',
-                categories:'game',
-                content:[
-                    {
-                        value:65115,
-                        rate:5.34
-                    },{
-                        value:65115,
-                        rate:5.34
-                    }
-                ]
-          },
-          {
-              img:'../../static/logo1.png',
-              name:'恐龙乐园',
-                plat:'NAS',
-                categories:'game',
-                content:[
-                    {
-                        value:65115,
-                        rate:5.34
-                    },{
-                        value:65115,
-                        rate:5.34
-                    }
-                ]
-          },
-          {
-              img:'../../static/logo1.png',
-              name:'恐龙乐园',
-                plat:'NAS',
-                categories:'game',
-                content:[
-                    {
-                        value:65115,
-                        rate:5.34
-                    },{
-                        value:65115,
-                        rate:5.34
-                    }
-                ]
-          },
-          {
-              img:'../../static/logo1.png',
-              name:'恐龙乐园',
-                plat:'NAS',
-                categories:'game',
-                content:[
-                    {
-                        value:65115,
-                        rate:5.34
-                    },{
-                        value:65115,
-                        rate:5.34
-                    }
-                ]
-          },
-          {
-              img:'../../static/logo1.png',
-              name:'恐龙乐园',
-                plat:'NAS',
-                categories:'game',
-                content:[
-                    {
-                        value:65115,
-                        rate:5.34
-                    },{
-                        value:65115,
-                        rate:5.34
-                    }
-                ]
-          }
-      ],
-      //切换图表
-      color1: {
-        color: "#409efe",
-        backgroundColor: "#f5faff",
-        borderRadius: " 12px"
-      },
-      color2: "",
-      color3: "",
-      //请求数组
-      reqarr: ["call", "total_user", "new_user"],
-      select: 0,
-      //图表数组
-      xarr: [],
-      nasarr: [],
-      etharr: [],
-      eosarr: [],
-      uashdj: "wu wu",
+      hotarr:[],
+      //图表数组 
       theleft: "280px",
       cdwd: "",
       clientHeight: 0,
-      //图表改变宽度
-      chartwd: "",
       // 图表文字切换
-      toparr: ["总览", "Overview"],
-      pictt: ["整体趋势", "Trend"],
-      adduser: ["新增用户", "New Users"],
-      alluser: ["累计用户", "Users"],
-      calltimes: ["调用次数", "Transactions"],
       dappnumtips: ["Dapps数量", "Dapps"],
       blocktitle: [
-        ["热门公链", "BlockChian"],
-        ["热门Dapp", "Most Dapp"],
+        ["热门公链", "HOT Chains"],
+        ["热门Dapp", "HOT Dapps"],
         ["研究报告", "Report"],
         ["查看全部","more"],
         ["新增用户数","New Users"],
         ["活跃用户数","Active Users"]
       ],
-      chartsss: "",
-      // 图表重绘
-      redrawflag: true,
       //报告数据
       reportarr:[]
     };
@@ -329,7 +294,10 @@ export default {
   created() {
     this.reportarr = pdfarr
     console.log(this.reportarr)
+
     this.fornew(true);
+    this.fornewdapp()
+
     this.cglf(this.$store.state.themenuflag);
     var bbc = window.innerWidth;
     console.log(parseInt(this.theleft));
@@ -338,7 +306,7 @@ export default {
     //loading初始化
     this.$store.commit("changeloadopacty", true);
     this.$store.commit("changeloadflge", true);
-    
+
   },
   mounted() {
     console.log('==========='+this.$store.state.alllang)
@@ -364,11 +332,6 @@ export default {
     clientHeight(val, o) {
       var bbc = window.innerWidth;
       this.cdwd = (bbc - parseInt(this.theleft) - 110) / 3 + "px";
-    },
-    redrawflag() {
-      setTimeout(() => {
-        this.initChart(this.xarr,this.etharr,this.nasarr,this.eosarr)
-      }, 1000);
     }
   },
   methods: {
@@ -405,157 +368,15 @@ export default {
       var bbc = window.innerWidth;
       this.cdwd = (bbc - parseInt(this.theleft) - 110) / 3 + "px";
 
-      var newchart = setInterval(() => {
-        window.chartsss.reflow();
-      }, 17);
-      setTimeout(() => {
-        this.initChart(this.xarr,this.etharr,this.nasarr,this.eosarr)
-        clearInterval(newchart);
-      }, 1010);
-    },
-    initChart(arr1, arr2, arr3, arr4) {
-      var options1 = {
-        //hchart的参数
-        chart: {
-          zoomType: "xy"
-        },
-        colors: ["#409efe", "#00e175", "#ff0a50"],
-        title: {
-          text: ""
-        },
-        subtitle: {
-          text: ""
-        },
-        credits: {
-          enabled: false
-        },
-        xAxis: [
-          {
-            //横坐标
-            categories: arr1,
-            crosshair: true
-          }
-        ],
-        yAxis: [
-          {
-            // Primary yAxis
-            labels: {
-              format: "{value}",
-              style: {
-                color: "#409efe"
-              }
-            },
-            title: {
-              text: "ETH",
-              style: {
-                color: "#409efe"
-              }
-            }
-          },
-          {
-            // Secondary yAxis
-            title: {
-              text: "EOS",
-              style: {
-                color: "#00e175"
-              }
-            },
-            labels: {
-              format: "{value}",
-              style: {
-                color: "#00e175"
-              }
-            },
-            opposite: true
-          },
-          {
-            // Secondary yAxis
-            title: {
-              text: "NAS",
-              style: {
-                color: "#ff0a50"
-              }
-            },
-            labels: {
-              format: "{value}",
-              style: {
-                color: "#ff0a50"
-              }
-            },
-            opposite: true
-          }
-        ],
-        tooltip: {
-          shared: true
-        },
-        series: [
-          {
-            name: "ETH",
-            data: arr2,
-            type: "spline"
-          },
-          {
-            //纵坐标
-            name: "EOS",
-            data: arr4,
-            type: "spline",
-            yAxis: 1
-          },
-          {
-            //纵坐标
-            name: "NAS",
-            data: arr3,
-            type: "spline",
-            yAxis: 2
-          }
-        ]
-      };
-      window.chartsss = Highcharts.chart("mychart", options1);
-
-      window.onresize = function() {
-        chart.reflow();
-
-        window.chartsss.reflow();
-      };
-    },
-    chat(a) {
-      this.color1 = "";
-      this.color2 = "";
-      this.color3 = "";
-      this.select = a;
-      this.fornew(false);
-      if (a == 0) {
-        this.color1 = {
-          color: "rgb(73,165,251)",
-          backgroundColor: "#f5faff",
-          borderRadius: " 12px"
-        };
-      } else if (a == 1) {
-        this.color2 = {
-          color: "rgb(73,165,251)",
-          backgroundColor: "#f5faff",
-          borderRadius: " 12px"
-        };
-      } else if (a == 2) {
-        this.color3 = {
-          color: "rgb(73,165,251)",
-          backgroundColor: "#f5faff",
-          borderRadius: " 12px"
-        };
-      }
     },
     fornew(aa) {
-      this.xarr = [];
-      this.etharr = [];
-      this.nasarr = [];
-      this.eosarr = [];
       console.log(this.$store.state.moneyty, this.$store.state.requesttime);
       var url = this.$store.state.requrl + "/index";
       Axios.post(
         url,
         {
-          key: this.reqarr[this.select]
-        },
+          key: "call"
+          },
         {
           headers: { "Content-Type": "application/x-www-form-urlencoded" }
         }
@@ -647,25 +468,27 @@ export default {
         this.arr[0].num = res.data.msg.count.eth;
         this.arr[1].num = res.data.msg.count.eos;
         this.arr[2].num = res.data.msg.count.nas;
-        // this.xarr = res.data.msg.day_30d.eth_info
-        res.data.msg.day_30d.eth_info.forEach(e => {
-          var ddd = new Date((e.timestamp - 86400) * 1000);
-          var year = ddd.getFullYear();
-          var month = ddd.getMonth() + 1;
-          var day = ddd.getDate();
-          this.xarr.unshift(year + "/" + month + "/" + day);
-          this.etharr.unshift(e.value);
-        });
-        console.log(this.etharr)
-        res.data.msg.day_30d.nas_info.forEach(e => {
-          this.nasarr.unshift(e.value);
-        });
-        res.data.msg.day_30d.eos_info.forEach(e => {
-          this.eosarr.unshift(e.value);
-        });
         this.$store.commit("changeloadopacty", false);
-        this.redrawflag = !this.redrawflag;
       });
+    },
+    fornewdapp(){
+      Axios.post(
+        this.$store.state.requrlnew + "/hotdapp",
+        {
+          "num":6,
+          "order":"active_user",
+          "blockchain":"total"
+         },
+        {
+          headers: { "Content-Type": "application/x-www-form-urlencoded" }
+        }
+      ).then(res => {
+        console.log(res)
+        res.data.msg.data.forEach(element => {
+          this.hotarr.unshift(element)
+        });
+        
+      })
     }
   }
 };
@@ -820,6 +643,7 @@ a{
     border-radius: 50%;
     margin: 0 auto;
     margin-bottom: 20px;
+    overflow: hidden;
 }
 
 .hot_left p:nth-of-type(1){

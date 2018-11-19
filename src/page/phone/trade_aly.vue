@@ -11,7 +11,7 @@
           <input type="text" id="first_date" v-model="timevalue"  style="float:left;color:#797b8e;width: 3.2rem;text-align:center;height: 0.6rem;border: 1px solid #dfe4ed;border-radius: 0.3rem;box-sizing: border-box;"/>
         </div> 
         <div class="timein" >
-          <span style="float:left;margin-right:0.3rem;">{{ttarr[6][$store.state.alllang]}}</span>
+          <span :style="$store.state.alllang == 1?{float:'left',marginRight:'0.5rem'}:{float:'left',marginRight:'0.3rem'}" >{{ttarr[6][$store.state.alllang]}}</span>
           <input type="text" id="last_date" v-model="timevalue1"  style="float:left;color:#797b8e;width: 3.2rem;text-align:center;height: 0.6rem;border: 1px solid #dfe4ed;border-radius: 0.3rem;box-sizing: border-box;"/>
         </div>
 
