@@ -1,32 +1,48 @@
 <template>
     <div class="out" :style="{minHeight:geth,marginLeft:mglf}">
         <min-menu class="leftme" :style="{left:open}"></min-menu>
-        <!-- <p class="alltitle">{{ttarr[3][$store.state.alllang]}}</p> -->
+        <p class="alltitle dapp1">
+            <span style="float:right;margin-top: -10px;">
+                <el-date-picker v-model="value7" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions2" style="float:right;"></el-date-picker>
+                <span style="margin-right:10px;font-size: 14px;color: #797b8e;float:right;margin-top:6px;">{{ttarr[1][$store.state.alllang]}}</span>
+            </span>
+        </p>
         <div class="contright">
             <!-- 新用户数图表 -->
-            <div class="dapp">
-                <p><span style="float:left;color: #212229;font-weight: 600;">{{ttarr[0][$store.state.alllang]}}</span> <span style="float:right;margin-top: -10px;margin-bottom: 30px;"><span style="margin-right:10px;font-size: 14px;color: #797b8e;">{{ttarr[1][$store.state.alllang]}}</span><el-date-picker
-                                                        v-model="value7"
-                                                        type="daterange"
-                                                        align="right"
-                                                        unlink-panels
-                                                        range-separator="至"
-                                                        start-placeholder="开始日期"
-                                                        end-placeholder="结束日期"
-                                                        :picker-options="pickerOptions2">
-                                                    </el-date-picker>
-                                        </span></p>
-                <div id="tradenum"  style="min-width:500px;height:500px;margin-bottom:70px;"></div>
+            <div class="dapp dapp1">
+                <p style="margin-bottom:20px;overflow:hidden;"><span style="float:left;color: #212229;font-weight: 600;">{{ttarr[0][$store.state.alllang]}}</span> </p>
+                 <div id="alltrade"  style="min-width:500px;height:500px;"></div> 
+            </div>
 
-                <table  width="100%" cellspacing='0' style="text-align: center;margin-top: 50px;">
+            <!-- 活跃用户 -->
+             <div class="dapp dapp1">
+               <p style="text-align:left;margin-bottom: 20px;color: #212229;font-weight: 600;"><span>{{ttarr[2][$store.state.alllang]}}</span></p>
+               <div id="tradenum"  style="min-width:500px;height:500px;"></div>
+            </div>
+
+            <div class="dapp dapp1">
+               <p style="text-align:left;margin-bottom: 20px;color: #212229;font-weight: 600;"><span>{{ttarr[4][$store.state.alllang]}}</span></p>
+               <div id="usemun"  style="min-width:500px;height:500px;"></div>
+            </div>
+
+
+            <div class="dapp dapp1">
+               <p style="text-align:left;margin-bottom: 20px;color: #212229;font-weight: 600;float:left;"><span>{{ttarr[3][$store.state.alllang]}}</span></p>
+               <div style="float:right;width:70px;height:30px;line-height:30px;font-size: 14px;color: #fff;cursor: pointer;border-radius: 4px;background-color: #4da7fb;" @click="defalutexcle(titlearr2,tablearr)">
+                   {{ttarr[5][$store.state.alllang]}}
+               </div>
+               <table  width="100%" cellspacing='0' style="text-align: center;">
                     <tr class="top bg pd">
-                        <th  v-for="(item,index) in titlearr" class="title all topbt" :style="index == titlearr.length - 1?{borderRight:'1px solid #ebecf0'}:''">{{item[$store.state.alllang]}}</th>
+                        <th  v-for="(item,index) in titlearr2" class="title all topbt" :style="index == titlearr2.length - 1?{borderRight:'1px solid #ebecf0'}:''">{{item[$store.state.alllang]}}</th>
                     </tr>
-                    <tr class="top pd nbt" v-for="(item,index) in arr" v-if="index>=(currentPage1-1)*10&&index<currentPage1*10">
-                        <td class="title all">{{timeuse(item.timestamp-86400)}}</td>
-                        <td class="title all">{{conversion(item.day_tx.toString())}}</td>
-                        <td class="title all">{{conversion(item.total_tx.toString())}}</td>
-                        <td class="title all" style="borderRight:1px solid #ebecf0">{{conversion((item.total_tx_rate*100).toFixed(2))}}%</td> 
+                    <tr class="top pd" v-for="(item,index) in tablearr" v-if="index>=(currentPage1-1)*10&&index<currentPage1*10">
+                        <td  class="title all" >{{timeuse(item.timestamp-86400)}}</td>
+                        <td  class="title all" >{{conversion(item.day_vol.toFixed(2))}}</td>
+                        <td  class="title all" >{{conversion(item.day_tx.toString())}}</td>
+                        <td  class="title all" >{{conversion(item.day_call.toString())}}</td>
+                        <td  class="title all" >{{conversion(item.total_vol.toFixed(2))}}</td>
+                        <td  class="title all" >{{conversion(item.total_tx.toString())}}</td>
+                        <td  class="title all" style="border-right:1px solid #ebecf0;">{{conversion(item.total_call.toString())}}</td>
                     </tr>
                 </table>
                
@@ -42,41 +58,8 @@
                         :total="arr.length" style="width:200px;float:left;">
                     </el-pagination>
                 </div>
-
             </div>
-
-            <!-- 活跃用户 -->
-             <div class="dapp">
-                <p style="text-align:left;margin-bottom: 20px;color: #212229;font-weight: 600;"><span>{{ttarr[2][$store.state.alllang]}}</span></p>
-                <div id="alltrade"  style="min-width:500px;height:500px;margin-bottom:30px;"></div>
-
-                <table  width="100%" cellspacing='0' style="text-align: center;">
-                    <tr class="top bg pd">
-                        <th  v-for="(item,index) in titlearr1" class="title all topbt" :style="index == titlearr1.length - 1?{borderRight:'1px solid #ebecf0'}:''">{{item[$store.state.alllang]}}</th>
-                    </tr>
-                    <tr class="top pd nbt" v-for="(item,index) in arr"  v-if="index>=(currentPage2-1)*10&&index<currentPage2*10">
-                        <td class="title all">{{timeuse(item.timestamp-86400)}}</td>
-                        <td class="title all">{{conversion(item.total_vol.toFixed(2))}}</td>
-                        <td class="title all">{{conversion((item.total_tx_rate*100).toFixed(2))}}%</td>
-                        <td class="title all">{{conversion(item.average_vol.toFixed(2))}}</td>
-                        <td class="title all" style="borderRight:1px solid #ebecf0">{{conversion((item.average_rate*100).toFixed(2))}}%</td>
-                    </tr>
-                </table>
-               
-
-                <div style="width:300px;height:50px;margin:0 auto;margin-top:40px;" >
-                    <span style="float:left;margin-top:7px;font-size:12px;color:#4f5f6e;" v-if="$store.state.alllang == 0">共 {{arr.length}} 条</span>
-                    <span style="float:left;margin-top:7px;font-size:12px;color:#4f5f6e;" v-if="$store.state.alllang == 1">Total {{arr.length}} items</span>
-                    <el-pagination
-                        @current-change="actuserPage"
-                        :current-page.sync="currentPage2"
-                        :page-size="10"
-                        layout="prev, pager, next"
-                        :total="arr.length" style="width:200px;float:left;">
-                    </el-pagination>
-                </div>
-            </div>
-
+            
 
              
         </div>
@@ -132,8 +115,11 @@ export default {
                     },
                     titlearr:[['日期','Date'],['当日交易笔数','Daily Transactions'],['总交易笔数','Transactions'], ['增长率','Growth Rate']],
                     titlearr1 :[['日期','Date'],['总交易量','Volume'],['总交易量增长率','Volume(Growth Rate)'], ['平均单笔交易量','Average Volume'],['平均交易量增长率','Average Volume(Growth Rate)']],
+                    titlearr2:[['日期','Date'],['日交易额','Daily Volume'],['日交易笔数','Daily Transactions'], ['日转账笔数','Daily Transfer'], ['累计交易额','Total Volume'], ['累计交易笔数','Total Transactions'], ['累计转账笔数','Total Transfer']],
                     arr:[],
-                    ttarr:[['交易笔数','Transactions'],['时间段','Period'],['交易量','Volume'],['交易数据','Transaction Data']],
+                    arr1:[],
+                    tablearr:[],
+                    ttarr:[['日交易额','Daily Volume'],['时间段','Period'],['日交易笔数','Daily Transactions '],['交易数据','Transaction Data'],['日转账笔数','Daily Transfer'],['导出','Export']],
                     currentPage1:1,
                     currentPage2:1,
                     mglf:'',
@@ -143,6 +129,7 @@ export default {
                     xarr:[],
                     timearr:[],
                     allarr:[],
+                    usearr:[],
                     fornewflag:false
                 
             }
@@ -162,6 +149,7 @@ export default {
             this.value7 = [this.begintime,this.endtime]
             setTimeout(()=>{
                 this.fornew()
+                this.fornew1()
                 this.fornewflag = true
             },50)
             if(this.$store.state.themenuflag){
@@ -196,6 +184,7 @@ export default {
                 var newchart = setInterval(()=>{
                     window.tradenum.reflow()
                     window.alltrade.reflow()
+                    window.usemun.reflow()
                 },17)
                 setTimeout(()=>{
                     clearInterval(newchart)
@@ -212,6 +201,7 @@ export default {
                 this.endtime = date2.getTime();
                 if(this.fornewflag){
                     this.fornew()
+                    this.fornew1()
                     this.drawall()
                 }
                 
@@ -221,6 +211,61 @@ export default {
             }    
         },
     methods:{
+          //排序方法
+    rank(num,string,arr){      
+        var list = arr
+        var endarr = ''
+            if(-1 == num ){
+                 //从小到大
+                endarr = list.sort(function(a,b){
+                    return  a[string]-b[string]
+                })
+            }else{
+                 //从大到小
+                endarr = list.sort(function(a,b){
+                    return  b[string]-a[string]
+                })
+            }
+        return endarr
+    },
+        //导出excle
+        defalutexcle(titlearr,dataarr){
+            let str = ``
+            // let str = `姓名,电话,邮箱\n`;
+            titlearr.forEach((e,index )=> {
+                if(index < titlearr.length-1){
+                    str = str + `${e[this.$store.state.alllang ] + ','}`
+                }else{
+                    str = str + `${e[this.$store.state.alllang ] + '\n'}`
+                }
+                
+            });
+
+            
+            //增加\t为了不让表格显示科学计数法或者其他格式
+            for(let i = 0 ; i < dataarr.length ; i++ ){
+                str+=`${this.timeuse(dataarr[i].timestamp-86400)  + '\t'},`; 
+                str+=`${dataarr[i].day_vol.toFixed(2)  + '\t'},`; 
+                str+=`${dataarr[i].day_tx.toString()  + '\t'},`; 
+                str+=`${dataarr[i].day_call.toString()  + '\t'},`; 
+                str+=`${dataarr[i].total_vol.toFixed(2) + '\t'},`; 
+                str+=`${dataarr[i].total_tx.toString() + '\t'},`; 
+                str+=`${dataarr[i].total_call.toString() + '\t'},`; 
+
+                str+='\n';
+            }
+            
+            //encodeURIComponent解决中文乱码
+            let uri = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(str);
+            //通过创建a标签实现
+            var link = document.createElement("a");
+            link.href = uri;
+            //对下载的文件命名
+            link.download = this.ttarr[3][this.$store.state.alllang] +'.csv';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        },
         //数字字符串添加逗号
                 conversion(str){
                     if(/\./.test(str)){
@@ -232,13 +277,31 @@ export default {
         drawall(){
             
                 setTimeout(()=>{
-                    this.drawuser('tradenum',this.xarr,this.timearr,this.ttarr[0][this.$store.state.alllang],'tradenum')
+                    this.drawuser('tradenum',this.xarr,this.usearr,this.ttarr[2][this.$store.state.alllang],'tradenum')
                 },1000)
                 setTimeout(()=>{
-                    this.drawuser('alltrade',this.xarr,this.allarr,this.ttarr[2][this.$store.state.alllang],'alltrade')
+                    this.drawuser('alltrade',this.xarr,this.allarr,this.ttarr[0][this.$store.state.alllang],'alltrade')
+                },1000) 
+                setTimeout(()=>{
+                    this.drawuser('usemun',this.xarr,this.timearr,this.ttarr[4][this.$store.state.alllang],'usemun')
                 },1000)  
             
-            
+                setTimeout(()=>{
+                    this.tablearr = []
+                    console.log(this.arr)
+                    console.log(this.arr1)
+                    this.arr.forEach((e,index) => {
+                        this.tablearr.push({})
+                        this.tablearr[index]['timestamp'] = e.timestamp
+                        this.tablearr[index]['day_tx'] = e.day_tx
+                        this.tablearr[index]['day_vol'] = e.day_vol
+                        this.tablearr[index]['total_tx'] = e.total_tx
+                        this.tablearr[index]['total_vol'] = e.total_vol
+                        this.tablearr[index]['day_call'] = this.arr1[index].day_call
+                        this.tablearr[index]['total_call'] = this.arr1[index].total_call
+                    });
+                    console.log(this.tablearr)
+                },1000)
         },
         timeuse(aaa){
             var ddd = new Date(aaa*1000)
@@ -319,7 +382,8 @@ export default {
             this.allarr = []
             this.arr = []
             console.log(this.$store.state.moneyty,this.$store.state.requesttime)
-                    var url = this.$store.state.requrl+'/'+this.$store.state.appid.split('_')[0].toLowerCase()+'/tx';
+            if(this.$store.state.appid.split("_")[0]=='ETH'||this.$store.state.appid.split("_")[0]=='EOS'||this.$store.state.appid.split("_")[0]=='NAS'){
+                var url = this.$store.state.requrl+'/'+this.$store.state.appid.split('_')[0].toLowerCase()+'/tx';
                     console.log(url)
                     Axios.post(url,{
                                         "dapp_id":this.$store.state.appid,
@@ -336,7 +400,6 @@ export default {
                                         })
                                         
                                         this.arr.forEach((e) => {
-                                            
                                                 var ddd = new Date(e.timestamp*1000-86400000)
                                                 var year = ddd.getFullYear()
                                                 var month = ddd.getMonth()+1
@@ -344,15 +407,113 @@ export default {
                                                 this.xarr.unshift(year+'/'+month+'/'+day)
                                                 this.timearr.unshift(e.day_tx)
                                                 this.allarr.unshift(e.day_vol) 
-                                            
-                                            
                                         });
+                                        
                                         this.$store.commit('changeloadopacty',false)
                                         setTimeout(()=>{
                                             this.drawall() 
                                         },100)
                                     })
-        }
+            }else{
+                var url = this.$store.state.requrlnew+'/dapp';
+                    console.log(url)
+                    Axios.post(url,{
+                                        "blockchain": this.$store.state.appid.split("_")[0].toLowerCase(),
+                                        "dapp_id":this.$store.state.appid,
+                                        "begin": this.begintime/1000,
+                                        "end": this.endtime/1000+86400,
+                                        "type":"tx"
+                                    },{
+                                        headers: {'Content-Type': "application/x-www-form-urlencoded"}
+                                    }).then(res => {
+                                        console.log(res)
+                                       
+                                        this.arr = this.rank(1,'timestamp',res.data.msg.data)
+                                        this.arr.forEach((e) => {
+                                                var ddd = new Date(e.timestamp*1000-86400000)
+                                                var year = ddd.getFullYear()
+                                                var month = ddd.getMonth()+1
+                                                var day=ddd.getDate();
+                                                this.xarr.unshift(year+'/'+month+'/'+day)
+                                                this.timearr.unshift(e.day_tx)
+                                                this.allarr.unshift(e.day_vol) 
+                                        });
+                                        
+                                        this.$store.commit('changeloadopacty',false)
+                                        setTimeout(()=>{
+                                            this.drawall() 
+                                        },100)
+                                    })
+            }
+                    
+        },
+        fornew1(){
+            this.usearr  = []
+            this.arr1 = []
+            console.log(this.$store.state.moneyty,this.$store.state.requesttime)
+            if(this.$store.state.appid.split("_")[0]=='ETH'||this.$store.state.appid.split("_")[0]=='EOS'||this.$store.state.appid.split("_")[0]=='NAS'){
+                var url = this.$store.state.requrl+'/'+this.$store.state.appid.split('_')[0].toLowerCase()+'/call';
+                    console.log(url)
+                    Axios.post(url,{
+                                        "dapp_id":this.$store.state.appid,
+                                        "start":this.begintime/1000,
+                                        "last":this.endtime/1000+86400
+                                    },{
+                                        headers: {'Content-Type': "application/x-www-form-urlencoded"}
+                                    }).then(res => {
+                                        console.log(res)
+                                        res.data.msg.call_info.forEach((a,bb) => {
+                                            if(bb < res.data.msg.call_info.length -1){
+                                                this.arr1.push(a)
+                                            }
+                                            
+                                        })
+                                        // res.data.msg.view_info.forEach((a,bb) => {
+                                        //     if(bb < res.data.msg.view_info.length -1){
+                                        //         this.arr1.push(a)
+                                        //     }
+                                        
+                                        // })
+                                        this.arr1.forEach(e => {
+                                            var ddd = new Date(e.timestamp*1000-86400000)
+                                            var year = ddd.getFullYear()
+                                            var month = ddd.getMonth()+1
+                                            var day=ddd.getDate();
+                                            this.xarr.unshift(year+'/'+month+'/'+day)
+                                            this.usearr.unshift(e.day_call)
+                                        });
+                                        console.log(this.xarr)
+                                        this.$store.commit('changeloadopacty',false)
+                                    })
+            }else{
+                var url =  this.$store.state.requrlnew+'/dapp';
+                    console.log(url)
+                    Axios.post(url,{
+                                        "blockchain": this.$store.state.appid.split("_")[0].toLowerCase(),
+                                        "dapp_id":this.$store.state.appid,
+                                        "begin": this.begintime/1000,
+                                        "end": this.endtime/1000+86400,
+                                        "type":"call"
+                                    },{
+                                        headers: {'Content-Type': "application/x-www-form-urlencoded"}
+                                    }).then(res => {
+                                        console.log(res)
+                                        this.arr1 = this.rank(1,'timestamp',res.data.msg.data)
+                                        // res.data.msg.view_info.forEach((a,bb) => {
+                                        //     if(bb < res.data.msg.view_info.length -1){
+                                        //         this.arr1.push(a)
+                                        //     }
+                                        
+                                        // })
+                                        this.arr1.forEach(e => {
+                                            this.usearr.unshift(e.day_call)
+                                        });
+                                        console.log(this.xarr)
+                                        this.$store.commit('changeloadopacty',false)
+                                    })
+            }
+                    
+        } 
     }
 }
 </script>
@@ -382,8 +543,10 @@ export default {
     margin-top: 50px;
     margin-bottom: 30px;
     text-align: left;
+    overflow: hidden;
     font-size: 24px;
     color: #c1c7cd;
+    padding-top: 10px;
 }
 .dapp{
     width: 100%;
@@ -433,39 +596,39 @@ export default {
 }
 </style>
 <style>
-.dapp .el-range-editor.el-input__inner{
+.dapp1 .el-range-editor.el-input__inner{
     border-radius: 20px;
     background-color: #f7f8fa;
 }
-.dapp .el-range-editor .el-range-input{
+.dapp1 .el-range-editor .el-range-input{
     background-color: #f7f8fa;
 }
- .dapp .el-date-editor--daterange.el-input,.dapp .el-date-editor--daterange.el-input__inner,.dapp .el-date-editor--timerange.el-input,.dapp .el-date-editor--timerange.el-input__inner{
+ .dapp1 .el-date-editor--daterange.el-input,.dapp1 .el-date-editor--daterange.el-input__inner,.dapp1 .el-date-editor--timerange.el-input,.dapp1 .el-date-editor--timerange.el-input__inner{
     width:350px;
 }
-.dapp .el-icon-date:before{
+.dapp1 .el-icon-date:before{
     content:'';
 }
-.dapp .el-input__inner{
+.dapp1 .el-input__inner{
     border: 1px solid #f7f8fa;
     font-size:14px;
     color:#797b8e;
     height: 30px;
     line-height: 24px;
 }
-.dapp .el-date-editor .el-range-separator{
+.dapp1 .el-date-editor .el-range-separator{
     line-height: 24px;
 }
-.dapp .el-input__inner:hover{
+.dapp1 .el-input__inner:hover{
     border-color:#f7f8fa;
 }
-.dapp .el-pager li.active{
+.dapp1 .el-pager li.active{
     color:rgb(73,165,251);
 }
 .el-pager li:hover{
     color:#49a5fb;
 }
-.dapp .el-pagination{
+.dapp1 .el-pagination{
     font-weight:400;
 }
 </style>

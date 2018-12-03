@@ -3,40 +3,71 @@
         <chain-Menu class="leftme" :style="{left:open}"></chain-menu>
         <!-- <p class="alltitle">{{ttarr[4][$store.state.alllang]}}</p>  -->
         <div class="contright">
-
-            <!-- 新用户数图表 -->
-            <div class="dapp">
-                <div style="padding-top:5px;"><span style="float:left;color: #212229;font-weight: 600;">{{ttarr[0][$store.state.alllang]}}</span> 
-                    <div class="export" @click="defalutexcle(titlearr,arr)">{{type_exp[1][$store.state.alllang]}}</div>
-                    <span style="float:right;margin-top: -5px;margin-bottom: 30px;" class="type_sel">
+            <p style="height:15px;" class="dapp1">
+                <!-- <span style="float:right;margin-top: -5px;margin-bottom: 30px;" class="type_sel">
                         <span style="margin-right:10px;font-size: 14px;color: #797b8e;margin-left:40px;">
                             {{type_exp[0][$store.state.alllang]}}
                         </span>
                         <el-select v-model="typedata"   class="cur" >
                             <el-option :key="index" :label="item[$store.state.alllang]" :value="index" v-for="(item,index) in typearr1">{{item[$store.state.alllang]}}</el-option>
                         </el-select>
-                    </span>
+                    </span> -->
                     <span style="float:right;margin-top: -5px;margin-bottom: 30px;" class="time_sel">
                         <span style="margin-right:10px;font-size: 14px;color: #797b8e;vertical-align:5px;">
                             {{ttarr[1][$store.state.alllang]}}
                         </span>
                         <el-date-picker v-model="value7" type="daterange" align="right" unlink-panels range-separator="---" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions2"></el-date-picker>
                     </span>
+            </p>
+            <!-- 新用户数图表 -->
+            <div class="dapp">
+                <div style="padding-top:5px;"><span style="float:left;color: #212229;font-weight: 600;margin-bottom:30px;">{{typearr1[0][$store.state.alllang]}}</span> 
+                    
+                    
                 </div>
-                <div id="newuser"  style="min-width:500px;height:500px"></div>
+                <div id="totaluser"  style="min-width:500px;height:500px;"></div>
 
-                <table  width="100%" cellspacing='0' style="text-align: center;margin-top:100px;">
+                
+            </div>
+
+            <div class="dapp">
+                <div style="padding-top:5px;"><span style="float:left;color: #212229;font-weight: 600;margin-bottom:30px;">{{typearr1[1][$store.state.alllang]}}</span> 
+                    
+                    
+                </div>
+                <div id="newuser"  style="min-width:500px;height:500px;"></div>
+
+                
+            </div>
+
+            <div class="dapp">
+                <div style="padding-top:5px;"><span style="float:left;color: #212229;font-weight: 600;margin-bottom:30px;">{{typearr1[3][$store.state.alllang]}}</span> 
+              
+                </div>
+                <div id="activeuser"  style="min-width:500px;height:500px;"></div>
+
+                
+            </div>
+            
+
+
+            <div class="dapp">
+                <div style="padding-top:5px;"><span style="float:left;color: #212229;font-weight: 600;margin-bottom:30px;">{{ttarr[0][$store.state.alllang]}}</span> 
+                        <div class="export" @click="defalutexcle(titlearr,arr)">{{type_exp[1][$store.state.alllang]}}</div>   
+                    </div>
+
+                <table  width="100%" cellspacing='0' style="text-align: center;">
+                    
                     <tr class="top bg pd">
                         <th  v-for="(item,index) in titlearr" class="title all topbt" :style="index == titlearr.length -1 ?{borderRight:'1px solid #ebecf0'}:''">{{item[$store.state.alllang]}}</th>
                     </tr>
                     <tr class="top pd nbt" v-for="(item,index) in arr" v-if="index>=(currentPage1-1)*10&&index<currentPage1*10" :key="index">
                         <td class="title all" style="width:55px;">{{index+1}}</td>
                         <td class="title all">{{timeuse(item.timestamp)}}</td>
-                        <td class="title all">{{conversion(item.chain_total_user.toString())}}</td>
                         <td class="title all">{{conversion(item.chain_new_user.toString())}}</td>
-                        <td class="title all">{{conversion((item.chain_new_user_rate*100).toFixed(2))}}%</td>
-                        <td class="title all">{{conversion(item.chain_active_user.toString())}}</td>
-                        <td class="title all" style="border-right:1px solid #ebecf0;">{{conversion((item.chain_active_rate*100).toFixed(2))}}%</td>
+                        <td class="title all">{{conversion(item.chain_total_user.toString())}}</td>
+                        <td class="title all"  style="border-right:1px solid #ebecf0;">{{conversion(item.chain_active_user.toString())}}</td>
+                       
                     </tr>
                    
                 </table>
@@ -107,7 +138,7 @@ export default {
                         }
                     }]
                     },
-                    titlearr:[[' ',' '],['日期','Date'],['累计用户','Total User'],['新增用户','New user'],['增长率','Growth Rate'],['活跃用户','Active User'], ['活跃度','Active Rate']],
+                    titlearr:[[' ',' '],['日期','Date'],['累计用户','Total User'],['新增用户','New user'],['活跃用户','Active User']],
                     arr:[],
                     ttarr:[['用户分析','User Analysis'],['时间段','Period'],['新增用户','New User'],['活跃用户','Active User'],['用户分析','User Analysis']],
                     currentPage1:1,
@@ -176,8 +207,16 @@ export default {
             var newchart = setInterval(()=>{
                 window.newuser.reflow()
             },17)
+            var newchart1 = setInterval(()=>{
+                window.totaluser.reflow()
+            },17)
+            var newchart2 = setInterval(()=>{
+                window.activeuser.reflow()
+            },17)
             setTimeout(()=>{
                 clearInterval(newchart)
+                clearInterval(newchart1)
+                clearInterval(newchart2)
             },1010)
         },
         value7(n,o){
@@ -200,6 +239,23 @@ export default {
         }
     },
     methods:{ 
+        //排序方法
+    rank(num,string,arr){      
+        var list = arr
+        var endarr = ''
+            if(-1 == num ){
+                 //从小到大
+                endarr = list.sort(function(a,b){
+                    return  a[string]-b[string]
+                })
+            }else{
+                 //从大到小
+                endarr = list.sort(function(a,b){
+                    return  b[string]-a[string]
+                })
+            }
+        return endarr
+    },
         //导出excle
         defalutexcle(titlearr,dataarr){
             let str = ``
@@ -217,12 +273,9 @@ export default {
             for(let i = 0 ; i < dataarr.length ; i++ ){
                 str+=`${i+1 + '\t'},`; 
                 str+=`${this.timeuse(dataarr[i].timestamp)  + '\t'},`; 
-                str+=`${dataarr[i].chain_total_user.toString()  + '\t'},`; 
+                 str+=`${dataarr[i].chain_active_user.toString() + '\t'},`; 
                 str+=`${(dataarr[i].chain_new_user).toString()  + '\t'},`; 
-                str+=`${(dataarr[i].chain_new_user_rate*100).toFixed(2) + '%'  + '\t'},`; 
-                str+=`${dataarr[i].chain_active_user.toString() + '\t'},`; 
-                str+=`${(dataarr[i].chain_active_rate*100).toFixed(2) +'%' + '\t'},`; 
-
+                str+=`${dataarr[i].chain_total_user.toString()  + '\t'},`; 
                 str+='\n';
             }
             
@@ -232,7 +285,7 @@ export default {
             var link = document.createElement("a");
             link.href = uri;
             //对下载的文件命名
-            link.download = this.typearr1[this.typedata][this.$store.state.alllang] +'.csv';
+            link.download = this.ttarr[0][this.$store.state.alllang] +'.csv';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -247,7 +300,13 @@ export default {
                 },
         drawall(){
                 setTimeout(()=>{
-                    this.drawuser1('newuser',this.xarr,this.newarr[this.typedata],this.typearr1[this.typedata][this.$store.state.alllang],'newuser')
+                    this.drawuser1('totaluser',this.xarr,this.newarr[0],this.typearr1[0][this.$store.state.alllang],'totaluser')
+                },1000)
+                setTimeout(()=>{
+                    this.drawuser1('newuser',this.xarr,this.newarr[1],this.typearr1[1][this.$store.state.alllang],'newuser')
+                },1000)
+                setTimeout(()=>{
+                    this.drawuser1('activeuser',this.xarr,this.newarr[3],this.typearr1[3][this.$store.state.alllang],'activeuser')
                 },1000)
         },
         timeuse(aaa){
@@ -342,12 +401,12 @@ export default {
                                         headers: {'Content-Type': "application/x-www-form-urlencoded"}
                                     }).then(res => {
                                         console.log(res.data.msg)
-                                        res.data.msg.data.forEach((a,bb) => {
-                                            if(bb < res.data.msg.data.length -1){
-                                                this.arr.unshift(a)
-                                            }
+                                        // res.data.msg.data.forEach((a,bb) => {
+                                        //     if(bb < res.data.msg.data.length -1){
+                                        //         this.arr.unshift(a)
+                                        //     }
                                             
-                                        })
+                                        // })
                                         console.log(this.arr)
                                         this.newarr=[
                                             [],
@@ -355,6 +414,13 @@ export default {
                                             [],
                                             []
                                         ]
+                                        
+                                        this.arr = this.rank(1,'timestamp',res.data.msg.data)
+                                        setTimeout(()=>{
+                                            console.log(this.arr)
+                                        },1000)
+                                        
+
                                         this.arr.forEach(e => {
                                             var ddd = new Date(e.timestamp*1000)
                                             var year = ddd.getFullYear()
@@ -408,6 +474,7 @@ export default {
     margin-top: 30px;
     margin-right: 20px;
     padding: 30px; 
+    padding-bottom: 60px;
     box-sizing: border-box;
     box-shadow: 3px 2px 10px 0px 
 		rgba(37, 48, 76, 0.08);
@@ -465,8 +532,11 @@ export default {
 <style>
 .time_sel .el-range-editor.el-input__inner{
     border-radius: 20px;
-    background-color: #eef2f5;
+    background-color: #fdfdfd;
     height: 30px;
+}
+.time_sel .el-range-editor .el-range-input{
+    background-color: rgba(0,0,0,0);
 }
 .time_sel .el-date-editor .el-range-separator{
     line-height: 22px;
@@ -476,14 +546,14 @@ export default {
 }
 .type_sel .el-input--suffix .el-input__inner{
     border-radius: 20px;
-    background-color: #eef2f5;
+    background-color: #fdfdfd;
     height: 30px;
 }
 .type_sel .el-input__icon{
     line-height: 30px;
 }
 .el-range-editor .el-range-input{
-    background-color: #eef2f5;
+    background-color: #fdfdfd;
 }
 .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
     width:350px;

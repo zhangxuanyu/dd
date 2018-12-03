@@ -45,22 +45,13 @@ export default {
           icon: "../../static/downcld.png",
           flag: false,
           address: [
-            ["累计用户", "Users"],
+            ["活跃用户", "Active Users"],
             ["新增用户", "New users"],
-            ["活跃用户", "Active Users"]
+            ["累计用户", "Users"]
           ],
           posi: [0, 630, 1920]
         },
-        {
-          word: ["交易数据", "Transaction Data"],
-          img: "../../static/an.png",
-          icon: "../../static/downcld.png",
-          flag: false,
-          address: [["交易笔数", "Transactions"], ["交易总额", "Volume"]],
-          posi: [0, 1300]
-        },
-        // {word:['合约调用','Transactions'],img:'../../static/an.png',icon:'../../static/downcld.png',flag:false,address:[['调用次数','Transactions'],['实时调用','nowcall']],posi:[0,1350]}
-        { word: ["合约调用", "Transactions"], img: "../../static/an.png" }
+        { word: ["交易分析", "Transactions"], img: "../../static/an.png" }
       ],
       //路由数组
       routearr: ["/detail", "/user", "/trade", "/usedapp"],
@@ -105,21 +96,13 @@ export default {
         icon: "../../static/downcld.png",
         flag: false,
         address: [
-          ["累计用户", "Users"],
-          ["新增用户", "New users"],
-          ["活跃用户", "Active Users"]
+          ["活跃用户", "Active Users"],
+            ["新增用户", "New users"],
+            ["累计用户", "Users"]
         ],
         posi: [0, 630, 1920]
       },
-      {
-        word: ["交易数据", "Transaction Data"],
-        img: "../../static/an.png",
-        icon: "../../static/downcld.png",
-        flag: false,
-        address: [["交易笔数", "Transactions"], ["交易总额", "Volume"]],
-        posi: [0, 1300]
-      },
-      { word: ["合约调用", "Transactions"], img: "../../static/an.png" }
+       { word: ["交易分析", "Transactions"], img: "../../static/an.png" }
     ];
     if (this.$route.path == "/detail") {
       this.select = 0;
@@ -143,6 +126,49 @@ export default {
   },
   methods: {
     request() {
+      if(this.$store.state.appid.split("_")[0]=='ETH'||this.$store.state.appid.split("_")[0]=='EOS'||this.$store.state.appid.split("_")[0]=='NAS'){
+        var url =
+        this.$store.state.requrl +
+        "/" +
+        this.$store.state.appid.split("_")[0].toLowerCase() +
+        "/detail";
+      console.log(url);
+      Axios.post(
+        url,
+        {
+          dapp_id: this.$store.state.appid,
+          flag: 0
+        },
+        {
+          headers: { "Content-Type": "application/x-www-form-urlencoded" }
+        }
+      ).then(res => {
+        console.log(res.data.msg);
+        this.showDapp = res.data.msg
+      });
+      }else{
+        var url =
+        this.$store.state.requrlnew +
+        "/dapp/detail";
+      console.log(url);
+      Axios.post(
+        url,
+        {
+          blockchain:this.$store.state.appid.split("_")[0].toLowerCase(),
+          dapp_id:this.$store.state.appid
+        },
+        {
+          headers: { "Content-Type": "application/x-www-form-urlencoded" }
+        }
+      ).then(res => {
+        setTimeout(() => {
+          this.picshow = true;
+        }, 1000);
+        console.log(res.data.msg);
+        this.showDapp = res.data.msg
+        
+      });
+      }
       var url =
         this.$store.state.requrl +
         "/" +
@@ -180,21 +206,13 @@ export default {
             icon: "../../static/downcld.png",
             flag: false,
             address: [
-              ["累计用户", "Users"],
+              ["活跃用户", "Active Users"],
               ["新增用户", "New users"],
-              ["活跃用户", "Active Users"]
+              ["累计用户", "Users"]
             ],
             posi: [0, 630, 1920]
           },
-          {
-            word: ["交易数据", "Transaction Data"],
-            img: "../../static/an.png",
-            icon: "../../static/downcld.png",
-            flag: false,
-            address: [["交易笔数", "Transactions"], ["交易总额", "Volume"]],
-            posi: [0, 1300]
-          },
-          { word: ["合约调用", "Transactions"], img: "../../static/an.png" }
+          { word: ["交易分析", "Transactions"], img: "../../static/an.png" }
         ];
         if (aa == 0) {
           this.mearr[aa].img = "../../static/light.png";

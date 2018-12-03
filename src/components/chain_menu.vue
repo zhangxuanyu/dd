@@ -1,7 +1,7 @@
 <template>
     <div class="menu" :style="{minHeight:geth,width:loww}">
         <div class="outtitle">
-            <img :src="'../../static/'+showDapp.blockchain.toUpperCase()+'-1.png'" alt="" class="titleimg">
+            <img :src="'https://bkc-dapp-1252899312.cos.ap-hongkong.myqcloud.com/dappdata/static/chain_icon/'+showDapp.blockchain+'.jpg'" alt="" class="titleimg">
             <div class="title">
                 <p class="titlf" style="width:120px;">{{showDapp.blockchain.toUpperCase()}}</p>
                 <!-- <p class="titlty">{{showDapp.platform}} | {{showDapp.category}}</p> -->
@@ -10,7 +10,7 @@
               {{showDapp.blockchain.toUpperCase()}}
             </div>
         </div>
-        <div v-for="(item,index) in mearr" class="outlock">
+        <div v-for="(item,index) in mearr" class="outlock"  v-if="$store.state.appid !='steem'||index != 4">
             <div class="lock lockh " :style="index == select?{color:'#48a5fb',backgroundColor:'#f6f9fb'}:''"  @click="gotoother(index,true)">
                 <img :src="item.img" alt="" class="left mg1 cur" >
                 <span  class="left mg2 cur" >{{item.word[$store.state.alllang]}}</span>
@@ -46,10 +46,6 @@ export default {
           word: ["交易数据", "Transaction Data"],
           img: "../../static/an.png"
         },
-        { 
-            word: ["合约调用", "Transactions"], 
-            img: "../../static/an.png" 
-            },
             { 
             word: ["Dapp数据", "Dapp Data"], 
             img: "../../static/an.png" 
@@ -103,10 +99,6 @@ export default {
           word: ["交易数据", "Transaction Data"],
           img: "../../static/an.png"
         },
-        { 
-            word: ["合约调用", "Transactions"], 
-            img: "../../static/an.png" 
-            },
             { 
             word: ["Dapp数据", "Dapp Data"], 
             img: "../../static/an.png" 
@@ -121,12 +113,9 @@ export default {
     } else if (this.$route.path == "/chaintrade") {
       this.select = 2;
       this.mearr[2].img = "../../static/light.png";
-    } else if (this.$route.path == "/chainusedapp") {
+    } else if (this.$route.path == "/chaindapp") {
       this.select = 3;
       this.mearr[3].img = "../../static/light.png";
-    } else if (this.$route.path == "/chaindapp") {
-      this.select = 4;
-      this.mearr[4].img = "../../static/light.png";
     }
     this.changeflag(this.select);
   },
@@ -176,10 +165,6 @@ export default {
           word: ["交易数据", "Transaction Data"],
           img: "../../static/an.png"
         },
-        { 
-            word: ["合约调用", "Transactions"], 
-            img: "../../static/an.png" 
-            },
             { 
             word: ["Dapp数据", "Dapp Data"], 
             img: "../../static/an.png" 
@@ -194,10 +179,7 @@ export default {
         } else if (aa == 2) {
           this.mearr[aa].img = "../../static/light.png";
           this.$router.push({ path: "/chaintrade?id=" + this.urlid });
-        } else if (aa == 3) {
-          this.mearr[aa].img = "../../static/light.png";
-          this.$router.push({ path: "/chainusedapp?id=" + this.urlid });
-        }else if (aa == 4) {
+        }else if (aa == 3) {
           this.mearr[aa].img = "../../static/light.png";
           this.$router.push({ path: "/chaindapp?id=" + this.urlid });
         }

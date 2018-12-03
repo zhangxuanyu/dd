@@ -95,7 +95,7 @@
                             <p :style="item.new_user_rate>0?{color:'#1ccfa7'}:item.new_user_rate<0?{color:'#f85e70'}:{color:'#797b8e'}">
                                 <img src="../../static/up.png" alt="" class="mgt" v-if="item.new_user_rate>0">
                                 <img src="../../static/down.png" alt="" class="mgt" v-if="item.new_user_rate<0">
-                                {{item.new_user_rate.toFixed(3)}}%
+                                {{(item.new_user_rate*100).toFixed(3)}}%
                             </p>
                         </div>
 
@@ -103,10 +103,10 @@
                             <p>{{blocktitle[5][$store.state.alllang]}}</p>
                             <p>(24h)</p>
                             <p>{{item.active_user}}</p>
-                            <p :style="item.active_user_rate>0?{color:'#1ccfa7'}:item.new_user_rate<0?{color:'#f85e70'}:{color:'#797b8e'}">
+                            <p :style="item.active_user_rate>0?{color:'#1ccfa7'}:item.active_user_rate<0?{color:'#f85e70'}:{color:'#797b8e'}">
                                 <img src="../../static/up.png" alt="" class="mgt" v-if="item.active_user_rate>0">
                                 <img src="../../static/down.png" alt="" class="mgt" v-if="item.active_user_rate<0">
-                                {{item.active_user_rate.toFixed(3)}}%
+                                {{(item.active_user_rate*100).toFixed(3)}}%
                             </p>
                         </div>
                         

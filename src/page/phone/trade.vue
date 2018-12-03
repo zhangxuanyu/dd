@@ -31,7 +31,7 @@
                         {{conversion(it.day_vol.toFixed(2))}}
                     </div>
                     <div class="all" v-if="index == 4" v-for="(it,idx) in arr" :key="idx">
-                        {{conversion(it.day_vol_rate.toFixed(2))}}%
+                        {{conversion((it.day_vol_rate*100).toFixed(2))}}%
                     </div>
                     <div class="all" v-if="index == 5" v-for="(it,idx) in arr" :key="idx">
                         {{conversion(it.average_vol.toFixed(2))}}

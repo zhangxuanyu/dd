@@ -40,18 +40,18 @@
                <div v-for="(item,index) in dayarr" :key="index" class="daydata">
                    <p>{{item.title[$store.state.alllang]}}</p>
                    <p>(24h)</p>
-                   <p>{{item.value.toFixed(0)}}</p>
-                   <p :style="item.rate>0?{color:'#1ccfa7'}:item.rate<0?{color:'#f85e70'}:{color:'#797b8e'}"><img :src="item.rate>0?'../../static/up.png':item.rate<0?'../../static/down.png':''" alt=""> {{item.rate.toFixed(5)}}%</p>
+                   <p>{{item.value=="-"?item.value:item.value.toFixed(0)}}</p>
+                   <p :style="item.rate>0?{color:'#1ccfa7'}:item.rate<0?{color:'#f85e70'}:{color:'#797b8e'}"><img :src="item.rate>0?'../../static/up.png':item.rate<0?'../../static/down.png':''" alt=""> {{item.rate=='-'?item.rate:(item.rate*100).toFixed(5)}}{{item.rate=='-'?'':'%'}}</p>
                </div>
             </div>
 
             <!-- 热门dapp -->
-        <p class="hot">
+        <p class="hot" v-if="this.$store.state.appid!='steem'">
             <span>{{ttarr[8][$store.state.alllang]}}</span>
             <span @click="gotodapp(1,'')">{{ttarr[9][$store.state.alllang]}} ></span>
         </p>
 
-           <div class="hotdapp">
+           <div class="hotdapp" v-if="this.$store.state.appid!='steem'">
             <div v-for="(item,index) in hotarr" :key="index" class="hotbox" @click="gotodapp(2,item.dapp_id)" v-if="hotarr.length>0">
                 <div class="hot_content cur">
                     <div class="hot_left">
@@ -73,7 +73,7 @@
                             <p :style="item.new_user_rate>0?{color:'#1ccfa7'}:item.new_user_rate<0?{color:'#f85e70'}:{color:'#797b8e'}">
                                 <img src="../../static/up.png" alt="" class="mgt" v-if="item.new_user_rate>0">
                                 <img src="../../static/down.png" alt="" class="mgt" v-if="item.new_user_rate<0">
-                                {{item.new_user_rate.toFixed(3)}}%
+                                {{(item.new_user_rate*100).toFixed(3)}}%
                             </p>
                         </div>
 
@@ -81,10 +81,10 @@
                             <p>{{blocktitle[1][$store.state.alllang]}}</p>
                             <p>(24h)</p>
                             <p>{{item.active_user}}</p>
-                            <p :style="item.active_user_rate>0?{color:'#1ccfa7'}:item.new_user_rate<0?{color:'#f85e70'}:{color:'#797b8e'}">
+                            <p :style="item.active_user_rate>0?{color:'#1ccfa7'}:item.active_user_rate<0?{color:'#f85e70'}:{color:'#797b8e'}">
                                 <img src="../../static/up.png" alt="" class="mgt" v-if="item.active_user_rate>0">
                                 <img src="../../static/down.png" alt="" class="mgt" v-if="item.active_user_rate<0">
-                                {{item.active_user_rate.toFixed(3)}}%
+                                {{(item.active_user_rate*100).toFixed(3)}}%
                             </p>
                         </div>
                         

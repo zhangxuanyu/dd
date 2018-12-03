@@ -20,7 +20,7 @@
                         <span style="margin-right:10px;font-size: 14px;color: #797b8e;">
                             {{ttarr[1][$store.state.alllang]}}
                         </span>
-                        <el-date-picker v-model="value7" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions2"></el-date-picker>
+                        <el-date-picker v-model="value7" type="daterange" align="right" unlink-panels range-separator="--" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions2"></el-date-picker>
                     </span>
                 </div>
                 <div id="newuser"  style="min-width:500px;height:500px"></div>
@@ -30,7 +30,7 @@
                         <th  v-for="(item,index) in titlearr" class="title all topbt" :style="index == titlearr.length -1 ?{borderRight:'1px solid #ebecf0'}:''">{{item[$store.state.alllang]}}</th>
                     </tr>
                     <tr class="top pd nbt" v-for="(item,index) in arr" v-if="index>=(currentPage1-1)*10&&index<currentPage1*10" :key="index">
-                        <td class="title all" style="width:55px;">{{(currentPage1-1)*10+index+1}}</td>
+                        <td class="title all" style="width:55px;">{{index+1}}</td>
                         <td class="title all">{{timeuse(item.timestamp)}}</td>
                         <td class="title all">{{conversion(item.dapp_num.toString())}}</td>
                         <td class="title all">{{conversion(item.dapp_total_user.toString())}}</td>
@@ -250,6 +250,23 @@ export default {
         }
     },
     methods:{ 
+          //排序方法
+            rank(num,string,arr){      
+                var list = arr
+                var endarr = ''
+                    if(-1 == num ){
+                        //从小到大
+                        endarr = list.sort(function(a,b){
+                            return  a[string]-b[string]
+                        })
+                    }else{
+                        //从大到小
+                        endarr = list.sort(function(a,b){
+                            return  b[string]-a[string]
+                        })
+                    }
+                return endarr
+            },
         //导出excle
         defalutexcle(titlearr,dataarr){
             let str = ``
@@ -385,7 +402,7 @@ export default {
                     var url = this.$store.state.requrlnew+'/chain';
                     console.log(url)
                     Axios.post(url,{
-                                        "blockchain": "nas",
+                                        "blockchain": this.$store.state.appid,
                                         "begin":this.begintime/1000,
                                         "end":this.endtime/1000+86400,
                                         "type":"dapp"
@@ -408,6 +425,7 @@ export default {
                                             [],
                                             []
                                         ]
+                                        this.arr = this.rank(1,'timestamp',res.data.msg.data)
                                         this.arr.forEach(e => {
                                             var ddd = new Date(e.timestamp*1000)
                                             var year = ddd.getFullYear()

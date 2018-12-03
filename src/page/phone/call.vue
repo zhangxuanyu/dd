@@ -31,7 +31,7 @@
                         {{conversion(it.day_call.toString())}}
                     </div>
                     <div class="all" v-if="index == 4" v-for="(it,idx) in arr" :key="idx">
-                        {{conversion(it.call_rate.toFixed(2))}}%
+                        {{conversion((it.call_rate*100).toFixed(2))}}%
                     </div>
                     <div class="all" v-if="index == 5" v-for="(it,idx) in arr" :key="idx">
                         {{it.category}}

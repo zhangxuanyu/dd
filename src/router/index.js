@@ -38,6 +38,12 @@ import phtradealy from '../page/phone/trade_aly.vue'
 import phusedappaly from '../page/phone/usedapp_aly.vue'
 import phreport from '../page/phone/report.vue'
 import phsearch from '../page/phone/search.vue'
+import phchain from '../page/phone/chain.vue'
+import phchaindetail from '../page/phone/chaindetail.vue'
+import phchainuser from '../page/phone/chainuser.vue'
+import phchaintrade from '../page/phone/chaintrade.vue'
+import phchainuse from '../page/phone/chainusedapp.vue'
+import phchaindapp from '../page/phone/chaindapp.vue'
 
 Vue.use(Router)
 
@@ -279,42 +285,42 @@ var myroutelist = [
         },
         {
           path: '/chain',
-          component: chain,
+          component: phchain,
           meta: {
             title: 'DappData'
           }
         },
         {
           path: '/chaindetail',
-          component: chaindetail,
+          component: phchaindetail,
           meta: {
             title: 'DappData'
           }
         },
         {
           path: '/chainuser',
-          component: chainuser,
+          component: phchainuser,
           meta: {
             title: 'DappData'
           }
         },
         {
           path: '/chainusedapp',
-          component: chainusedapp,
+          component: phchainuse,
           meta: {
             title: 'DappData'
           }
         },
         {
           path: '/chaintrade',
-          component: chaintrade,
+          component: phchaintrade,
           meta: {
             title: 'DappData'
           }
         },
         {
           path: '/chaindapp',
-          component: chaindata,
+          component: phchaindapp,
           meta: {
             title: 'DappData'
           }

@@ -19,23 +19,31 @@
             <div class="search"  v-if="!length"></div>
             <input type="text" v-model="value" placeholder="请输入搜索内容" @focus="showinput(true)" @blur="showinput(false)">
         </div> -->
-        <img src="../../../static/phone/search.png" alt="" style="float:right;width:0.38rem;height:0.4rem;margin-top:0.4rem;margin-right:0.4rem;" @click="gotoother(2,3)">
-
-        <div  @touchmove.prevent class="menudetail" :style="showflag?{}:{height:'0rem'}">
-            <div v-for="(item,index) in mearr" :key="index" class="mutitle">
-                <div v-if="item.title[$store.state.alllang]" class="type">
-                    {{item.title[$store.state.alllang]}}
+        <img src="../../../static/phone/search.png" alt="" style="float:right;width:0.38rem;height:0.4rem;margin-top:0.4rem;margin-right:0.4rem;" @click="gotoother(2,4)">
+        
+        
+            <div  @touchmove.prevent class="menudetail" :style="showflag?{}:{height:'0rem'}">
+              
+                <div v-for="(item,index) in mearr" :key="index" class="mutitle">
+                    <div v-if="item.title[$store.state.alllang]" class="type">
+                        {{item.title[$store.state.alllang]}}
+                    </div>
+                    <div v-for="(it,idx) in item.content" :key="idx" class="title" @click="gotoother(idx,index)">
+                        <p><img :src="it.img" alt="" style="width:0.4rem;height:0.4rem;">{{it.word[$store.state.alllang]}}</p>
+                    </div>
                 </div>
-                <div v-for="(it,idx) in item.content" :key="idx" class="title" @click="gotoother(idx,index)">
-                    <p><img :src="it.img" alt="" style="width:0.4rem;height:0.4rem;">{{it.word[$store.state.alllang]}}</p>
-                </div>
-            </div>
 
-            <div class="language" @click="changelang()">
-                <p><img :src="$store.state.alllang==0?'../../../static/icon-cn.png':'../../../static/icon-en.png'" alt="">{{langarr[0][$store.state.alllang]}}</p>
-            </div>
-            
-        </div>
+                    <div class="language" @click="changelang()">
+                        <p><img :src="$store.state.alllang==0?'../../../static/icon-cn.png':'../../../static/icon-en.png'" alt="">{{langarr[0][$store.state.alllang]}}</p>
+                    </div>
+              
+              
+
+              
+              
+          </div>
+       
+        
     </div>
 </template>
 
@@ -53,12 +61,12 @@ export default {
             { word: ["总览", "Overview"], img: "../../static/phone/Management.png" }
           ]
         },
-        // {
-        //   title: ["公链", "Chain"],
-        //   content: [
-        //     { word: ["公链数据", "Chain"], img: "../../static/data1.png" }
-        //   ]
-        // },
+        {
+          title: ["公链", "Chain"],
+          content: [
+            { word: ["公链数据", "Chain"], img: "../../static/data1.png" }
+          ]
+        },
         {
           title: ["Dapp", "Dapp"],
           content: [
@@ -148,30 +156,30 @@ export default {
       
     },
     gotoother(index, block) {
-      if(block == 3){
+      if(block == 4){
         this.$router.push({ path: "/search" });
       }else{
-        if (block == 1) {
-        if (index == 0) {
-          this.$router.push({ path: "/rank" });
-        } else if (index == 1) {
-          this.$router.push({ path: "/num" });
-        } else if (index == 2) {
-          this.$router.push({ path: "/money" });
-        } else if (index == 3) {
-          this.$router.push({ path: "/use" });
-        }
+        if (block == 2) {
+          if (index == 0) {
+            this.$router.push({ path: "/rank" });
+          } else if (index == 1) {
+            this.$router.push({ path: "/num" });
+          } else if (index == 2) {
+            this.$router.push({ path: "/money" });
+          } else if (index == 3) {
+            this.$router.push({ path: "/use" });
+          }
       } else if (block == 0) {
         if (index == 0) {
           this.$router.push({ path: "/" });
         }
       }
-      // else if(block == 1){
-      //     if(index == 0){
-      //       this.$router.push({ path: "/chain" });
-      //     }
-      // }
-      else if (block == 2) {
+      else if(block == 1){
+          if(index == 0){
+            this.$router.push({ path: "/chain" });
+          }
+      }
+      else if (block == 3) {
         if (index == 0) {
           this.$router.push({ path: "/report" });
         }
@@ -283,6 +291,7 @@ div {
   position: fixed;
   top: 1.2rem;
   overflow: hidden;
+  overflow-y: scroll;
   text-align: left;
   padding-left: 0.3rem;
   transition: all 0.4s;

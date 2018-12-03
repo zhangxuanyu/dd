@@ -191,8 +191,8 @@ export default {
       ttarr: [
         ['调用次数','Transactions'],['时间段','Period'],['实时调用','View List of Transactions'],['合约调用','Transactions'],
         ["用户分析", "User Analysis"],
-        ["开始时间", "begin time"],
-        ["结束时间", "end time"],
+        ["开始时间", "Begin Time"],
+        ["结束时间", "End Time"],
         ["确定", "confirm"]
       ],
       titlearr:[['日期','Date'],['当日调用次数','Daily Transactions'],['总调用次数','Transactions'], ['增长率','Growth Rate']], 

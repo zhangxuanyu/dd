@@ -1,5 +1,6 @@
 <template>
-    <div class="menu" :style="{minHeight:geth,width:loww}">
+<div style="height:100%;overflow-y:scroll;width:auto;" class="topnav_box1"> 
+    <div class="menu" :style="{minHeight:'800px',width:loww}">
         
         
         <div class="lock lotop" v-if="$store.state.themenuflag">
@@ -41,6 +42,8 @@
         
         
     </div>
+
+</div>
 </template>
 
 <script>
@@ -359,6 +362,22 @@ export default {
 </script>
 
 <style scoped>
+.topnav_box1::-webkit-scrollbar {
+  width: 0px;
+  height: 4px;
+
+  background-color: #c1c1c1;
+}
+.topnav_box1::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  background-color: #f1f1f1;
+}
+.topnav_box1::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #c1c1c1;
+}
 .menu {
   width: 250px;
   height: 100%;

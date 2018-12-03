@@ -2,7 +2,7 @@
     <div>
         <p class="title">
             <span >{{blocktitle[0][$store.state.alllang]}}</span>
-            <span > </span>
+            <span  @click="gotoother(2,0)">{{blocktitle[3][$store.state.alllang]}} ></span>
         </p>
 
         <div v-for="(item,index) in arr" :key="index" class="chain"> 
@@ -21,11 +21,11 @@
             </div>
         </div>
 
-        <p class="title" style="margin-top:0.8rem;">
+        <!-- <p class="title" style="margin-top:0.8rem;">
             <span >{{blocktitle[7][$store.state.alllang]}}</span>
-        </p>
+        </p> -->
         <!-- 曲线图 -->
-        <div style="overflow:hidden;"> 
+        <!-- <div style="overflow:hidden;"> 
             <p class="select_type">
                   <span style="margin-right:0.1rem;font-size: 0.32rem;color: #797b8e;">
                             {{blocktitle[8][$store.state.alllang]}}
@@ -40,8 +40,45 @@
           <div class="picture">
               <div id="mychart"></div>
           </div>
+        </div> -->
+
+        <p class="title">
+            <span >{{blocktitle[1][$store.state.alllang]}}</span>
+            <span  @click="gotoother(1,0)">{{blocktitle[3][$store.state.alllang]}} > </span>
+        </p>
+        
+        <div class="dapp" v-for="(item,index) in hotarr"  v-if="hotarr.length>=1"  @click="gotoother(3,item.dapp_id)">
+          <div class="dapptitle">
+            <div class="imgbox">
+              <img :src="'https://bkc-dapp-1252899312.cos.ap-hongkong.myqcloud.com/dappdata/static/icon/'+item.dapp_id+'.jpg'" alt="" onerror="javascript:this.src='../../../static/all1.png'" style="width:1.1rem;height:1.1rem;">
+            </div>
+            <p style="overflow : hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;">{{item.en_cn[$store.state.alllang].title}}</p>
+            <p>{{item.blockchain.toUpperCase()}}&nbsp;|&nbsp;{{item.category}}</p>
+          </div>
+          <div class="dappdata">
+            <div class="dappcont">
+              <p><span>{{blocktitle[4][$store.state.alllang]}}</span> <span style="font-size:0.2rem;">(24h)</span> </p>
+              <p>{{item.new_user}}</p>
+              <p  :style="item.new_user_rate>0?{color:'#1ccfa7'}:item.new_user_rate<0?{color:'#f85e70'}:{color:'#797b8e'}">
+                <img src="../../../static/up.png" alt="" class="mgt" v-if="item.new_user_rate>0">
+                <img src="../../../static/down.png" alt="" class="mgt" v-if="item.new_user_rate<0">
+                {{(item.new_user_rate*100).toFixed(3)}}%</p>
+            </div>
+
+            <div class="dappcont">
+              <p><span>{{blocktitle[5][$store.state.alllang]}}</span>  <span style="font-size:0.2rem;">(24h)</span> </p>
+              <p>{{item.active_user}}</p>
+              <p  :style="item.active_user_rate>0?{color:'#1ccfa7'}:item.active_user_rate<0?{color:'#f85e70'}:{color:'#797b8e'}">
+                <img src="../../../static/up.png" alt="" class="mgt" v-if="item.active_user_rate>0">
+                <img src="../../../static/down.png" alt="" class="mgt" v-if="item.active_user_rate<0">
+                {{(item.active_user_rate*100).toFixed(3)}}%</p>
+            </div>
+          </div>
         </div>
-          
 
         <!-- 研究报告 -->
         <p class="title">
@@ -156,8 +193,8 @@ export default {
         }
       ],
       blocktitle: [
-        ["热门公链", "BlockChian"],
-        ["热门Dapp", "Most Dapp"],
+        ["热门公链", "BlockChain"],
+        ["热门Dapp", "Hot Dapp"],
         ["研究报告", "Report"],
         ["查看全部", "more"],
         ["新增用户数", "New Users"],
@@ -178,12 +215,14 @@ export default {
       //请求数组
       reqarr: ["new_user", "total_user", "call"],
       //触发画图
-      redrawflag:true
+      redrawflag:true,
+      hotarr:[]
     };
   },
   created(){
       this.reportarr = pdfarr
       this.fornew(true)
+      this.hotrequest()
   },
   mounted(){
       var mySwiper = new Swiper('.swiper-container', {      
@@ -205,7 +244,11 @@ export default {
         if(a == 0){
           this.$router.push({path:'/report'});
         }else if(a == 1){
-
+          this.$router.push({path:'/rank'});
+        }else if(a == 2){
+          this.$router.push({path:'/chain'});
+        }else if(a == 3){
+          this.$router.push({path:'/detail?id='+b});
         }
       },
       initChart(arr1, arr2, arr3, arr4) {
@@ -429,8 +472,27 @@ export default {
           this.eosarr.unshift(e.value);
         });
         this.$store.commit("changeloadopacty", false);
-        this.redrawflag = !this.redrawflag;
+        // this.redrawflag = !this.redrawflag;
       });
+    },
+    hotrequest(){
+      Axios.post(
+        this.$store.state.requrlnew + "/hotdapp",
+        {
+          "num":6,
+          "order":"active_user",
+          "blockchain":"total"
+         },
+        {
+          headers: { "Content-Type": "application/x-www-form-urlencoded" }
+        }
+      ).then(res => {
+        console.log(res)
+        res.data.msg.data.forEach(element => {
+          this.hotarr.unshift(element)
+        });
+        
+      })
     }
   }
 };
@@ -540,6 +602,71 @@ a{
 #mychart{
   width: 20rem;
   height: 100%;
+}
+
+.dapp{
+  background-color: #fff;
+  box-shadow: 3px 2px 10px 0px 
+    rgba(37, 48, 76, 0.08);
+    width: 100%;
+    height: 3.9rem;
+    margin-bottom: 0.4rem;
+}
+.dapptitle{
+  width: 100%;
+  height: 1.9rem;
+  border-bottom: 1px solid #eff3f5;
+  padding-left: 1.7rem;
+  padding-top: 0.4rem;
+  font-size: 0.32rem;
+  position: relative;
+}
+.dapptitle .imgbox{
+  position: absolute;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 50%;
+  overflow: hidden;
+  top: 0.4rem;
+  left: 0.4rem;
+}
+.dapptitle .imgbox img{
+  float: left;
+}
+.dapptitle p{
+  line-height: 0.6rem;
+  text-align: left;
+}
+.dapptitle p:nth-of-type(1){
+  color: #464a58;
+}
+.dapptitle p:nth-of-type(2){
+  font-size: 0.28rem;
+	color: #797b8e;
+}
+.dappdata{
+  display: flex;
+  justify-content: space-around;
+  font-size: 0.24rem;
+  padding-top: 0.25rem;
+}
+.dappcont p{
+  line-height: 0.5rem;
+}
+.dappcont p:nth-of-type(1){
+  color: #797b8e;
+}
+.dappcont p:nth-of-type(2){
+  font-size: 0.36rem;
+  font-weight: 600;
+  color: #464a58;
+}
+.dappcont p:nth-of-type(3){
+  font-size: 0.22rem;
+  color: #797b8e;
+}
+.mgt {
+  vertical-align: -1px;
 }
 
 

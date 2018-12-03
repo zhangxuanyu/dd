@@ -20,20 +20,19 @@
           </div>
         </div>
         
-        <p class="preview">{{ttarr[0][$store.state.alllang]}}</p>  
-         
-         <div style="padding:0.8rem 0.4rem 0.5rem 0.4rem;background-color:#FFF;margin-bottom:0.8rem;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
-        <div class="picture">   
-          <div class="mychart" id="alluser"></div>
-        </div>
-        </div>
+       
 
 
-         <p class="preview">{{ttarr[2][$store.state.alllang]}}</p> 
-         <div style="padding:0.8rem 0.4rem 0.5rem 0.4rem;background-color:#FFF;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
-        <div class="picture">   
-          <div class="mychart" id="newuser"></div>
-        </div>  
+        <p class="preview right">
+            <span style="margin-right:0.14rem;font-size:0.26rem;margin-top: 0.15rem;float:left;color: #797b8e;">{{toparr[0][$store.state.alllang]}}</span>
+            <el-select v-model="type"   class="top_right"  style="float:left">
+                <el-option :key="index" :label="item[$store.state.alllang]" :value="index" v-for="(item,index) in typearr1">{{item[$store.state.alllang]}}</el-option>
+            </el-select>
+        </p> 
+        <div style="padding:0.8rem 0.4rem 0.5rem 0.4rem;background-color:#FFF;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
+            <div class="picture">   
+            <div class="mychart" id="newuser"></div>
+            </div>  
         </div>
 
 
@@ -46,20 +45,29 @@
                     </div>
 
 
-                    <div class="all" v-if="index == 0&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr" :key="idx" >
-                       {{timeuse(it.timestamp-68400)}}
+                    <div class="all" v-if="index == 0&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr" >
+                       {{idx+1}}
                     </div>
-                    <div class="all" v-if="index == 1&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr" :key="idx" >
-                       {{conversion(it.new_user.toString())}}
+                    <div class="all" v-if="index == 1&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr" >
+                       {{timeuse(it.timestamp)}}
                     </div>
-                    <div class="all" v-if="index == 2&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr" :key="idx">
-                        {{conversion((it.new_rate*100).toFixed(2))}}%
+                    <div class="all" v-if="index == 2&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr">
+                        {{conversion(it.dapp_num.toString())}}
                     </div>
-                    <div class="all" v-if="index == 3&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr" :key="idx">
-                        {{conversion(it.total_user.toString())}}
+                    <div class="all" v-if="index == 3&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr">
+                        {{conversion(it.dapp_total_user.toString())}}
                     </div>
-                    <div class="all" v-if="index == 4&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr" :key="idx">
-                        {{conversion((it.new_user_ratio*100).toFixed(2))}}%
+                    <div class="all" v-if="index == 4&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr">
+                        {{conversion(it.dapp_new_user.toString())}}
+                    </div>
+                    <div class="all" v-if="index == 5&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr">
+                        {{conversion(it.dapp_active_user.toString())}}
+                    </div>
+                    <div class="all" v-if="index == 6&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr">
+                        {{conversion(it.dapp_call.toString())}}
+                    </div>
+                    <div class="all" v-if="index == 7&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr">
+                        {{conversion(it.dapp_vol.toString())}}
                     </div>
                     
                 </li>
@@ -84,84 +92,15 @@
                 <span>{{toparr[4][$store.state.alllang]}}</span>
             </p>
         </div>
-        <!-- 活跃用户 -->
-        <p class="preview">{{ttarr[3][$store.state.alllang]}}</p> 
-
-        <div style="padding:0.8rem 0.4rem 0.5rem 0.4rem;background-color:#FFF;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
-        <div class="picture">   
-          <div class="mychart" id="actuser"></div>
-        </div>
-        </div>
-
-         <div style="padding:0.4rem;background-color:#FFF;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
-        <div class="tableout">
-            <ul class="table">
-                <li v-for="(item,index) in titlearr1" :key="index">
-                    <div  class="all titletop" :style="index == 1?{textAlign:'left'}:{}">
-                        {{item[$store.state.alllang]}} 
-                    </div>
-
-
-                    <div class="all" v-if="index == 0&&idx<thepage1*thepagesize&&idx>=(thepage1-1)*thepagesize" v-for="(it,idx) in arr" :key="idx" >
-                       {{timeuse(it.timestamp-86400)}}
-                    </div>
-                    <div class="all" v-if="index == 1&&idx<thepage1*thepagesize&&idx>=(thepage1-1)*thepagesize" v-for="(it,idx) in arr" :key="idx" >
-                       {{conversion(it.active_user.toString())}}
-                    </div>
-                    <div class="all" v-if="index == 2&&idx<thepage1*thepagesize&&idx>=(thepage1-1)*thepagesize" v-for="(it,idx) in arr" :key="idx">
-                        {{conversion((it.day_rate*100).toFixed(2))}}%
-                    </div>
-                    <div class="all" v-if="index == 3&&idx<thepage1*thepagesize&&idx>=(thepage1-1)*thepagesize" v-for="(it,idx) in arr" :key="idx">
-                        {{conversion(it.week_user.toString())}}
-                    </div>
-                    <div class="all" v-if="index == 4&&idx<thepage1*thepagesize&&idx>=(thepage1-1)*thepagesize" v-for="(it,idx) in arr" :key="idx">
-                        {{conversion((it.week_rate*100).toFixed(2))}}%
-                    </div>
-                    <div class="all" v-if="index == 5&&idx<thepage1*thepagesize&&idx>=(thepage1-1)*thepagesize" v-for="(it,idx) in arr" :key="idx">
-                       {{conversion(it.month_user.toString())}}
-                    </div>
-                    <div class="all" v-if="index == 6&&idx<thepage1*thepagesize&&idx>=(thepage1-1)*thepagesize" v-for="(it,idx) in arr" :key="idx">
-                        {{conversion((it.month_rate*100).toFixed(2))}}%
-                    </div>
-                    <div class="all" v-if="index == 7&&idx<thepage1*thepagesize&&idx>=(thepage1-1)*thepagesize" v-for="(it,idx) in arr" :key="idx">
-                        {{conversion(it.lost_user.toString())}}
-                    </div>
-                    <div class="all" v-if="index == 8&&idx<thepage1*thepagesize&&idx>=(thepage1-1)*thepagesize" v-for="(it,idx) in arr" :key="idx">
-                        {{conversion((it.lost_rate*100).toFixed(2))}}%
-                    </div>
-                    
-                </li>
-            </ul>
-           
-        </div>
-        </div>
-
-
-
-        <div class="botpage">
-            <div class="pre" @click="runpage1(-1)" v-if="thepage1>1">
-                {{toparr[1][$store.state.alllang]}}
-            </div>
-            <div class="pre" @click="runpage1(1)" v-if="thepage1<Math.ceil(arr.length/thepagesize)">
-                {{toparr[2][$store.state.alllang]}}
-            </div>
-            <p class="rightpage">
-                <span>{{toparr[3][$store.state.alllang]}}</span>     
-                <el-select v-model="thepage1"   class="top_right"  v-if="arr.length">
-                        <el-option :key="index" :label="item" :value="item" v-for="(item,index) in Math.ceil(arr.length/thepagesize)" >{{item}}</el-option>
-                    </el-select>
-                <span>{{toparr[4][$store.state.alllang]}}</span>
-            </p>
-        </div>
-
+       
         
     </div>
 </template>
 
 <script>
 import Highcharts from "highcharts/highstock";
-import phName from "../../components/phone/dappname.vue";
-import phType from "../../components/phone/detail_type.vue";
+import phName from "../../components/phone/chainname.vue";
+import phType from "../../components/phone/chaindetail_type.vue";
 import Axios from "axios";
 
 export default {
@@ -180,9 +119,9 @@ export default {
         ["用户分析", "User Analysis"],
         ["开始时间", "Begin Time"],
         ["结束时间", "End Time"],
-        ["确定", "confirm"]
+        ["确定", "Confirm"]
       ],
-      titlearr:[['日期','Date'],['新增用户','New users'],['增长率','Growth Rate'], ['累计用户','Users'],['新增用户占总用户比','New Users(Rate)']],
+      titlearr:[['',''],['日期','Date'],['Dapp数量','Dapp Num'],['用户数量','User Num'],['新增用户','New User'],['活跃用户','Active User'], ['调用次数','Transactions'], ['交易量','Volume']],
       date: "",
       pickerValue: "",
       pickerValue1: "",
@@ -199,20 +138,11 @@ export default {
       fornewflag:false,
       thepagesize:10,
       thepage:1,
-      thepage1:1,
-      toparr:[['综合排行','Rankings'],['上一页','pre'],['下一页','next'],['第','page'],['页','']],
-      titlearr1:[['日期','Date'],
-                  ['日活跃用户','DAU '],
-                  ['日活跃率','DAU(Rate)'], 
-                  ['周活跃用户','WAU'],
-                  ['周活跃率','WAU(Rate)'],
-                  ['月活跃用户','MAU'],
-                  ['月活跃率','MAU(Rate)'],
-                  ['流失用户','Churn'],
-                  ['流失率','Churn(Rate)'],
-                            ],
+      toparr:[['分类','Other'],['上一页','pre'],['下一页','next'],['第','page'],['页','']],
+      typearr1:[['Dapp数量','Dapp Num'],['用户数量','User Num'],['新增用户','New user'],['活跃用户','Active User'], ['调用次数','Transactions'], ['交易量','Volume']],
       timevalue:'',
-      timevalue1:''
+      timevalue1:'',
+      type:1
     };
   },
   created(){
@@ -279,9 +209,29 @@ export default {
     },
     pickerValue1(n, o) {
       console.log(n);
+    },
+    type(){
+        this.drawall()
     }
   },
   methods: {
+      //排序方法
+    rank(num,string,arr){      
+        var list = arr
+        var endarr = ''
+            if(-1 == num ){
+                 //从小到大
+                endarr = list.sort(function(a,b){
+                    return  a[string]-b[string]
+                })
+            }else{
+                 //从大到小
+                endarr = list.sort(function(a,b){
+                    return  b[string]-a[string]
+                })
+            }
+        return endarr
+    },
     // 确定时间
     request(){
       if(this.begintime>this.endtime){
@@ -293,9 +243,6 @@ export default {
         this.timevalue1 = showtime
       }
       this.fornew()
-    },
-    runpage1(add){
-      this.thepage1 = this.thepage1 + add
     },
     runpage(add){
       this.thepage = this.thepage + add
@@ -310,113 +257,14 @@ export default {
                 },
     drawall() {
       setTimeout(() => {
-        this.drawuser(
-          "alluser",
-          this.xarr,
-          this.userarr,
-          this.addarr,
-          "allusechart"
-        );
-      }, 1000);
-      setTimeout(() => {
         this.drawuser1(
           "newuser",
           this.xarr,
-          this.newarr,
-          this.ttarr[2][this.$store.state.alllang],
+          this.newarr[this.type],
+          this.typearr1[this.type][this.$store.state.alllang],
           "newuser"
         );
       }, 1000);
-      setTimeout(() => {
-        this.drawuser1(
-          "actuser",
-          this.xarr,
-          this.actarr,
-          this.ttarr[3][this.$store.state.alllang],
-          "actuser"
-        );
-      }, 1000);
-    },
-    drawuser(aa, arr1, arr2, arr3, windname) {
-      var options = {
-        //hchart的参数
-        chart: {
-          zoomType: "xy"
-        },
-        colors: ["#409efe", "#00e175", "#ff0a50", "black"],
-        title: {
-          text: ""
-        },
-        subtitle: {
-          text: ""
-        },
-        credits: {
-          enabled: false
-        },
-        xAxis: [
-          {
-            //横坐标
-            categories: arr1,
-            crosshair: true
-          }
-        ],
-        yAxis: [
-          {
-            // Primary yAxis
-            labels: {
-              format: "{value}",
-              style: {
-                color: "#409efe"
-              }
-            },
-            title: {
-              text: this.titlearr[3][this.$store.state.alllang],
-              style: {
-                color: "#409efe"
-              }
-            }
-          },
-          {
-            // Secondary yAxis
-            title: {
-              text: this.titlearr[2][this.$store.state.alllang],
-              style: {
-                color: "#00e175"
-              }
-            },
-            labels: {
-              format: "{value}%",
-              style: {
-                color: "#00e175"
-              }
-            },
-            opposite: true
-          }
-        ],
-        tooltip: {
-          shared: true
-        },
-        series: [
-          {
-            name: this.titlearr[3][this.$store.state.alllang],
-            data: arr2,
-            type: "spline"
-          },
-          {
-            //纵坐标
-            name: this.titlearr[2][this.$store.state.alllang],
-            data: arr3,
-            type: "spline",
-            yAxis: 1
-          }
-        ]
-      };
-      // this.chart = new Highcharts.Chart(chartContainer, options)
-      window[windname] = Highcharts.chart(aa, options);
-
-      window.onresize = function() {
-        window[windname].reflow();
-      };
     },
     drawuser1(aa, arr1, arr2, string, windowname) {
       var options = {
@@ -504,51 +352,53 @@ export default {
         },
     //数据请求
     fornew() {
-      this.xarr = [];
-      this.userarr = [];
-      this.addarr = [];
-      this.newarr = [];
-      this.actarr = [];
-      this.arr = [];
-      console.log(this.$store.state.moneyty, this.$store.state.requesttime);
-      var url =
-        this.$store.state.requrl +
-        "/" +
-        this.$store.state.appid.split("_")[0].toLowerCase() +
-        "/user";
-      console.log(url);
-      Axios.post(
-        url,
-        {
-          dapp_id: this.$store.state.appid,
-          start: this.begintime / 1000,
-          last: this.endtime / 1000 + 86400
-        },
-        {
-          headers: { "Content-Type": "application/x-www-form-urlencoded" }
-        }
-      ).then(res => {
-        console.log(res.data.msg);
-        res.data.msg.item.forEach((a, bb) => {
-          if (bb < res.data.msg.item.length - 1) {
-            this.arr.push(a);
-          }
-        });
-        console.log(this.arr);
-        this.arr.forEach(e => {
-          var ddd = new Date(e.timestamp * 1000 - 86400000);
-          var year = ddd.getFullYear();
-          var month = ddd.getMonth() + 1;
-          var day = ddd.getDate();
-          this.xarr.unshift(year + "/" + month + "/" + day);
-          this.userarr.unshift(e.total_user);
-          this.addarr.unshift((e.total_rate * 100).toFixed(3) - 0);
-          this.newarr.unshift(e.new_user);
-          this.actarr.unshift(e.active_user);
-        });
-        this.drawall();
-        this.$store.commit("changeloadopacty", false);
-      });
+      this.xarr = []
+            this.newarr = []
+            this.arr = []
+            console.log(this.$store.state.moneyty,this.$store.state.requesttime)
+                    var url = this.$store.state.requrlnew+'/chain';
+                    console.log(url)
+                    Axios.post(url,{
+                                        "blockchain":this.$store.state.appid,
+                                        "begin":this.begintime/1000,
+                                        "end":this.endtime/1000+86400,
+                                        "type":"dapp"
+                                    },{
+                                        headers: {'Content-Type': "application/x-www-form-urlencoded"}
+                                    }).then(res => {
+                                        console.log(res.data.msg)
+                                        console.log(this.arr)
+                                        this.newarr=[
+                                            [],
+                                            [],
+                                            [],
+                                            [],
+                                            [],
+                                            []
+                                        ]
+                                        
+                                        this.arr = this.rank(1,'timestamp',res.data.msg.data)
+                                        setTimeout(()=>{
+                                            console.log(this.arr)
+                                        },1000)
+                                        
+
+                                        this.arr.forEach(e => {
+                                            var ddd = new Date(e.timestamp*1000)
+                                            var year = ddd.getFullYear()
+                                            var month = ddd.getMonth()+1
+                                            var day=ddd.getDate();
+                                            this.xarr.unshift(year+'/'+month+'/'+day)
+                                            this.newarr[0].unshift(e.dapp_num)
+                                            this.newarr[1].unshift(e.dapp_total_user)
+                                            this.newarr[2].unshift(e.dapp_new_user)
+                                            this.newarr[3].unshift(e.dapp_active_user)
+                                            this.newarr[4].unshift(e.dapp_call)
+                                            this.newarr[5].unshift(e.dapp_vol)
+                                        });
+                                        this.drawall()
+                                        this.$store.commit('changeloadopacty',false)
+                                    })
     }
   }
 };
@@ -575,8 +425,9 @@ input{
   color: #525864;
   font-weight: 600;
   text-align: left;
-  margin-top: 0.8rem;
+  margin-top: 0.5rem;
   margin-bottom: 0.4rem;
+  overflow: hidden;
 }
 .timein {
   float: left;
@@ -709,5 +560,24 @@ input{
   background-color: rgba(42, 121, 249,0.1);
 }
 
-
+.right .el-date-editor.el-input, .el-date-editor.el-input__inner{
+    width: 194px;
+}
+.right .el-input--suffix .el-input__inner{
+    border-radius: 20px;
+    background-color: #f7f8fa;
+    width: 200px;
+}
+.right .el-input__suffix{ 
+    right:25px;
+}
+.right .el-input__inner{
+    font-size:14px;
+    color:#797b8e;
+    height: 30px;
+    line-height: 30px;
+}
+.right .el-input__icon{
+    line-height: 30px;
+}
 </style>

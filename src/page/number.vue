@@ -62,10 +62,10 @@ export default {
                     arr:[],
                     currentPage1: 1,
                      //请求数组
-                    reqarr:['eth','eos','nas'],
+                    reqarr:['eth','eos','nas','tron'],
                     reqAarr:['ETH','EOS','NAS'],
                     // typearr:['total','game','tool','market','other'],
-                    allmoney:[['total','exchanges','games','high-risk','marketplaces','gambling','other'],['total','game','tool','exchange','marketplaces','gambling','high-risk','other'],['total','Game','Tool','Market','Other']],
+                    allmoney:[['total','exchanges','games','high-risk','marketplaces','gambling','other'],['total','game','tool','exchange','marketplaces','gambling','high-risk','other'],['total','Game','Tool','Market','Other'],['total','Gambling','Games','Other']],
                     all:'',
                     theleft:'280px',
                     stylearr:['','','100px','','','',''],
@@ -167,8 +167,26 @@ export default {
                 fornew(){
                     this.all = []
                     this.arr = ''
-                    console.log(this.$store.state.moneyty,this.$store.state.requesttime)
-                    var url = this.$store.state.requrl+'/'+this.reqarr[this.$store.state.moneyty]+'/rank';
+                    // console.log(this.$store.state.moneyty,this.$store.state.requesttime)
+                    // var url = this.$store.state.requrl+'/'+this.reqarr[this.$store.state.moneyty]+'/rank';
+                    //     Axios.post(url,{
+                    //                         "page":this.currentPage1,
+                    //                         "timestamp":this.$store.state.requesttime/1000+86400,
+                    //                         "order_by":'user',
+                    //                         "num":this.pagesize,
+                    //                         "category":this.allmoney[this.$store.state.moneyty][this.$store.state.dapptype]
+                    //                     },{
+                    //                         headers: {'Content-Type': "application/x-www-form-urlencoded"}
+                    //                     }).then(res => {
+                    //                         console.log(res.data.msg)
+                    //                         this.all = res.data.msg.count
+                    //                         this.arr = res.data.msg.data.data
+                    //                         this.$store.commit('changeloadopacty',false)
+                    //                     })
+
+
+                    if(this.$store.state.moneyty <= 2){
+                        var url =  this.$store.state.requrl+'/'+this.reqarr[this.$store.state.moneyty]+'/rank';
                         Axios.post(url,{
                                             "page":this.currentPage1,
                                             "timestamp":this.$store.state.requesttime/1000+86400,
@@ -181,8 +199,33 @@ export default {
                                             console.log(res.data.msg)
                                             this.all = res.data.msg.count
                                             this.arr = res.data.msg.data.data
+                                            // this.rankarr(1,'rank_order')
+                                           
                                             this.$store.commit('changeloadopacty',false)
                                         })
+
+                    }else if(this.$store.state.moneyty == 3){
+                        var url =  this.$store.state.requrlnew+'/dapp/rank';
+                        Axios.post(url,{
+                                            "blockchain": this.reqarr[this.$store.state.moneyty],
+                                            "timestamp": this.$store.state.requesttime/1000,
+                                            "order": "active_user",
+                                            "category": this.allmoney[this.$store.state.moneyty][this.$store.state.dapptype],
+                                            "page_num": this.currentPage1,
+                                            "page_size": this.pagesize,
+                                            "rank": "user",
+                                            "stat": -1
+                                        },{
+                                            headers: {'Content-Type': "application/x-www-form-urlencoded"}
+                                        }).then(res => {
+                                            console.log(res.data.msg)
+                                            this.all = res.data.msg.count
+                                            this.arr = res.data.msg.data
+                                            // this.rankarr(1,'rank_order')
+                            
+                                            this.$store.commit('changeloadopacty',false)
+                                        })
+                    }
                     
                 }
             }

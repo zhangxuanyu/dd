@@ -1,22 +1,15 @@
 <template>
     <div class="out" :style="{minHeight:geth,marginLeft:mglf}">
         <min-menu class="leftme" :style="{left:open}"></min-menu>
-        <!-- <p class="alltitle">{{ttarr[4][$store.state.alllang]}}</p>  -->
+        <p class="alltitle dapp1"><span style="margin-top: -10px;margin-bottom: 30px;">
+            <el-date-picker v-model="value7" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions2" style="float:right;"></el-date-picker>
+            <span style="margin-right:10px;font-size: 14px;color: #797b8e;float:left;margin-top:8px;float:right;">{{ttarr[1][$store.state.alllang]}}</span>
+        </span></p> 
         <div class="contright">
             <!-- 用户总数图表 -->
             <div class="dapp" style="height:600px;">
-                <p><span style="float:left;color: #212229;font-weight: 600;">{{ttarr[0][$store.state.alllang]}}</span> <span style="float:right;margin-top: -10px;margin-bottom: 30px;"><span style="margin-right:10px;font-size: 14px;color: #797b8e;">{{ttarr[1][$store.state.alllang]}}</span><el-date-picker
-                                                        v-model="value7"
-                                                        type="daterange"
-                                                        align="right"
-                                                        unlink-panels
-                                                        range-separator="至"
-                                                        start-placeholder="开始日期"
-                                                        end-placeholder="结束日期"
-                                                        :picker-options="pickerOptions2">
-                                                    </el-date-picker>
-                                        </span></p>
-                <div id="alluser"  style="min-width:500px;height:500px;margin-bottom:30px;"></div>
+                <p style="text-align:left;margin-bottom: 20px;color: #212229;font-weight: 600;">{{ttarr[3][$store.state.alllang]}}</p>
+                <div id="actuser"  style="min-width:500px;height:500px;margin-bottom:30px;"></div>
             </div>
 
             <!-- 新用户数图表 -->
@@ -24,7 +17,7 @@
                 <p style="text-align:left;margin-bottom: 20px;color: #212229;font-weight: 600;">{{ttarr[2][$store.state.alllang]}}</p>
                 <div id="newuser"  style="min-width:500px;height:500px"></div>
 
-                <table  width="100%" cellspacing='0' style="text-align: center;">
+                <!-- <table  width="100%" cellspacing='0' style="text-align: center;">
                     <tr class="top bg pd">
                         <th  v-for="(item,index) in titlearr" class="title all topbt" :style="index == titlearr.length -1 ?{borderRight:'1px solid #ebecf0'}:''">{{item[$store.state.alllang]}}</th>
                     </tr>
@@ -47,28 +40,32 @@
                         layout="prev, pager, next"
                         :total="arr.length" style="width:200px;float:left;">
                     </el-pagination>
-                </div>
+                </div> -->
             </div>
 
             <!-- 活跃用户 -->
              <div class="dapp">
-                <p  style="text-align:left;margin-bottom: 20px;color: #212229;font-weight: 600;"><span>{{ttarr[3][$store.state.alllang]}}</span></p>
-                <div id="actuser"  style="min-width:500px;height:500px;margin-bottom:30px;"></div>
+                <p  style="text-align:left;margin-bottom: 20px;color: #212229;font-weight: 600;"><span>{{ttarr[0][$store.state.alllang]}}</span></p>
+                <div  id="alluser"  style="min-width:500px;height:500px;margin-bottom:30px;"></div>
 
+            </div>
+
+            <div class="dapp dapp1">
+                <p  style="text-align:left;margin-bottom: 20px;color: #212229;font-weight: 600;float:left;padding-top:10px;"><span>{{ttarr[5][$store.state.alllang]}}</span></p>
+                <div style="width:70px;height:30px;line-height:30px;font-size: 14px;color: #fff;cursor: pointer;border-radius: 4px;background-color: #4da7fb;float:right;" @click="defalutexcle(titlearr2,arr)">
+                    {{ttarr[6][$store.state.alllang]}}
+                </div>
                 <table  width="100%" cellspacing='0' style="text-align: center;">
                     <tr class="top bg pd">
-                        <th  v-for="(item,index) in titlearr1" class="title all topbt" :style="index == titlearr1.length -1 ?{borderRight:'1px solid #ebecf0'}:''">{{item[$store.state.alllang]}}</th>
+                        <th  v-for="(item,index) in titlearr2" class="title all topbt" :style="index == titlearr1.length -1 ?{borderRight:'1px solid #ebecf0'}:''">{{item[$store.state.alllang]}}</th>
                     </tr>
                     <tr class="top pd nbt" v-for="(item,index) in arr" v-if="index>=(currentPage2-1)*10&&index<currentPage2*10">
                         <td class="title all">{{timeuse(item.timestamp-86400)}}</td>
+                        <td class="title all">{{conversion(item.new_user.toString())}}</td>
                         <td class="title all">{{conversion(item.active_user.toString())}}</td>
-                        <td class="title all">{{conversion((item.day_rate*100).toFixed(2))}}%</td>
                         <td class="title all">{{conversion(item.week_user.toString())}}</td>
-                        <td class="title all">{{conversion((item.week_rate*100).toFixed(2))}}%</td>
                         <td class="title all">{{conversion(item.month_user.toString())}}</td>
-                        <td class="title all">{{conversion((item.month_rate*100).toFixed(2))}}%</td>
-                        <td class="title all">{{conversion(item.lost_user.toString())}}</td>
-                        <td class="title all" style="border-right:1px solid #ebecf0;">{{conversion((item.lost_rate*100).toFixed(2))}}%</td> 
+                        <td class="title all" style="border-right:1px solid #ebecf0;">{{conversion(item.total_user.toString())}}</td> 
                     </tr>
                 </table>
                 
@@ -149,8 +146,9 @@ export default {
                             ['流失用户','Churn'],
                             ['流失率','Churn(Rate)'],
                             ],
+                    titlearr2:[['日期','Date'],['新增用户','New users'],['日活跃','DAU'], ['周活跃用户','WAU'],['月活跃用户','MAU'],['累计用户','Total Users']],
                     arr:[],
-                    ttarr:[['累计用户','Users'],['时间段','Period'],['新增用户','New users'],['活跃用户','Active Users'],['用户分析','User Analysis']],
+                    ttarr:[['累计用户','Total Users'],['时间段','Period'],['新增用户','New users'],['活跃用户','Active Users'],['用户分析','User Analysis'],['用户数据','User Data'],['导出','Export']],
                     currentPage1:1,
                     currentPage2:1,
                     //伸展宽度
@@ -245,6 +243,59 @@ export default {
         }
     },
     methods:{ 
+        //排序方法
+    rank(num,string,arr){      
+        var list = arr
+        var endarr = ''
+            if(-1 == num ){
+                 //从小到大
+                endarr = list.sort(function(a,b){
+                    return  a[string]-b[string]
+                })
+            }else{
+                 //从大到小
+                endarr = list.sort(function(a,b){
+                    return  b[string]-a[string]
+                })
+            }
+        return endarr
+    },
+        //导出excle
+        defalutexcle(titlearr,dataarr){
+            let str = ``
+            // let str = `姓名,电话,邮箱\n`;
+            titlearr.forEach((e,index )=> {
+                if(index < titlearr.length-1){
+                    str = str + `${e[this.$store.state.alllang ] + ','}`
+                }else{
+                    str = str + `${e[this.$store.state.alllang ] + '\n'}`
+                }
+                
+            });
+            
+            //增加\t为了不让表格显示科学计数法或者其他格式
+            for(let i = 0 ; i < dataarr.length ; i++ ){
+                str+=`${this.timeuse(dataarr[i].timestamp-86400)  + '\t'},`; 
+                str+=`${dataarr[i].new_user.toString()  + '\t'},`; 
+                str+=`${dataarr[i].active_user.toString()  + '\t'},`; 
+                str+=`${dataarr[i].week_user.toString() + '\t'},`; 
+                str+=`${dataarr[i].month_user.toString() + '\t'},`; 
+                str+=`${dataarr[i].total_user.toString()+ '\t'},`; 
+
+                str+='\n';
+            }
+            
+            //encodeURIComponent解决中文乱码
+            let uri = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(str);
+            //通过创建a标签实现
+            var link = document.createElement("a");
+            link.href = uri;
+            //对下载的文件命名
+            link.download = this.ttarr[5][this.$store.state.alllang] +'.csv';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        },
         //数字字符串添加逗号
                 conversion(str){
                     if(/\./.test(str)){
@@ -310,22 +361,7 @@ export default {
 				                    color:'#409efe'
 				                }
 				            }
-				        },
-				        { // Secondary yAxis
-				            title: {
-				                text: this.titlearr[2][this.$store.state.alllang],
-				                style: {
-				                    color:'#00e175'
-				                }
-				            },
-				            labels: {
-				                format: '{value}%',
-				                style: {
-				                    color:'#00e175'
-				                }
-				            },
-				            opposite: true
-						}
+				        }
 						
 			        ],
 			        tooltip: {
@@ -336,12 +372,6 @@ export default {
 				            name: this.titlearr[3][this.$store.state.alllang],
 				            data: arr2,
 				            type: 'spline',
-				        },
-				        {  //纵坐标
-				            name: this.titlearr[2][this.$store.state.alllang],
-				            data: arr3,
-				            type: 'spline',
-				            yAxis: 1,
 				        }
 
 			        ]
@@ -421,7 +451,8 @@ export default {
             this.actarr = []
             this.arr = []
             console.log(this.$store.state.moneyty,this.$store.state.requesttime)
-                    var url = this.$store.state.requrl+'/'+this.$store.state.appid.split('_')[0].toLowerCase()+'/user';
+            if(this.$store.state.appid.split("_")[0]=='ETH'||this.$store.state.appid.split("_")[0]=='EOS'||this.$store.state.appid.split("_")[0]=='NAS'){
+                var url = this.$store.state.requrl+'/'+this.$store.state.appid.split('_')[0].toLowerCase()+'/user';
                     console.log(url)
                     Axios.post(url,{
                                         "dapp_id":this.$store.state.appid,
@@ -452,6 +483,41 @@ export default {
                                         this.drawall()
                                         this.$store.commit('changeloadopacty',false)
                                     })
+            }else{
+                var url = this.$store.state.requrlnew+'/dapp';
+                    console.log(url)
+                    Axios.post(url,{
+                                        "blockchain": this.$store.state.appid.split("_")[0].toLowerCase(),
+                                        "dapp_id":this.$store.state.appid,
+                                        "begin": this.begintime/1000,
+                                        "end": this.endtime/1000+86400,
+                                        "type":"user"
+                                    },{
+                                        headers: {'Content-Type': "application/x-www-form-urlencoded"}
+                                    }).then(res => {
+                                        console.log(res.data.msg)
+                                        
+                                        this.arr = this.rank(1,'timestamp',res.data.msg.data)
+                                        console.log(this.arr)
+                                        this.arr.forEach(e => {
+                                            var ddd = new Date(e.timestamp*1000-86400000)
+                                            var year = ddd.getFullYear()
+                                            var month = ddd.getMonth()+1
+                                            var day=ddd.getDate();
+                                            this.xarr.unshift(year+'/'+month+'/'+day)
+                                            this.userarr.unshift(e.total_user)
+                                            this.addarr.unshift((e.total_rate*100).toFixed(3)-0) 
+                                            this.newarr.unshift(e.new_user)
+                                            this.actarr.unshift(e.active_user)
+                                        });
+                                        this.drawall()
+                                        this.$store.commit('changeloadopacty',false)
+                                    })
+            }
+                    
+
+
+
         }
     }
 }
@@ -480,6 +546,7 @@ export default {
     text-align: left;
     font-size: 24px;
     color: #c1c7cd;
+    overflow: hidden;
 }
 .contright{
     width: 100%;
@@ -533,39 +600,39 @@ export default {
 }
 </style>
 <style>
-.dapp .el-range-editor.el-input__inner{
+.dapp1 .el-range-editor.el-input__inner{
     border-radius: 20px;
-    background-color: #f7f8fa;
+    background-color: #fdfdfd;
 }
-.dapp .el-range-editor .el-range-input{
-    background-color: #f7f8fa;
+.dapp1 .el-range-editor .el-range-input{
+    background-color: #fdfdfd;
 }
- .dapp .el-date-editor--daterange.el-input,.dapp .el-date-editor--daterange.el-input__inner,.dapp .el-date-editor--timerange.el-input,.dapp .el-date-editor--timerange.el-input__inner{
+ .dapp1 .el-date-editor--daterange.el-input,.dapp1 .el-date-editor--daterange.el-input__inner,.dapp1 .el-date-editor--timerange.el-input,.dapp1 .el-date-editor--timerange.el-input__inner{
     width:350px;
 }
-.dapp .el-icon-date:before{
+.dapp1 .el-icon-date:before{
     content:'';
 }
-.dapp .el-input__inner{
+.dapp1 .el-input__inner{
     border: 1px solid #f7f8fa;
     font-size:14px;
     color:#797b8e;
     height: 30px;
     line-height: 24px;
 }
-.dapp .el-date-editor .el-range-separator{
+.dapp1 .el-date-editor .el-range-separator{
     line-height: 24px;
 }
-.dapp .el-input__inner:hover{
+.dapp1 .el-input__inner:hover{
     border-color:#f7f8fa;
 }
-.dapp .el-pager li.active{
+.dapp1 .el-pager li.active{
     color:rgb(73,165,251);
 }
 .el-pager li:hover{
     color:#49a5fb;
 }
-.dapp .el-pagination{
+.dapp1 .el-pagination{
     font-weight:400;
 }
 </style>

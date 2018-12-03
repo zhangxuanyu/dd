@@ -59,7 +59,8 @@
                                   <td class="all">
                                     <a :href="'https://explorer.nebulas.io/#/address/'+item" v-if="arr.platform == 'NAS'" target="_black" rel="noopener noreferrer">{{item}}</a>
                                     <a :href="'https://etherscan.io/address/'+item" v-if="arr.platform == 'ETH'" target="_black" rel="noopener noreferrer">{{item}}</a>
-                                    <a :href="'https://eospark.com/MainNet/account/'+item" v-if="arr.platform == 'EOS'" target="_black" rel="noopener noreferrer">{{item}}</a>  
+                                    <a :href="'https://eospark.com/MainNet/account/'+item" v-if="arr.platform == 'EOS'" target="_black" rel="noopener noreferrer">{{item}}</a> 
+                                    <a :href="'https://tronscan.org/#/contract/'+item" v-if="arr.platform == 'TRON'" target="_black" rel="noopener noreferrer">{{item}}</a>   
                                   </td>
                               </tr>
                           </table>
@@ -268,7 +269,8 @@ export default {
       this.usearr = [];
       this.allarr = [];
       console.log(this.$store.state.moneyty, this.$store.state.requesttime);
-      var url =
+      if(this.$store.state.appid.split("_")[0]=='ETH'||this.$store.state.appid.split("_")[0]=='EOS'||this.$store.state.appid.split("_")[0]=='NAS'){
+        var url =
         this.$store.state.requrl +
         "/" +
         this.$store.state.appid.split("_")[0].toLowerCase() +
@@ -309,6 +311,48 @@ export default {
         }
         this.$store.commit("changeloadopacty", false);
       });
+      }else{
+        var url =
+        this.$store.state.requrlnew +
+        "/dapp/detail";
+      console.log(url);
+      Axios.post(
+        url,
+        {
+          blockchain:this.$store.state.appid.split("_")[0].toLowerCase(),
+          dapp_id:this.$store.state.appid
+        },
+        {
+          headers: { "Content-Type": "application/x-www-form-urlencoded" }
+        }
+      ).then(res => {
+        setTimeout(() => {
+          this.picshow = true;
+        }, 1000);
+        console.log(res.data.msg);
+        this.arr = res.data.msg;
+        this.urlid = res.data.msg.dapp_id;
+        res.data.msg.day_30.forEach(e => {
+          var ddd = new Date(e.timestamp * 1000 - 86400000);
+          var year = ddd.getFullYear();
+          var month = ddd.getMonth() + 1;
+          var day = ddd.getDate();
+          this.xarr.unshift(year + "/" + month + "/" + day);
+          this.userarr.unshift(e.day_info[0]);
+          this.tradearr.unshift(e.day_info[2].toFixed(2) - 0);
+          this.usearr.unshift(e.day_info[1]);
+          this.allarr.unshift(e.rank_order);
+        });
+        if (this.arr.platform == "NAS") {
+          this.theurl =
+            "https://explorer.nebulas.io/#/address/" + this.arr.contracts[0];
+        } else if (this.arr.platform == "ETH") {
+          this.theurl = "https://etherscan.io/address/" + this.arr.contracts[0];
+        }
+        this.$store.commit("changeloadopacty", false);
+      });
+      }
+      
     }
   }
 };

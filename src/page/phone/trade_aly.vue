@@ -156,8 +156,8 @@ export default {
         ["交易量", "Volume"],
         ["交易数据", "Transaction Data"],
         ["用户分析", "User Analysis"],
-        ["开始时间", "begin time"],
-        ["结束时间", "end time"],
+        ["开始时间", "Begin Time"],
+        ["结束时间", "End Time"],
         ["确定", "confirm"]
       ],
       titlearr:[['日期','Date'],['当日交易笔数','Daily Transactions'],['总交易笔数','Transactions'], ['增长率','Growth Rate']],

@@ -20,7 +20,7 @@
                     <td class="title all hhvv cur" @click="gotodetail(item.dapp_id)" :style="index == arr.length -1 ?{border:'none'}:''"><div class="ttimg"><img :src="'https://bkc-dapp-1252899312.cos.ap-hongkong.myqcloud.com/dappdata/static/icon/'+item.dapp_id+'.jpg'" alt="" onerror="javascript:this.src='../../static/all1.png'" style="width:26px;height:26px;position:absolute;"></div>{{item.title[$store.state.alllang]}}</td>
                     <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{conversion(item.total_call.toString())}}</td>
                     <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{conversion(item.day_call.toString())}}</td>
-                    <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{conversion(item.call_rate.toFixed(2))}}%</td>
+                    <td class="title all" :style="index == arr.length -1 ?{border:'none'}:''">{{conversion((item.call_rate*100).toFixed(2))}}%</td>
                     <td class="title all" :style="index == arr.length -1 ?{border:'none',textTransform:'capitalize'}:{textTransform:'capitalize'}">{{item.category}}</td>
                 </tr>
             </table>
@@ -62,9 +62,9 @@ export default {
                     arr:[],
                     currentPage1: 1,
                     //请求数组
-                    reqarr:['eth','eos','nas'],
+                    reqarr:['eth','eos','nas','tron'],
                     reqAarr:['ETH','EOS','NAS'],
-                    allmoney:[['total','exchanges','games','high-risk','marketplaces','gambling','other'],['total','game','tool','exchange','marketplaces','gambling','high-risk','other'],['total','Game','Tool','Market','Other']],
+                    allmoney:[['total','exchanges','games','high-risk','marketplaces','gambling','other'],['total','game','tool','exchange','marketplaces','gambling','high-risk','other'],['total','Game','Tool','Market','Other'],['total','Gambling','Games','Other']],
                     all:'',
                     theleft:'280px',
                     stylearr:['','','100px','','','',''],
@@ -159,22 +159,65 @@ export default {
                 fornew(){
                     this.all = []
                     this.arr = ''
-                    console.log(this.$store.state.moneyty,this.$store.state.requesttime)
-                    var url = this.$store.state.requrl+'/'+this.reqarr[this.$store.state.moneyty]+'/rank';
-                    Axios.post(url,{
-                                        "page":this.currentPage1,
-                                        "timestamp":this.$store.state.requesttime/1000+86400,
-                                        "order_by":'call',
-                                        "num":this.pagesize,
-                                        "category":this.allmoney[this.$store.state.moneyty][this.$store.state.dapptype]
-                                    },{
-                                        headers: {'Content-Type': "application/x-www-form-urlencoded"}
-                                    }).then(res => {
-                                        console.log(res.data.msg)
-                                        this.all = res.data.msg.count
-                                        this.arr = res.data.msg.data.data
-                                        this.$store.commit('changeloadopacty',false)
-                                    })
+                    // console.log(this.$store.state.moneyty,this.$store.state.requesttime)
+                    // var url = this.$store.state.requrl+'/'+this.reqarr[this.$store.state.moneyty]+'/rank';
+                    // Axios.post(url,{
+                    //                     "page":this.currentPage1,
+                    //                     "timestamp":this.$store.state.requesttime/1000+86400,
+                    //                     "order_by":'call',
+                    //                     "num":this.pagesize,
+                    //                     "category":this.allmoney[this.$store.state.moneyty][this.$store.state.dapptype]
+                    //                 },{
+                    //                     headers: {'Content-Type': "application/x-www-form-urlencoded"}
+                    //                 }).then(res => {
+                    //                     console.log(res.data.msg)
+                    //                     this.all = res.data.msg.count
+                    //                     this.arr = res.data.msg.data.data
+                    //                     this.$store.commit('changeloadopacty',false)
+                    //                 })
+
+
+                    if(this.$store.state.moneyty <= 2){
+                        var url =  this.$store.state.requrl+'/'+this.reqarr[this.$store.state.moneyty]+'/rank';
+                        Axios.post(url,{
+                                            "page":this.currentPage1,
+                                            "timestamp":this.$store.state.requesttime/1000+86400,
+                                            "order_by":'call',
+                                            "num":this.pagesize,
+                                            "category":this.allmoney[this.$store.state.moneyty][this.$store.state.dapptype]
+                                        },{
+                                            headers: {'Content-Type': "application/x-www-form-urlencoded"}
+                                        }).then(res => {
+                                            console.log(res.data.msg)
+                                            this.all = res.data.msg.count
+                                            this.arr = res.data.msg.data.data
+                                            // this.rankarr(1,'rank_order')
+                                            
+                                            this.$store.commit('changeloadopacty',false)
+                                        })
+
+                    }else if(this.$store.state.moneyty == 3){
+                        var url =  this.$store.state.requrlnew+'/dapp/rank';
+                        Axios.post(url,{
+                                            "blockchain": this.reqarr[this.$store.state.moneyty],
+                                            "timestamp": this.$store.state.requesttime/1000,
+                                            "order": "total_call",
+                                            "category": this.allmoney[this.$store.state.moneyty][this.$store.state.dapptype],
+                                            "page_num": this.currentPage1,
+                                            "page_size": this.pagesize,
+                                            "rank": "call",
+                                            "stat": -1
+                                        },{
+                                            headers: {'Content-Type': "application/x-www-form-urlencoded"}
+                                        }).then(res => {
+                                            console.log(res.data.msg)
+                                            this.all = res.data.msg.count
+                                            this.arr = res.data.msg.data
+                                            // this.rankarr(1,'rank_order')
+                                           
+                                            this.$store.commit('changeloadopacty',false)
+                                        })
+                    }
                 }
             }
 }

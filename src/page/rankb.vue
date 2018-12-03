@@ -74,10 +74,10 @@ export default {
                     // 排序功能控制数组 
                     ranknum:[-1,-1,0,0,0,0,-1],
                     arr:[],
-                    allmoney:[['total','exchanges','games','high-risk','marketplaces','gambling','other'],['total','game','tool','exchange','marketplaces','gambling','high-risk','other'],['total','Game','Tool','Market','Other']],
+                    allmoney:[['total','exchanges','games','high-risk','marketplaces','gambling','other'],['total','game','tool','exchange','marketplaces','gambling','high-risk','other'],['total','Game','Tool','Market','Other'],['total','Gambling','Games','Other']],
                     currentPage1: 1,
                      //请求数组
-                    reqarr:['eth','eos','nas'],
+                    reqarr:['eth','eos','nas','tron'],
                     reqAarr:['ETH','EOS','NAS'],
                     stylearr:['','','100px','','','',''],
                     all:'',
@@ -195,30 +195,61 @@ export default {
                     this.arr = ''
                     this.picfalt = false
                     console.log(this.$store.state.moneyty,this.$store.state.requesttime)
-                    var url =  this.$store.state.requrl+'/'+this.reqarr[this.$store.state.moneyty]+'/rank';
-                    Axios.post(url,{
-                                        "page":this.currentPage1,
-                                        "timestamp":this.$store.state.requesttime/1000+86400,
-                                        "order_by":'total',
-                                        "num":this.pagesize,
-                                        "category":this.allmoney[this.$store.state.moneyty][this.$store.state.dapptype]
-                                    },{
-                                        headers: {'Content-Type': "application/x-www-form-urlencoded"}
-                                    }).then(res => {
-                                        console.log(res.data.msg)
-                                        this.all = res.data.msg.count
-                                        this.arr = res.data.msg.info
-                                        // this.rankarr(1,'rank_order')
-                                        setTimeout(()=>{
-                                            $('.picfalse').each((a)=>{
-                                                if($('.picfalse').eq(a)[0].children[0].src.indexOf('jpg')!=-1){
-                                                    $('.picfalse').eq(a)[0].children[1].style.width = '0px'
-                                                }
-                                            })
-                                            this.picfalt = true
-                                        },1000)
-                                        this.$store.commit('changeloadopacty',false)
-                                    })
+                    if(this.$store.state.moneyty <= 2){
+                        var url =  this.$store.state.requrl+'/'+this.reqarr[this.$store.state.moneyty]+'/rank';
+                        Axios.post(url,{
+                                            "page":this.currentPage1,
+                                            "timestamp":this.$store.state.requesttime/1000+86400,
+                                            "order_by":'total',
+                                            "num":this.pagesize,
+                                            "category":this.allmoney[this.$store.state.moneyty][this.$store.state.dapptype]
+                                        },{
+                                            headers: {'Content-Type': "application/x-www-form-urlencoded"}
+                                        }).then(res => {
+                                            console.log(res.data.msg)
+                                            this.all = res.data.msg.count
+                                            this.arr = res.data.msg.info
+                                            // this.rankarr(1,'rank_order')
+                                            setTimeout(()=>{
+                                                $('.picfalse').each((a)=>{
+                                                    if($('.picfalse').eq(a)[0].children[0].src.indexOf('jpg')!=-1){
+                                                        $('.picfalse').eq(a)[0].children[1].style.width = '0px'
+                                                    }
+                                                })
+                                                this.picfalt = true
+                                            },1000)
+                                            this.$store.commit('changeloadopacty',false)
+                                        })
+
+                    }else if(this.$store.state.moneyty == 3){
+                        var url =  this.$store.state.requrlnew+'/dapp/rank';
+                        Axios.post(url,{
+                                            "blockchain": this.reqarr[this.$store.state.moneyty],
+                                            "timestamp": this.$store.state.requesttime/1000,
+                                            "order": "active_user",
+                                            "category": this.allmoney[this.$store.state.moneyty][this.$store.state.dapptype],
+                                            "page_num": this.currentPage1,
+                                            "page_size": this.pagesize,
+                                            "rank": "total",
+                                            "stat": -1
+                                        },{
+                                            headers: {'Content-Type': "application/x-www-form-urlencoded"}
+                                        }).then(res => {
+                                            console.log(res.data.msg)
+                                            this.all = res.data.msg.count
+                                            this.arr = res.data.msg.data
+                                            // this.rankarr(1,'rank_order')
+                                            setTimeout(()=>{
+                                                $('.picfalse').each((a)=>{
+                                                    if($('.picfalse').eq(a)[0].children[0].src.indexOf('jpg')!=-1){
+                                                        $('.picfalse').eq(a)[0].children[1].style.width = '0px'
+                                                    }
+                                                })
+                                                this.picfalt = true
+                                            },1000)
+                                            this.$store.commit('changeloadopacty',false)
+                                        })
+                    }
                 }
             }
 }
