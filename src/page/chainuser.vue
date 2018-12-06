@@ -20,12 +20,11 @@
                     </span>
             </p>
             <!-- 新用户数图表 -->
-            <div class="dapp">
-                <div style="padding-top:5px;"><span style="float:left;color: #212229;font-weight: 600;margin-bottom:30px;">{{typearr1[0][$store.state.alllang]}}</span> 
-                    
-                    
+           <div class="dapp">
+                <div style="padding-top:5px;"><span style="float:left;color: #212229;font-weight: 600;margin-bottom:30px;">{{typearr1[3][$store.state.alllang]}}</span> 
+              
                 </div>
-                <div id="totaluser"  style="min-width:500px;height:500px;"></div>
+                <div id="activeuser"  style="min-width:500px;height:500px;"></div>
 
                 
             </div>
@@ -40,14 +39,17 @@
                 
             </div>
 
-            <div class="dapp">
-                <div style="padding-top:5px;"><span style="float:left;color: #212229;font-weight: 600;margin-bottom:30px;">{{typearr1[3][$store.state.alllang]}}</span> 
-              
+             <div class="dapp">
+                <div style="padding-top:5px;"><span style="float:left;color: #212229;font-weight: 600;margin-bottom:30px;">{{typearr1[0][$store.state.alllang]}}</span> 
+                    
+                    
                 </div>
-                <div id="activeuser"  style="min-width:500px;height:500px;"></div>
+                <div id="totaluser"  style="min-width:500px;height:500px;"></div>
 
                 
             </div>
+
+            
             
 
 
@@ -140,7 +142,7 @@ export default {
                     },
                     titlearr:[[' ',' '],['日期','Date'],['累计用户','Total User'],['新增用户','New user'],['活跃用户','Active User']],
                     arr:[],
-                    ttarr:[['用户分析','User Analysis'],['时间段','Period'],['新增用户','New User'],['活跃用户','Active User'],['用户分析','User Analysis']],
+                    ttarr:[['用户分析','User Data'],['时间段','Period'],['新增用户','New User'],['活跃用户','Active User'],['用户分析','User Analysis']],
                     currentPage1:1,
                     //伸展宽度
                     open:'',

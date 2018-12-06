@@ -19,9 +19,6 @@ export default {
         {
           word: ["用户分析", "User"]
         },
-        {
-          word: ["交易数据", "Transaction Data"]
-        },
         { word: ["合约调用", "Transactions"] }
       ],
       select:0

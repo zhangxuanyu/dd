@@ -16,7 +16,7 @@
                     :key="index"
                     @click="rankdata(index)"
                     >
-                        {{item[$store.state.alllang]}}  
+                       <span>{{item[$store.state.alllang]}}</span>  <span v-if="index == 4" style="font-weight:400;color:#797b8e;">({{reqAarr[$store.state.moneyty]}})</span>  
                         <img :src="rankpic_arr[ranknum[index]]" alt="" style="width:6px;height:12px;vertical-align: -1px;margin-left:6px;" v-if="rankpic_arr[ranknum[index]]" >
                     </th>
                 </tr>
@@ -78,7 +78,7 @@ export default {
                     currentPage1: 1,
                      //请求数组
                     reqarr:['eth','eos','nas','tron'],
-                    reqAarr:['ETH','EOS','NAS'],
+                    reqAarr:['ETH','EOS','NAS','TRON'],
                     stylearr:['','','100px','','','',''],
                     all:'',
                     theleft:'280px',
@@ -334,8 +334,12 @@ table td{
     background-color: #fafbfc;
 }
 
-.hhvv:hover{
-    color: #409efe;
+.hhvv {
+  color: #409efe;
+  font-weight: 600;
+}
+.hhvv:hover {
+  color: rgb(34,48,74);
 }
 .mgt{
     position: absolute;

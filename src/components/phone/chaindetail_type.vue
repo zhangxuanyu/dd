@@ -25,9 +25,6 @@ export default {
             word: ["交易数据", "Transaction Data"]
         },
         { 
-            word: ["合约调用", "Transactions"] 
-        },
-        { 
             word: ["Dapp数据", "Dapp Data"] 
         }
       ],
@@ -55,12 +52,14 @@ export default {
           this.select = 1
       }else if(this.$route.path == '/chaintrade'){
           this.select = 2
-      }else if(this.$route.path == '/chainusedapp'){
-          this.select = 3
-          $("#target").scrollLeft(100);
-      }else if(this.$route.path == '/chaindapp'){
-        this.select = 4
-        $("#target").scrollLeft(200);
+      }
+    //   else if(this.$route.path == '/chainusedapp'){
+    //       this.select = 3
+    //       $("#target").scrollLeft(100);
+    //   }
+      else if(this.$route.path == '/chaindapp'){
+        this.select = 3
+        $("#target").scrollLeft(100);
           
           
       }
@@ -79,7 +78,8 @@ export default {
           }else if(index == 2){
               this.$router.push({ path: "/chaintrade?id=" + this.$store.state.appid });
           }else if(index == 3){
-              this.$router.push({ path: "/chainusedapp?id=" + this.$store.state.appid });
+              this.$router.push({ path: "/chaindapp?id=" + this.$store.state.appid });
+            //   this.$router.push({ path: "/chainusedapp?id=" + this.$store.state.appid });
           }else if(index == 4){
               this.$router.push({ path: "/chaindapp?id=" + this.$store.state.appid });
           }

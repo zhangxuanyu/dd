@@ -303,8 +303,12 @@ table td{
     background-color: #f9f9f9;
 }
 
-.hhvv:hover{
-    color: #409efe;
+.hhvv {
+  color: #409efe;
+  font-weight: 600;
+}
+.hhvv:hover {
+  color: rgb(34,48,74);
 }
 .mgt{
     position: absolute;

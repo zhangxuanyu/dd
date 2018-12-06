@@ -23,19 +23,41 @@
        
 
 
-        <p class="preview right">
+        <!-- <p class="preview right">
             <span style="margin-right:0.14rem;font-size:0.26rem;margin-top: 0.15rem;float:left;color: #797b8e;">{{toparr[0][$store.state.alllang]}}</span>
             <el-select v-model="type"   class="top_right"  style="float:left">
                 <el-option :key="index" :label="item[$store.state.alllang]" :value="index" v-for="(item,index) in typearr1">{{item[$store.state.alllang]}}</el-option>
             </el-select>
-        </p> 
+        </p>  -->
+        <p style="font-size:0.4rem;margin-bottom:0.2rem;text-align:left;margin-top:0.2rem;">{{typearr1[2][$store.state.alllang]}}</p>
         <div style="padding:0.8rem 0.4rem 0.5rem 0.4rem;background-color:#FFF;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
             <div class="picture">   
             <div class="mychart" id="newuser"></div>
             </div>  
         </div>
 
+        <p style="font-size:0.4rem;margin-bottom:0.2rem;text-align:left;margin-top:0.2rem;">{{typearr1[3][$store.state.alllang]}}</p>
+        <div style="padding:0.8rem 0.4rem 0.5rem 0.4rem;background-color:#FFF;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
+            <div class="picture">   
+            <div class="mychart" id="activeuser"></div>
+            </div>  
+        </div>
 
+        <p style="font-size:0.4rem;margin-bottom:0.2rem;text-align:left;margin-top:0.2rem;">{{typearr1[4][$store.state.alllang]}}</p>
+        <div style="padding:0.8rem 0.4rem 0.5rem 0.4rem;background-color:#FFF;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
+            <div class="picture">   
+            <div class="mychart" id="transe"></div>
+            </div>  
+        </div>
+
+        <p style="font-size:0.4rem;margin-bottom:0.2rem;text-align:left;margin-top:0.2rem;">{{typearr1[5][$store.state.alllang]}}</p>
+        <div style="padding:0.8rem 0.4rem 0.5rem 0.4rem;background-color:#FFF;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
+            <div class="picture">   
+            <div class="mychart" id="vol"></div>
+            </div>  
+        </div>
+
+        <p style="font-size:0.4rem;margin-bottom:0.2rem;text-align:left;margin-top:0.2rem;">{{ttarr[8][$store.state.alllang]}}</p>
         <div style="padding:0.4rem;background-color:#FFF;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
         <div class="tableout">
             <ul class="table">
@@ -67,7 +89,7 @@
                         {{conversion(it.dapp_call.toString())}}
                     </div>
                     <div class="all" v-if="index == 7&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr">
-                        {{conversion(it.dapp_vol.toString())}}
+                        {{conversion(it.dapp_vol.toFixed(3))}}
                     </div>
                     
                 </li>
@@ -119,7 +141,8 @@ export default {
         ["用户分析", "User Analysis"],
         ["开始时间", "Begin Time"],
         ["结束时间", "End Time"],
-        ["确定", "Confirm"]
+        ["确定", "Confirm"],
+        ["Dapp数据", "Dapp Data"]
       ],
       titlearr:[['',''],['日期','Date'],['Dapp数量','Dapp Num'],['用户数量','User Num'],['新增用户','New User'],['活跃用户','Active User'], ['调用次数','Transactions'], ['交易量','Volume']],
       date: "",
@@ -139,7 +162,7 @@ export default {
       thepagesize:10,
       thepage:1,
       toparr:[['分类','Other'],['上一页','pre'],['下一页','next'],['第','page'],['页','']],
-      typearr1:[['Dapp数量','Dapp Num'],['用户数量','User Num'],['新增用户','New user'],['活跃用户','Active User'], ['调用次数','Transactions'], ['交易量','Volume']],
+      typearr1:[['Dapp数量','Dapp Num'],['用户数量','User Num'],['新增用户','New User'],['活跃用户','Active User'], ['调用次数','Transactions'], ['交易量','Volume']],
       timevalue:'',
       timevalue1:'',
       type:1
@@ -260,9 +283,30 @@ export default {
         this.drawuser1(
           "newuser",
           this.xarr,
-          this.newarr[this.type],
-          this.typearr1[this.type][this.$store.state.alllang],
+          this.newarr[2],
+          this.typearr1[2][this.$store.state.alllang],
           "newuser"
+        );
+        this.drawuser1(
+          "activeuser",
+          this.xarr,
+          this.newarr[3],
+          this.typearr1[3][this.$store.state.alllang],
+          "activeuser"
+        );
+        this.drawuser1(
+          "transe",
+          this.xarr,
+          this.newarr[4],
+          this.typearr1[4][this.$store.state.alllang],
+          "transe"
+        );
+        this.drawuser1(
+          "vol",
+          this.xarr,
+          this.newarr[5],
+          this.typearr1[5][this.$store.state.alllang],
+          "vol"
         );
       }, 1000);
     },
@@ -472,7 +516,7 @@ input{
     overflow-x: scroll;
 }
 .table{
-    width: 20rem;
+    width: 21rem;
 }
 .table li{
     float: left;

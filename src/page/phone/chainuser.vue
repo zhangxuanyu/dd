@@ -23,19 +23,34 @@
        
 
 
-        <p class="preview right">
+        <!-- <p class="preview right">
             <span style="margin-right:0.14rem;font-size:0.26rem;margin-top: 0.15rem;float:left;color: #797b8e;">{{toparr[0][$store.state.alllang]}}</span>
             <el-select v-model="type"   class="top_right"  style="float:left">
                 <el-option :key="index" :label="item[$store.state.alllang]" :value="index" v-for="(item,index) in typearr1">{{item[$store.state.alllang]}}</el-option>
             </el-select>
-        </p> 
+        </p>  -->
+        <p style="font-size:0.4rem;margin-bottom:0.2rem;text-align:left;margin-top:0.2rem;">{{ typearr1[3][$store.state.alllang]}}</p>
+        <div style="padding:0.8rem 0.4rem 0.5rem 0.4rem;background-color:#FFF;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
+            <div class="picture">   
+            <div class="mychart" id="activeuser"></div>
+            </div>  
+        </div>
+
+        <p style="font-size:0.4rem;margin-bottom:0.2rem;text-align:left;margin-top:0.2rem;">{{typearr1[1][$store.state.alllang]}}</p>
         <div style="padding:0.8rem 0.4rem 0.5rem 0.4rem;background-color:#FFF;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
             <div class="picture">   
             <div class="mychart" id="newuser"></div>
             </div>  
         </div>
 
+        <p style="font-size:0.4rem;margin-bottom:0.2rem;text-align:left;margin-top:0.2rem;">{{typearr1[0][$store.state.alllang]}}</p>
+        <div style="padding:0.8rem 0.4rem 0.5rem 0.4rem;background-color:#FFF;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
+            <div class="picture">   
+            <div class="mychart" id="totaluser"></div>
+            </div>  
+        </div>
 
+         <p style="font-size:0.4rem;margin-bottom:0.2rem;text-align:left;margin-top:0.2rem;">{{ttarr[8][$store.state.alllang]}}</p>
         <div style="padding:0.4rem;background-color:#FFF;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
         <div class="tableout">
             <ul class="table">
@@ -57,15 +72,11 @@
                     <div class="all" v-if="index == 3&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr">
                         {{conversion(it.chain_new_user.toString())}}
                     </div>
+                   
                     <div class="all" v-if="index == 4&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr">
-                        {{conversion((it.chain_new_user_rate*100).toFixed(2))}}%
-                    </div>
-                    <div class="all" v-if="index == 5&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr">
                         {{conversion(it.chain_active_user.toString())}}
                     </div>
-                    <div class="all" v-if="index == 6&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr">
-                        {{conversion((it.chain_active_rate*100).toFixed(2))}}%
-                    </div>
+                    
                     
                 </li>
             </ul>
@@ -116,9 +127,10 @@ export default {
         ["用户分析", "User Analysis"],
         ["开始时间", "Begin Time"],
         ["结束时间", "End Time"],
-        ["确定", "Confirm"]
+        ["确定", "Confirm"],
+         ["用户数据", "User Data"]
       ],
-      titlearr:[[' ',' '],['日期','Date'],['累计用户','Total User'],['新增用户','New user'],['增长率','Growth Rate'],['活跃用户','Active User'], ['活跃度','Active Rate']],
+      titlearr:[[' ',' '],['日期','Date'],['累计用户','Total User'],['新增用户','New user'],['活跃用户','Active User']],
       date: "",
       pickerValue: "",
       pickerValue1: "",
@@ -255,11 +267,25 @@ export default {
     drawall() {
       setTimeout(() => {
         this.drawuser1(
+          "activeuser",
+          this.xarr,
+          this.newarr[3],
+          this.typearr1[3][this.$store.state.alllang],
+          "activeuser"
+        );
+        this.drawuser1(
           "newuser",
           this.xarr,
-          this.newarr[this.type],
-          this.typearr1[this.type][this.$store.state.alllang],
+          this.newarr[1],
+          this.typearr1[1][this.$store.state.alllang],
           "newuser"
+        );
+        this.drawuser1(
+          "totaluser",
+          this.xarr,
+          this.newarr[0],
+          this.typearr1[0][this.$store.state.alllang],
+          "totaluser"
         );
       }, 1000);
     },

@@ -20,13 +20,18 @@
           </div>
         </div>
         
-        <p class="preview">{{ttarr[0][$store.state.alllang]}}</p>  
-         
-         <div style="padding:0.8rem 0.4rem 0.5rem 0.4rem;background-color:#FFF;margin-bottom:0.8rem;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
+       
+        
+         <p class="preview">{{ttarr[3][$store.state.alllang]}}</p> 
+
+        <div style="padding:0.8rem 0.4rem 0.5rem 0.4rem;background-color:#FFF;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
         <div class="picture">   
-          <div class="mychart" id="alluser"></div>
+          <div class="mychart" id="actuser"></div>
         </div>
         </div>
+
+
+
 
 
          <p class="preview">{{ttarr[2][$store.state.alllang]}}</p> 
@@ -37,6 +42,17 @@
         </div>
 
 
+        <!-- 活跃用户 -->
+         <p class="preview">{{ttarr[0][$store.state.alllang]}}</p>  
+         
+         <div style="padding:0.8rem 0.4rem 0.5rem 0.4rem;background-color:#FFF;margin-bottom:0.8rem;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
+        <div class="picture">   
+          <div class="mychart" id="alluser"></div>
+        </div>
+        </div>
+
+
+        <p class="preview">{{ttarr[8][$store.state.alllang]}}</p>  
         <div style="padding:0.4rem;background-color:#FFF;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
         <div class="tableout">
             <ul class="table">
@@ -46,6 +62,7 @@
                     </div>
 
 
+
                     <div class="all" v-if="index == 0&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr" :key="idx" >
                        {{timeuse(it.timestamp-68400)}}
                     </div>
@@ -53,13 +70,16 @@
                        {{conversion(it.new_user.toString())}}
                     </div>
                     <div class="all" v-if="index == 2&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr" :key="idx">
-                        {{conversion((it.new_rate*100).toFixed(2))}}%
+                        {{conversion(it.active_user.toString())}}
                     </div>
                     <div class="all" v-if="index == 3&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr" :key="idx">
-                        {{conversion(it.total_user.toString())}}
+                        {{conversion(it.week_user.toString())}}
                     </div>
-                    <div class="all" v-if="index == 4&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr" :key="idx">
-                        {{conversion((it.new_user_ratio*100).toFixed(2))}}%
+                     <div class="all" v-if="index == 4&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr" :key="idx">
+                        {{conversion(it.month_user.toString())}}
+                    </div>
+                    <div class="all" v-if="index == 5&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr" :key="idx">
+                        {{conversion(it.total_user.toString())}}
                     </div>
                     
                 </li>
@@ -84,75 +104,8 @@
                 <span>{{toparr[4][$store.state.alllang]}}</span>
             </p>
         </div>
-        <!-- 活跃用户 -->
-        <p class="preview">{{ttarr[3][$store.state.alllang]}}</p> 
 
-        <div style="padding:0.8rem 0.4rem 0.5rem 0.4rem;background-color:#FFF;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
-        <div class="picture">   
-          <div class="mychart" id="actuser"></div>
-        </div>
-        </div>
-
-         <div style="padding:0.4rem;background-color:#FFF;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
-        <div class="tableout">
-            <ul class="table">
-                <li v-for="(item,index) in titlearr1" :key="index">
-                    <div  class="all titletop" :style="index == 1?{textAlign:'left'}:{}">
-                        {{item[$store.state.alllang]}} 
-                    </div>
-
-
-                    <div class="all" v-if="index == 0&&idx<thepage1*thepagesize&&idx>=(thepage1-1)*thepagesize" v-for="(it,idx) in arr" :key="idx" >
-                       {{timeuse(it.timestamp-86400)}}
-                    </div>
-                    <div class="all" v-if="index == 1&&idx<thepage1*thepagesize&&idx>=(thepage1-1)*thepagesize" v-for="(it,idx) in arr" :key="idx" >
-                       {{conversion(it.active_user.toString())}}
-                    </div>
-                    <div class="all" v-if="index == 2&&idx<thepage1*thepagesize&&idx>=(thepage1-1)*thepagesize" v-for="(it,idx) in arr" :key="idx">
-                        {{conversion((it.day_rate*100).toFixed(2))}}%
-                    </div>
-                    <div class="all" v-if="index == 3&&idx<thepage1*thepagesize&&idx>=(thepage1-1)*thepagesize" v-for="(it,idx) in arr" :key="idx">
-                        {{conversion(it.week_user.toString())}}
-                    </div>
-                    <div class="all" v-if="index == 4&&idx<thepage1*thepagesize&&idx>=(thepage1-1)*thepagesize" v-for="(it,idx) in arr" :key="idx">
-                        {{conversion((it.week_rate*100).toFixed(2))}}%
-                    </div>
-                    <div class="all" v-if="index == 5&&idx<thepage1*thepagesize&&idx>=(thepage1-1)*thepagesize" v-for="(it,idx) in arr" :key="idx">
-                       {{conversion(it.month_user.toString())}}
-                    </div>
-                    <div class="all" v-if="index == 6&&idx<thepage1*thepagesize&&idx>=(thepage1-1)*thepagesize" v-for="(it,idx) in arr" :key="idx">
-                        {{conversion((it.month_rate*100).toFixed(2))}}%
-                    </div>
-                    <div class="all" v-if="index == 7&&idx<thepage1*thepagesize&&idx>=(thepage1-1)*thepagesize" v-for="(it,idx) in arr" :key="idx">
-                        {{conversion(it.lost_user.toString())}}
-                    </div>
-                    <div class="all" v-if="index == 8&&idx<thepage1*thepagesize&&idx>=(thepage1-1)*thepagesize" v-for="(it,idx) in arr" :key="idx">
-                        {{conversion((it.lost_rate*100).toFixed(2))}}%
-                    </div>
-                    
-                </li>
-            </ul>
-           
-        </div>
-        </div>
-
-
-
-        <div class="botpage">
-            <div class="pre" @click="runpage1(-1)" v-if="thepage1>1">
-                {{toparr[1][$store.state.alllang]}}
-            </div>
-            <div class="pre" @click="runpage1(1)" v-if="thepage1<Math.ceil(arr.length/thepagesize)">
-                {{toparr[2][$store.state.alllang]}}
-            </div>
-            <p class="rightpage">
-                <span>{{toparr[3][$store.state.alllang]}}</span>     
-                <el-select v-model="thepage1"   class="top_right"  v-if="arr.length">
-                        <el-option :key="index" :label="item" :value="item" v-for="(item,index) in Math.ceil(arr.length/thepagesize)" >{{item}}</el-option>
-                    </el-select>
-                <span>{{toparr[4][$store.state.alllang]}}</span>
-            </p>
-        </div>
+       
 
         
     </div>
@@ -173,16 +126,17 @@ export default {
     return {
       value7: "",
       ttarr: [
-        ["累计用户", "Users"],
+        ["累计用户", "Total Users"],
         ["时间段", "Period"],
         ["新增用户", "New users"],
         ["活跃用户", "Active Users"],
         ["用户分析", "User Analysis"],
         ["开始时间", "Begin Time"],
         ["结束时间", "End Time"],
-        ["确定", "confirm"]
+        ["确定", "confirm"],
+        ["用户数据", "User Data"]
       ],
-      titlearr:[['日期','Date'],['新增用户','New users'],['增长率','Growth Rate'], ['累计用户','Users'],['新增用户占总用户比','New Users(Rate)']],
+      titlearr:[['日期','Date'],['新增用户','New users'],['日活跃','DAU'], ['周活跃用户','WAU'],['月活跃用户','MAU'],['累计用户','Total Users']],
       date: "",
       pickerValue: "",
       pickerValue1: "",
@@ -370,27 +324,11 @@ export default {
               }
             },
             title: {
-              text: this.titlearr[3][this.$store.state.alllang],
+              text: this.titlearr[5][this.$store.state.alllang],
               style: {
                 color: "#409efe"
               }
             }
-          },
-          {
-            // Secondary yAxis
-            title: {
-              text: this.titlearr[2][this.$store.state.alllang],
-              style: {
-                color: "#00e175"
-              }
-            },
-            labels: {
-              format: "{value}%",
-              style: {
-                color: "#00e175"
-              }
-            },
-            opposite: true
           }
         ],
         tooltip: {
@@ -398,16 +336,9 @@ export default {
         },
         series: [
           {
-            name: this.titlearr[3][this.$store.state.alllang],
+            name: this.titlearr[5][this.$store.state.alllang],
             data: arr2,
             type: "spline"
-          },
-          {
-            //纵坐标
-            name: this.titlearr[2][this.$store.state.alllang],
-            data: arr3,
-            type: "spline",
-            yAxis: 1
           }
         ]
       };

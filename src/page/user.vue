@@ -2,7 +2,7 @@
     <div class="out" :style="{minHeight:geth,marginLeft:mglf}">
         <min-menu class="leftme" :style="{left:open}"></min-menu>
         <p class="alltitle dapp1"><span style="margin-top: -10px;margin-bottom: 30px;">
-            <el-date-picker v-model="value7" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions2" style="float:right;"></el-date-picker>
+            <el-date-picker v-model="value7" type="daterange" align="right" unlink-panels range-separator="--" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions2" style="float:right;"></el-date-picker>
             <span style="margin-right:10px;font-size: 14px;color: #797b8e;float:left;margin-top:8px;float:right;">{{ttarr[1][$store.state.alllang]}}</span>
         </span></p> 
         <div class="contright">
@@ -340,6 +340,9 @@ export default {
 			        subtitle: {
 			            text: ''
                     },
+                    legend: {
+                        enabled: false
+                    },
                     credits: {
                         enabled: false
                     },
@@ -393,6 +396,9 @@ export default {
 			            text: ''
                     },
                     credits: {
+                        enabled: false
+                    },
+                    legend: {
                         enabled: false
                     },
 			        subtitle: {

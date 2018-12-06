@@ -3,31 +3,59 @@
         <chain-Menu class="leftme" :style="{left:open}"></chain-menu>
         <!-- <p class="alltitle">{{ttarr[4][$store.state.alllang]}}</p>  -->
         <div class="contright">
-
-            <!-- 新用户数图表 -->
-            <div class="dapp">
-                <div style="padding-top:5px;"><span style="float:left;color: #212229;font-weight: 600;">{{ttarr[0][$store.state.alllang]}}</span> 
-                    <div class="export" @click="defalutexcle(titlearr,arr)">{{type_exp[1][$store.state.alllang]}}</div>
-                    <span style="float:right;margin-top: -5px;margin-bottom: 30px;" class="type_sel">
+            <!-- <div class="export" @click="defalutexcle(titlearr,arr)">{{type_exp[1][$store.state.alllang]}}</div> -->
+                    <!-- <span style="float:right;margin-top: -5px;margin-bottom: 30px;" class="type_sel">
                         <span style="margin-right:10px;font-size: 14px;color: #797b8e;margin-left:40px;">
                             {{type_exp[0][$store.state.alllang]}}
                         </span>
                         <el-select v-model="typedata"   class="cur" >
                             <el-option :key="index" :label="item[$store.state.alllang]" :value="index" v-for="(item,index) in typearr1">{{item[$store.state.alllang]}}</el-option>
                         </el-select>
-                    </span>
+                    </span> -->
+                <p style="height:15px;" class="dapp1">
                     <span style="float:right;margin-top: -5px;margin-bottom: 30px;"  class="time_sel">
-                        <span style="margin-right:10px;font-size: 14px;color: #797b8e;">
+                        <span style="margin-right:10px;font-size: 14px;color: #797b8e;float:left;margin-top:7px;">
                             {{ttarr[1][$store.state.alllang]}}
                         </span>
                         <el-date-picker v-model="value7" type="daterange" align="right" unlink-panels range-separator="--" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions2"></el-date-picker>
                     </span>
+                </p>
+            <!-- 新用户数图表 -->
+            <div class="dapp">
+                <div style="padding-top:5px;"><span style="float:left;color: #212229;font-weight: 600;margin-bottom:30px;">{{titlearr[4][$store.state.alllang]}}</span> 
+                    
                 </div>
-                <div id="newuser"  style="min-width:500px;height:500px"></div>
+                <div id="newuser"  style="min-width:500px;height:500px"></div>            
+            </div>
 
-                <table  width="100%" cellspacing='0' style="text-align: center;margin-top:100px;">
+             <div class="dapp">
+                <div style="padding-top:5px;"><span style="float:left;color: #212229;font-weight: 600;margin-bottom:30px;">{{titlearr[5][$store.state.alllang]}}</span> 
+                    
+                </div>
+                <div id="activeuser"  style="min-width:500px;height:500px"></div>            
+            </div>
+
+             <div class="dapp">
+                <div style="padding-top:5px;"><span style="float:left;color: #212229;font-weight: 600;margin-bottom:30px;">{{titlearr[6][$store.state.alllang]}}</span> 
+                    
+                </div>
+                <div id="tx"  style="min-width:500px;height:500px"></div>            
+            </div>
+
+             <div class="dapp">
+                <div style="padding-top:5px;"><span style="float:left;color: #212229;font-weight: 600;margin-bottom:30px;">{{titlearr[7][$store.state.alllang]}}({{$store.state.appid=='tron'?'TRX':$store.state.appid.toUpperCase()}})</span> 
+                    
+                </div>
+                <div id="volume"  style="min-width:500px;height:500px"></div>            
+            </div>
+
+            <div class="dapp">
+                <div style="padding-top:5px;"><span style="float:left;color: #212229;font-weight: 600;margin-bottom:30px;">{{ttarr[0][$store.state.alllang]}}</span> 
+                        <div class="export" @click="defalutexcle(titlearr,arr)">{{type_exp[1][$store.state.alllang]}}</div>   
+                    </div>
+                <table  width="100%" cellspacing='0' style="text-align: center;">
                     <tr class="top bg pd">
-                        <th  v-for="(item,index) in titlearr" class="title all topbt" :style="index == titlearr.length -1 ?{borderRight:'1px solid #ebecf0'}:''">{{item[$store.state.alllang]}}</th>
+                        <th  v-for="(item,index) in titlearr" class="title all topbt" :style="index == titlearr.length -1 ?{borderRight:'1px solid #ebecf0'}:''">{{item[$store.state.alllang]}} <span v-if="index == titlearr.length -1" style="font-weight:400;color:#808c9b;">({{$store.state.appid=='tron'?'TRX':$store.state.appid.toUpperCase()}})</span> </th>
                     </tr>
                     <tr class="top pd nbt" v-for="(item,index) in arr" v-if="index>=(currentPage1-1)*10&&index<currentPage1*10" :key="index">
                         <td class="title all" style="width:55px;">{{index+1}}</td>
@@ -37,7 +65,7 @@
                         <td class="title all">{{conversion(item.dapp_new_user.toString())}}</td>
                         <td class="title all">{{conversion(item.dapp_active_user.toString())}}</td>
                         <td class="title all">{{conversion(item.dapp_call.toString())}}</td>
-                        <td class="title all" style="border-right:1px solid #ebecf0;">{{conversion(item.dapp_vol.toString())}}</td>
+                        <td class="title all" style="border-right:1px solid #ebecf0;">{{conversion(item.dapp_vol.toFixed(3))}}</td>
                     </tr>
                 </table>
                 
@@ -225,6 +253,9 @@ export default {
             // this.drawall()
             var newchart = setInterval(()=>{
                 window.newuser.reflow()
+                window.activeuser.reflow()
+                window.tx.reflow()
+                window.volume.reflow()
             },17)
             setTimeout(()=>{
                 clearInterval(newchart)
@@ -279,6 +310,8 @@ export default {
                 }
                 
             });
+
+
             
             //增加\t为了不让表格显示科学计数法或者其他格式
             for(let i = 0 ; i < dataarr.length ; i++ ){
@@ -289,7 +322,7 @@ export default {
                 str+=`${dataarr[i].dapp_new_user.toString()  + '\t'},`; 
                 str+=`${dataarr[i].dapp_active_user.toString() + '\t'},`; 
                 str+=`${dataarr[i].dapp_call.toString() + '\t'},`; 
-                str+=`${(dataarr[i].dapp_vol).toString()  + '\t'},`; 
+                str+=`${(dataarr[i].dapp_vol).toFixed(3)  + '\t'},`; 
 
                 str+='\n';
             }
@@ -300,7 +333,7 @@ export default {
             var link = document.createElement("a");
             link.href = uri;
             //对下载的文件命名
-            link.download = this.typearr1[this.typedata][this.$store.state.alllang] +'.csv';
+            link.download = this.ttarr[0][this.$store.state.alllang] +'.csv';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -315,7 +348,10 @@ export default {
                 },
         drawall(){
                 setTimeout(()=>{
-                    this.drawuser1('newuser',this.xarr,this.newarr[this.typedata],this.typearr1[this.typedata][this.$store.state.alllang],'newuser')
+                    this.drawuser1('newuser',this.xarr,this.newarr[2],this.typearr1[2][this.$store.state.alllang],'newuser')
+                    this.drawuser1('activeuser',this.xarr,this.newarr[3],this.typearr1[3][this.$store.state.alllang],'activeuser')
+                    this.drawuser1('tx',this.xarr,this.newarr[4],this.typearr1[4][this.$store.state.alllang],'tx')
+                    this.drawuser1('volume',this.xarr,this.newarr[5],this.typearr1[5][this.$store.state.alllang],'volume')
                 },1000)
         },
         timeuse(aaa){
@@ -481,6 +517,7 @@ export default {
     margin-top: 30px;
     margin-right: 20px;
     padding: 30px; 
+    padding-bottom: 60px;
     box-sizing: border-box;
     box-shadow: 3px 2px 10px 0px 
 		rgba(37, 48, 76, 0.08);
@@ -538,7 +575,7 @@ export default {
 <style>
 .time_sel .el-range-editor.el-input__inner{
     border-radius: 20px;
-    background-color: #eef2f5;
+    background-color: #fdfdfd;
     height: 30px;
 }
 .time_sel .el-date-editor .el-range-separator{
@@ -549,14 +586,14 @@ export default {
 }
 .type_sel .el-input--suffix .el-input__inner{
     border-radius: 20px;
-    background-color: #eef2f5;
+    background-color: #fdfdfd;
     height: 30px;
 }
 .type_sel .el-input__icon{
     line-height: 30px;
 }
 .el-range-editor .el-range-input{
-    background-color: #eef2f5;
+    background-color: #fdfdfd;
 }
 .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
     width:350px;

@@ -31,9 +31,9 @@
                     </div>{{item.blockchain.toUpperCase()}}</td>
                     <td class="title all" :style="index == chainarr.length -1 ?{border:'none'}:''">{{conversion(item.chain_new_user.toString())}}</td>
                     <td class="title all" :style="index == chainarr.length -1 ?{border:'none'}:''">{{conversion(item.chain_active_user.toString())}}</td>
-                    <td class="title all" :style="index == chainarr.length -1 ?{border:'none'}:''">{{conversion(item.chain_day_vol.toFixed(2))}}</td>
+                    <td class="title all" :style="index == chainarr.length -1 ?{border:'none'}:''">{{conversion(item.chain_day_vol.toFixed(2))}} <span style="position:absolute;font-size:12px;bottom:10px;right:19px;">{{item.blockchain=='tron'?'TRX':item.blockchain.toUpperCase()}}</span> </td>
                     <td class="title all" :style="index == chainarr.length -1 ?{border:'none'}:''">{{conversion(item.chain_day_call.toString())}}</td>
-                    <td class="title all" :style="index == chainarr.length -1 ?{border:'none'}:''">{{item.blockchain!='steem'?conversion(item.dapp_vol.toFixed(2)):'--'}}</td>
+                    <td class="title all" :style="index == chainarr.length -1 ?{border:'none'}:''">{{item.blockchain!='steem'?conversion(item.dapp_vol.toFixed(2)):'--'}} <span v-if="item.blockchain != 'steem'" style="position:absolute;font-size:12px;bottom:10px;right:19px;">{{item.blockchain=='tron'?'TRX':item.blockchain.toUpperCase()}}</span></td>
                     <td class="title all" :style="index == chainarr.length -1 ?{border:'none'}:''">{{item.blockchain!='steem'?conversion(item.dapp_call.toString()):'--'}}</td>
                 </tr>
             </table>
@@ -533,8 +533,12 @@ table td {
   background-color: #fafbfc;
 }
 
-.hhvv:hover {
+.hhvv {
   color: #409efe;
+  font-weight: 600;
+}
+.hhvv:hover {
+  color: rgb(34,48,74);
 }
 .mgt {
   position: absolute;

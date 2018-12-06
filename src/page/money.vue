@@ -11,7 +11,7 @@
                 <tr class="top bg" style="color: rgb(70, 74, 88);background-color:#f7fafc;">
                     <th  v-for="(item,index) in titlearr" class="title all" :style="{width:stylearr[index],borderBottom:'2px solid #ebecf0'}" :class="{cur:rankpic_arr[ranknum[index]]}" 
                     :key="index" @click="rankdata(index)">
-                        {{item[$store.state.alllang]}}
+                       <span>{{item[$store.state.alllang]}}</span> <span v-if="index == 2" style="font-weight:400;color:#797b8e;">({{reqAarr[$store.state.moneyty]}})</span>  
                         <img :src="rankpic_arr[ranknum[index]]" alt="" style="width:6px;height:12px;vertical-align: -1px;margin-left:6px;" v-if="rankpic_arr[ranknum[index]]" >
                     </th>
                 </tr>
@@ -64,7 +64,7 @@ export default {
                     currentPage1: 1,
                     //请求数组
                     reqarr:['eth','eos','nas','tron'],
-                    reqAarr:['ETH','EOS','NAS'],
+                    reqAarr:['ETH','EOS','NAS','TRON'],
                     all:'',
                     // typearr:['total','game','tool','market','other'],
                     allmoney:[['total','exchanges','games','high-risk','marketplaces','gambling','other'],['total','game','tool','exchange','marketplaces','gambling','high-risk','other'],['total','Game','Tool','Market','Other'],['total','Gambling','Games','Other']],
@@ -306,8 +306,12 @@ table td{
     background-color: #f9f9f9;
 }
 
-.hhvv:hover{
-    color: #409efe;
+.hhvv {
+  color: #409efe;
+  font-weight: 600;
+}
+.hhvv:hover {
+  color: rgb(34,48,74);
 }
 .mgt{
     position: absolute;

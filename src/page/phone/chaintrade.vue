@@ -29,13 +29,29 @@
                 <el-option :key="index" :label="item[$store.state.alllang]" :value="index" v-for="(item,index) in typearr1">{{item[$store.state.alllang]}}</el-option>
             </el-select>
         </p> 
+
+        <p style="font-size:0.4rem;margin-bottom:0.2rem;text-align:left;margin-top:0.2rem;">{{titlearr[2][$store.state.alllang]}}</p>
         <div style="padding:0.8rem 0.4rem 0.5rem 0.4rem;background-color:#FFF;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
             <div class="picture">   
-            <div class="mychart" id="newuser"></div>
+            <div class="mychart" id="vol"></div>
             </div>  
         </div>
 
+        <p style="font-size:0.4rem;margin-bottom:0.2rem;text-align:left;margin-top:0.2rem;">{{titlearr[3][$store.state.alllang]}}</p>
+        <div style="padding:0.8rem 0.4rem 0.5rem 0.4rem;background-color:#FFF;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
+            <div class="picture">   
+            <div class="mychart" id="call"></div>
+            </div>  
+        </div>
 
+        <p style="font-size:0.4rem;margin-bottom:0.2rem;text-align:left;margin-top:0.2rem;">{{titlearr[4][$store.state.alllang]}}</p>
+        <div style="padding:0.8rem 0.4rem 0.5rem 0.4rem;background-color:#FFF;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
+            <div class="picture">   
+            <div class="mychart" id="tx"></div>
+            </div>  
+        </div>
+
+        <p style="font-size:0.4rem;margin-bottom:0.2rem;text-align:left;margin-top:0.2rem;">{{ttarr[8][$store.state.alllang]}}</p>
         <div style="padding:0.4rem;background-color:#FFF;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
         <div class="tableout">
             <ul class="table">
@@ -45,29 +61,31 @@
                     </div>
 
 
-                    <div class="all" v-if="index == 0&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr" >
+                     
+
+                    <div class="all" v-if="index == 0&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in tablearr" >
                        {{idx+1}}
                     </div>
-                    <div class="all" v-if="index == 1&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr" >
+                    <div class="all" v-if="index == 1&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in tablearr" >
                        {{timeuse(it.timestamp)}}
                     </div>
-                    <div class="all" v-if="index == 2&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr">
-                        {{conversion(it.chain_total_tx.toString())}}
+                    <div class="all" v-if="index == 2&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in tablearr">
+                        {{conversion((it.chain_day_vol).toFixed(3))}}
                     </div>
-                    <div class="all" v-if="index == 3&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr">
-                        {{conversion(it.chain_day_tx.toString())}}
+                    <div class="all" v-if="index == 3&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in tablearr">
+                        {{conversion(it.chain_day_call.toString())}}
                     </div>
-                    <div class="all" v-if="index == 4&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr">
-                        {{conversion((it.chain_tx_rate*100).toFixed(2))}}%
+                    <div class="all" v-if="index == 4&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in tablearr">
+                        {{conversion((it.chain_day_tx).toString())}}
                     </div>
-                    <div class="all" v-if="index == 5&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr">
+                    <div class="all" v-if="index == 5&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in tablearr">
                         {{conversion(it.chain_total_vol.toFixed(3))}}
                     </div>
-                    <div class="all" v-if="index == 6&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr">
-                        {{conversion(it.chain_day_vol.toFixed(3))}}
+                    <div class="all" v-if="index == 6&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in tablearr">
+                        {{conversion(it.chain_total_call.toString())}}
                     </div>
-                    <div class="all" v-if="index == 7&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr">
-                        {{conversion((it.chain_vol_rate*100).toFixed(2))}}%
+                    <div class="all" v-if="index == 7&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in tablearr">
+                        {{conversion((it.chain_total_tx).toString())}}
                     </div>
                     
                 </li>
@@ -119,9 +137,10 @@ export default {
         ["用户分析", "User Analysis"],
         ["开始时间", "Begin Time"],
         ["结束时间", "End Time"],
-        ["确定", "Confirm"]
+        ["确定", "Confirm"],
+        ["交易数据", "Transaction Data"],
       ],
-      titlearr:[['',''],['日期','Date'],['累计交易笔数','Total Tx'],['当日交易笔数','Daily Tx'],['增长率','Growth Rate'],['累计交易量','Total Vol'],['当日交易量','Daily Vol'], ['增长率','Growth Rate']],
+      titlearr:[['',''],['日期','Date'],['当日交易量','Daily Volume'],['当日交易笔数','Daily Transactions'],['日转账笔数','Daily Transfer'],['累计交易量','Total Volume'],['累计交易笔数','Total Tramsactions'],['累计转账笔数','Total Transfer']],
       date: "",
       pickerValue: "",
       pickerValue1: "",
@@ -135,6 +154,9 @@ export default {
       newarr: [],
       actarr: [],
       arr:[],
+      newarr1 : [],
+      tablearr:[],
+       arr1 : [],
       fornewflag:false,
       thepagesize:10,
       thepage:1,
@@ -163,6 +185,7 @@ export default {
             this.timevalue1 = this.timeday(new Date(this.endtime))
             setTimeout(()=>{
                     this.fornew()
+                    this.fornew1()
             },50)
   },
   mounted() {
@@ -243,6 +266,7 @@ export default {
         this.timevalue1 = showtime
       }
       this.fornew()
+      this.fornew1()
     },
     runpage(add){
       this.thepage = this.thepage + add
@@ -258,13 +282,44 @@ export default {
     drawall() {
       setTimeout(() => {
         this.drawuser1(
-          "newuser",
+          "vol",
           this.xarr,
-          this.newarr[this.type],
-          this.typearr1[this.type][this.$store.state.alllang],
-          "newuser"
+          this.newarr[4],
+          this.titlearr[2][this.$store.state.alllang],
+          "vol"
+        );
+        this.drawuser1(
+          "call",
+          this.xarr,
+          this.newarr1[1],
+          this.titlearr[3][this.$store.state.alllang],
+          "call"
+        );
+        this.drawuser1(
+          "tx",
+          this.xarr,
+          this.newarr[1],
+          this.titlearr[4][this.$store.state.alllang],
+          "tx"
         );
       }, 1000);
+
+      setTimeout(()=>{
+                    console.log(this.arr)
+                    console.log(this.arr1)
+                    this.tablearr = []
+                    this.arr.forEach((e,index) => {
+                        this.tablearr.push({})
+                        this.tablearr[index]['timestamp'] = e.timestamp
+                        this.tablearr[index]['chain_day_vol'] = e.chain_day_vol
+                        this.tablearr[index]['chain_day_call'] = this.arr1[index].chain_day_call
+                        this.tablearr[index]['chain_day_tx'] = e.chain_day_tx
+                        this.tablearr[index]['chain_total_vol'] = e.chain_total_vol
+                        this.tablearr[index]['chain_total_call'] = this.arr1[index].chain_total_call
+                        this.tablearr[index]['chain_total_tx'] = e.chain_total_tx
+                    });
+                    console.log(this.tablearr)
+                },1000)
     },
     drawuser1(aa, arr1, arr2, string, windowname) {
       var options = {
@@ -397,7 +452,48 @@ export default {
                                         this.drawall()
                                         this.$store.commit('changeloadopacty',false)
                                     })
-    }
+    },
+    fornew1(){
+            this.newarr1 = []
+            this.arr1 = []
+            console.log(this.$store.state.moneyty,this.$store.state.requesttime)
+                    var url = this.$store.state.requrlnew+'/chain';
+                    console.log(url)
+                    Axios.post(url,{
+                                        "blockchain": this.$store.state.appid,
+                                        "type":"call",
+                                        "begin":this.begintime/1000,
+                                        "end":this.endtime/1000+86400
+                                    },{
+                                        headers: {'Content-Type': "application/x-www-form-urlencoded"}
+                                    }).then(res => {
+                                        console.log(res.data.msg)
+                                        res.data.msg.data.forEach((a,bb) => {
+                                            if(bb < res.data.msg.data.length -1){
+                                                this.arr1.unshift(a)
+                                            }
+                                            
+                                        })
+                                        console.log(this.arr1)
+                                        this.newarr1 = [
+                                            [],
+                                            [],
+                                            []
+                                        ]
+                                        this.arr1 = this.rank(1,'timestamp',res.data.msg.data)
+                                        this.arr1.forEach(e => {
+                                            var ddd = new Date(e.timestamp*1000)
+                                            var year = ddd.getFullYear()
+                                            var month = ddd.getMonth()+1
+                                            var day=ddd.getDate();
+                                            this.newarr1[0].unshift(e.chain_total_call)
+                                            this.newarr1[1].unshift(e.chain_day_call)
+                                            this.newarr1[2].unshift(e.chain_call_rate)
+                                        });
+                                       
+                                        this.$store.commit('changeloadopacty',false)
+                                    })
+        }
   }
 };
 </script>
@@ -470,7 +566,7 @@ input{
     overflow-x: scroll;
 }
 .table{
-    width: 20rem;
+    width: 23rem;
 }
 .table li{
     float: left;

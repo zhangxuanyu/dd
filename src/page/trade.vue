@@ -3,14 +3,14 @@
         <min-menu class="leftme" :style="{left:open}"></min-menu>
         <p class="alltitle dapp1">
             <span style="float:right;margin-top: -10px;">
-                <el-date-picker v-model="value7" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions2" style="float:right;"></el-date-picker>
+                <el-date-picker v-model="value7" type="daterange" align="right" unlink-panels range-separator="--" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions2" style="float:right;"></el-date-picker>
                 <span style="margin-right:10px;font-size: 14px;color: #797b8e;float:right;margin-top:6px;">{{ttarr[1][$store.state.alllang]}}</span>
             </span>
         </p>
         <div class="contright">
             <!-- 新用户数图表 -->
             <div class="dapp dapp1">
-                <p style="margin-bottom:20px;overflow:hidden;"><span style="float:left;color: #212229;font-weight: 600;">{{ttarr[0][$store.state.alllang]}}</span> </p>
+                <p style="margin-bottom:20px;overflow:hidden;"><span style="float:left;color: #212229;font-weight: 600;">{{ttarr[0][$store.state.alllang]}} <span>({{$store.state.appid.split('_')[0]}})</span> </span>   </p>
                  <div id="alltrade"  style="min-width:500px;height:500px;"></div> 
             </div>
 
@@ -330,7 +330,10 @@ export default {
                     },
 			        subtitle: {
 			            text: ''
-			        },
+                    },
+                    legend: {
+                        enabled: false
+                    },
 			        xAxis: [{ //横坐标
 			            categories: arr1,
 			            crosshair: true

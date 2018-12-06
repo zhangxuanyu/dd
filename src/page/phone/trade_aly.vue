@@ -20,20 +20,35 @@
           </div>
         </div>
         
+        
+        <!-- 活跃用户 -->
+        <p class="preview">{{ttarr[2][$store.state.alllang]}}</p> 
+        <div style="padding:0.8rem 0.4rem 0.5rem 0.4rem;background-color:#FFF;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
+        <div class="picture">   
+          <div class="mychart" id="alltrade"></div>
+        </div>
+        </div>
+
+
         <p class="preview">{{ttarr[0][$store.state.alllang]}}</p>  
-         
-        <!-- <div class="picture">   
-          <div class="mychart" id="alluser"></div>
-        </div> -->
+         <div style="padding:0.8rem 0.4rem 0.5rem 0.4rem;background-color:#FFF;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
+        <div class="picture">   
+          <div class="mychart" id="transe"></div>
+          </div>
+        </div>
 
-         <!-- <p class="preview">{{ttarr[2][$store.state.alllang]}}</p>  -->
 
+
+        <p class="preview">{{ttarr[8][$store.state.alllang]}}</p>  
          <div style="padding:0.8rem 0.4rem 0.5rem 0.4rem;background-color:#FFF;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
         <div class="picture">   
           <div class="mychart" id="tradenum"></div>
           </div>
         </div>
 
+
+
+        <p class="preview">{{ttarr[3][$store.state.alllang]}}</p> 
         <div style="padding:0.4rem;background-color:#FFF;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
         <div class="tableout">
             <ul class="table">
@@ -42,18 +57,26 @@
                         {{item[$store.state.alllang]}} 
                     </div>
 
-
-                    <div class="all" v-if="index == 0&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr" :key="idx" >
+                    <div class="all" v-if="index == 0&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in tablearr" :key="idx" >
                        {{timeuse(it.timestamp-68400)}}
                     </div>
-                    <div class="all" v-if="index == 1&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr" :key="idx" >
-                       {{conversion(it.day_tx.toString())}}
+                    <div class="all" v-if="index == 1&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in tablearr" :key="idx" >
+                       {{conversion(it.day_vol.toFixed(2))}}
                     </div>
-                    <div class="all" v-if="index == 2&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr" :key="idx">
+                    <div class="all" v-if="index == 2&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in tablearr" :key="idx">
+                        {{conversion(it.day_tx.toString())}}
+                    </div>
+                     <div class="all" v-if="index == 3&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in tablearr" :key="idx">
+                        {{conversion(it.day_call.toString())}}
+                    </div>
+                     <div class="all" v-if="index == 4&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in tablearr" :key="idx">
+                        {{conversion(it.total_vol.toFixed(2))}}
+                    </div>
+                     <div class="all" v-if="index == 5&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in tablearr" :key="idx">
                         {{conversion(it.total_tx.toString())}}
                     </div>
-                    <div class="all" v-if="index == 3&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in arr" :key="idx">
-                        {{conversion((it.total_tx_rate*100).toFixed(2))}}%
+                    <div class="all" v-if="index == 6&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in tablearr" :key="idx">
+                        {{conversion(it.total_call.toString())}}
                     </div>
                     
                 </li>
@@ -78,60 +101,6 @@
                 <span>{{toparr[4][$store.state.alllang]}}</span>
             </p>
         </div>
-        <!-- 活跃用户 -->
-        <p class="preview">{{ttarr[2][$store.state.alllang]}}</p> 
-        <div style="padding:0.8rem 0.4rem 0.5rem 0.4rem;background-color:#FFF;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
-        <div class="picture">   
-          <div class="mychart" id="alltrade"></div>
-        </div>
-        </div>
-
-        <div style="padding:0.4rem;background-color:#FFF;box-shadow:0.03rem 0.02rem 0.1rem 0rem rgba(37, 48, 76, 0.08);box-sizng:border-box;">
-        <div class="tableout">
-            <ul class="table">
-                <li v-for="(item,index) in titlearr1" :key="index">
-                    <div  class="all titletop" :style="index == 1?{textAlign:'left'}:{}">
-                        {{item[$store.state.alllang]}} 
-                    </div>
-
-
-                    <div class="all" v-if="index == 0&&idx<thepage1*thepagesize&&idx>=(thepage1-1)*thepagesize" v-for="(it,idx) in arr" :key="idx" >
-                       {{timeuse(it.timestamp-86400)}}
-                    </div>
-                    <div class="all" v-if="index == 1&&idx<thepage1*thepagesize&&idx>=(thepage1-1)*thepagesize" v-for="(it,idx) in arr" :key="idx" >
-                       {{conversion(it.total_vol.toFixed(2))}}
-                    </div>
-                    <div class="all" v-if="index == 2&&idx<thepage1*thepagesize&&idx>=(thepage1-1)*thepagesize" v-for="(it,idx) in arr" :key="idx">
-                        {{conversion((it.total_tx_rate*100).toFixed(2))}}%
-                    </div>
-                    <div class="all" v-if="index == 3&&idx<thepage1*thepagesize&&idx>=(thepage1-1)*thepagesize" v-for="(it,idx) in arr" :key="idx">
-                        {{conversion(it.average_vol.toFixed(2))}}
-                    </div>
-                    <div class="all" v-if="index == 4&&idx<thepage1*thepagesize&&idx>=(thepage1-1)*thepagesize" v-for="(it,idx) in arr" :key="idx">
-                        {{conversion((it.average_rate*100).toFixed(2))}}%
-                    </div>
-                    
-                </li>
-            </ul>
-           
-        </div>
-        </div>
-
-        <div class="botpage">
-            <div class="pre" @click="runpage1(-1)" v-if="thepage1>1">
-                {{toparr[1][$store.state.alllang]}}
-            </div>
-            <div class="pre" @click="runpage1(1)" v-if="thepage1<Math.ceil(arr.length/thepagesize)">
-                {{toparr[2][$store.state.alllang]}}
-            </div>
-            <p class="rightpage">
-                <span>{{toparr[3][$store.state.alllang]}}</span>     
-                <el-select v-model="thepage1"   class="top_right"  v-if="arr.length">
-                        <el-option :key="index" :label="item" :value="item" v-for="(item,index) in Math.ceil(arr.length/thepagesize)" >{{item}}</el-option>
-                    </el-select>
-                <span>{{toparr[4][$store.state.alllang]}}</span>
-            </p>
-        </div>
 
     </div>
 </template>
@@ -151,16 +120,17 @@ export default {
     return {
       value7: "",
       ttarr: [
-        ["交易笔数", "Transactions"],
+        ["日交易笔数", "Daily Transactions"],
         ["时间段", "Period"],
-        ["交易量", "Volume"],
+        ["日交易额", "Daily Volume"],
         ["交易数据", "Transaction Data"],
         ["用户分析", "User Analysis"],
         ["开始时间", "Begin Time"],
         ["结束时间", "End Time"],
-        ["确定", "confirm"]
+        ["确定", "confirm"],
+        ["日转账笔数", "Daily Transfer"]
       ],
-      titlearr:[['日期','Date'],['当日交易笔数','Daily Transactions'],['总交易笔数','Transactions'], ['增长率','Growth Rate']],
+      titlearr:[['日期','Date'],['日交易额','Daily Volume'],['日交易笔数','Daily Transactions'], ['日转账笔数','Daily Transfer'], ['累计交易额','Total Volume'], ['累计交易笔数','Total Transactions'], ['累计转账笔数','Total Transfer']],
       date: "",
       timevalue: "",
       timevalue1: "",
@@ -170,6 +140,10 @@ export default {
       timearr : [],
       allarr : [],
       arr : [],
+      usearr  : [],
+      arr2 : [],
+      arr1 : [],
+      tablearr:[],
       fornewflag: false,
       thepagesize: 10,
       thepage: 1,
@@ -203,6 +177,7 @@ export default {
     console.log(this.timevalue, this.timevalue1);
     setTimeout(() => {
       this.fornew();
+      this.fornew1();
     }, 50);
   },
   mounted(){
@@ -263,6 +238,7 @@ export default {
         this.timevalue1 = showtime;
       }
       this.fornew();
+      this.fornew1()
     },
     runpage1(add) {
       this.thepage1 = this.thepage1 + add;
@@ -286,7 +262,7 @@ export default {
           "tradenum",
           this.xarr,
           this.timearr,
-          this.ttarr[0][this.$store.state.alllang],
+          this.ttarr[8][this.$store.state.alllang],
           "tradenum"
         );
       }, 1000);
@@ -299,6 +275,31 @@ export default {
           "alltrade"
         );
       }, 1000);
+      setTimeout(() => {
+        this.drawuser1(
+          "transe",
+          this.xarr,
+          this.usearr,
+          this.ttarr[0][this.$store.state.alllang],
+          "transe"
+        );
+      }, 1000);
+      setTimeout(()=>{
+                    this.tablearr = []
+                    console.log(this.arr)
+                    console.log(this.arr2)
+                    this.arr.forEach((e,index) => {
+                        this.tablearr.push({})
+                        this.tablearr[index]['timestamp'] = e.timestamp
+                        this.tablearr[index]['day_tx'] = e.day_tx
+                        this.tablearr[index]['day_vol'] = e.day_vol
+                        this.tablearr[index]['total_tx'] = e.total_tx
+                        this.tablearr[index]['total_vol'] = e.total_vol
+                        this.tablearr[index]['day_call'] = this.arr2[index].day_call
+                        this.tablearr[index]['total_call'] = this.arr2[index].total_call
+                    });
+                    console.log(this.tablearr)
+                },1000)
     },
     drawuser1(aa, arr1, arr2, string, windowname) {
       var options = {
@@ -428,6 +429,55 @@ export default {
         setTimeout(()=>{
           this.drawall()
         },100)
+      });
+    },
+    //数据请求
+    fornew1() {
+            this.usearr  = []
+            this.arr2 = []
+            this.arr1 = []
+      console.log(this.$store.state.moneyty, this.$store.state.requesttime);
+      var url =
+        this.$store.state.requrl +
+        "/" +
+        this.$store.state.appid.split("_")[0].toLowerCase() +
+        "/call";
+      console.log(url);
+      Axios.post(
+        url,
+        {
+          dapp_id: this.$store.state.appid,
+          start: this.begintime / 1000,
+          last: this.endtime / 1000 + 86400
+        },
+        {
+          headers: { "Content-Type": "application/x-www-form-urlencoded" }
+        }
+      ).then(res => {
+        console.log(res)
+                                        res.data.msg.call_info.forEach((a,bb) => {
+                                            if(bb < res.data.msg.call_info.length -1){
+                                                this.arr2.push(a)
+                                            }
+                                            
+                                        })
+                                        res.data.msg.view_info.forEach((a,bb) => {
+                                            if(bb < res.data.msg.view_info.length -1){
+                                                this.arr1.push(a)
+                                            }
+                                        
+                                        })
+                                        this.arr2.forEach(e => {
+                                            var ddd = new Date(e.timestamp*1000-86400000)
+                                            var year = ddd.getFullYear()
+                                            var month = ddd.getMonth()+1
+                                            var day=ddd.getDate();
+                                            this.xarr.unshift(year+'/'+month+'/'+day)
+                                            this.usearr.unshift(e.day_call)
+                                        });
+                                        console.log(this.xarr)
+                                        this.$store.commit('changeloadopacty',false)
+        
       });
     }
   }

@@ -10,7 +10,7 @@
               {{showDapp.blockchain.toUpperCase()}}
             </div>
         </div>
-        <div v-for="(item,index) in mearr" class="outlock"  v-if="$store.state.appid !='steem'||index != 4">
+        <div v-for="(item,index) in mearr" class="outlock"  v-if="($store.state.appid =='steem'&&index == 3)?false:true">
             <div class="lock lockh " :style="index == select?{color:'#48a5fb',backgroundColor:'#f6f9fb'}:''"  @click="gotoother(index,true)">
                 <img :src="item.img" alt="" class="left mg1 cur" >
                 <span  class="left mg2 cur" >{{item.word[$store.state.alllang]}}</span>
@@ -39,7 +39,7 @@ export default {
             img: "../../static/an.png" 
             },
         {
-          word: ["用户分析", "User Analysis"],
+          word: ["用户分析", "User Data"],
           img: "../../static/an.png"
         },
         {
@@ -92,7 +92,7 @@ export default {
             img: "../../static/an.png" 
             },
         {
-          word: ["用户分析", "User Analysis"],
+          word: ["用户分析", "User Data"],
           img: "../../static/an.png"
         },
         {
@@ -158,7 +158,7 @@ export default {
             img: "../../static/an.png" 
             },
         {
-          word: ["用户分析", "User Analysis"],
+          word: ["用户分析", "User Data"],
           img: "../../static/an.png"
         },
         {

@@ -38,7 +38,7 @@
             <div class="dapp" style="">
                 <p class="preview">{{ttarr[7][$store.state.alllang]}}</p>
                <div v-for="(item,index) in dayarr" :key="index" class="daydata">
-                   <p>{{item.title[$store.state.alllang]}}</p>
+                   <p>{{item.title[$store.state.alllang]}} <span v-if="index == 2||index == 4" style="font-size:12px;">({{arr.blockchain=='tron'?'TRX':arr.blockchain.toUpperCase()}})</span> </p>
                    <p>(24h)</p>
                    <p>{{item.value=="-"?item.value:item.value.toFixed(0)}}</p>
                    <p :style="item.rate>0?{color:'#1ccfa7'}:item.rate<0?{color:'#f85e70'}:{color:'#797b8e'}"><img :src="item.rate>0?'../../static/up.png':item.rate<0?'../../static/down.png':''" alt=""> {{item.rate=='-'?item.rate:(item.rate*100).toFixed(5)}}{{item.rate=='-'?'':'%'}}</p>
@@ -154,7 +154,7 @@ export default {
         ["智能合约", "Smart contract"],
         ["合约地址", "Contract address"],
         ["展开", "Show"],
-        ["24小时概况", "24H data"],
+        ["24小时概况", "Data 24H"],
         ["热门Dapp", "Hot Dapp"],
         ["更多", "More"],
         ["应用详情", "Details"],
@@ -165,12 +165,12 @@ export default {
       infopicarr:['../../static/home.png','../../static/GitHub.png','../../static/dapp.png'],
       dayarr:[
           {
-            title:['新增用户','new user'],
+            title:['新增用户','new users'],
             value:51651,
             rate:5.23
           },
           {
-            title:['活跃用户','active user'],
+            title:['活跃用户','active users'],
             value:51651,
             rate:5.23
           },
