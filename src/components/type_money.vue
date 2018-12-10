@@ -11,7 +11,7 @@
 export default {
     data(){
         return{
-            moneyarr:['ETH','EOS','NAS','TRON'],
+            moneyarr:['ETH','EOS','NAS','TRON','NEO'],
             type:'',
             //币种选择
             mnysel:0,

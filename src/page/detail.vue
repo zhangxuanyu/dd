@@ -269,7 +269,7 @@ export default {
       this.usearr = [];
       this.allarr = [];
       console.log(this.$store.state.moneyty, this.$store.state.requesttime);
-      if(this.$store.state.appid.split("_")[0]=='ETH'||this.$store.state.appid.split("_")[0]=='EOS'||this.$store.state.appid.split("_")[0]=='NAS'){
+      if(this.$store.state.appid.split("_")[0]=='ETH'){
         var url =
         this.$store.state.requrl +
         "/" +

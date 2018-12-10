@@ -13,6 +13,7 @@
                 <el-option :key="index" :label="item[$store.state.alllang]"  :value="index" v-for="(item,index) in typearr2" v-if="$store.state.moneyty == 1">{{item[$store.state.alllang]}}</el-option>
                 <el-option :key="index" :label="item[$store.state.alllang]"  :value="index" v-for="(item,index) in typearr3" v-if="$store.state.moneyty == 2">{{item[$store.state.alllang]}}</el-option>
                 <el-option :key="index" :label="item[$store.state.alllang]"  :value="index" v-for="(item,index) in typearr4" v-if="$store.state.moneyty == 3">{{item[$store.state.alllang]}}</el-option>
+                <el-option :key="index" :label="item[$store.state.alllang]"  :value="index" v-for="(item,index) in typearr5" v-if="$store.state.moneyty == 4">{{item[$store.state.alllang]}}</el-option>
             </el-select>
          </p>
     </div>
@@ -22,11 +23,11 @@
 export default {
     data(){
         return{
-            moneyarr:['ETH','EOS','NAS'],
             typearr1:[['全部','Total'],['交易所','Exchanges'],['游戏','Games'],['高风险','High-Risk'],['市场','Marketplaces'],['博彩','Gambling'],['其他','Other']],
             typearr2:[['全部','Total'],['游戏','Game'],['工具','Tool'],['交易所','Exchange'],['市场','Marketplaces'],['博彩','Gambling'],['高风险','High-Risk'],['其他','Other']],
             typearr3:[['全部','Total'],['游戏','Game'],['工具','Tool'],['市场','Marketplace'],['其他','Other']],
             typearr4:[['全部','Total'],['博彩','Gambling'],['游戏','Game'],['其他','Other']],
+            typearr5:[['其他','Other']],
             value1: '',
             time:['日期','Date'],
             tyarr:['分类','Categories'],

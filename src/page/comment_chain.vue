@@ -73,13 +73,7 @@ import theSel from "../components/type_money";
 import theTime from "../components/time_type";
 import Axios from "axios";
 import Highcharts from "highcharts/highstock";
-import HighchartsMore from "highcharts/highcharts-more";
-import HighchartsDrilldown from "highcharts/modules/drilldown";
-import Highcharts3D from "highcharts/highcharts-3d";
 
-HighchartsMore(Highcharts);
-HighchartsDrilldown(Highcharts);
-Highcharts3D(Highcharts);
 export default {
   components: {
     theSel,
@@ -243,7 +237,7 @@ export default {
         chart: {
           zoomType: "xy"
         },
-        colors: ["#409efe", "#00e175", "#ff0a50"],
+        colors: ["#409efe", "#00e175", "#ff0a50","#fbbc05","#000"],
         title: {
           text: ""
         },

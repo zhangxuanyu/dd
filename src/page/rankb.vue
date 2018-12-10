@@ -74,11 +74,11 @@ export default {
                     // 排序功能控制数组 
                     ranknum:[-1,-1,0,0,0,0,-1],
                     arr:[],
-                    allmoney:[['total','exchanges','games','high-risk','marketplaces','gambling','other'],['total','game','tool','exchange','marketplaces','gambling','high-risk','other'],['total','Game','Tool','Market','Other'],['total','Gambling','Games','Other']],
+                    allmoney:[['total','exchanges','games','high-risk','marketplaces','gambling','other'],['total','game','tool','exchange','marketplaces','gambling','high-risk','other'],['total','Game','Tool','Market','Other'],['total','Gambling','Games','Other'],['Other']],
                     currentPage1: 1,
                      //请求数组
-                    reqarr:['eth','eos','nas','tron'],
-                    reqAarr:['ETH','EOS','NAS','TRON'],
+                    reqarr:['eth','eos','nas','tron','neo'],
+                    reqAarr:['ETH','EOS','NAS','TRON','NEO'],
                     stylearr:['','','100px','','','',''],
                     all:'',
                     theleft:'280px',
@@ -195,7 +195,7 @@ export default {
                     this.arr = ''
                     this.picfalt = false
                     console.log(this.$store.state.moneyty,this.$store.state.requesttime)
-                    if(this.$store.state.moneyty <= 2){
+                    if(this.$store.state.moneyty == 0){
                         var url =  this.$store.state.requrl+'/'+this.reqarr[this.$store.state.moneyty]+'/rank';
                         Axios.post(url,{
                                             "page":this.currentPage1,
@@ -221,7 +221,7 @@ export default {
                                             this.$store.commit('changeloadopacty',false)
                                         })
 
-                    }else if(this.$store.state.moneyty == 3){
+                    }else{
                         var url =  this.$store.state.requrlnew+'/dapp/rank';
                         Axios.post(url,{
                                             "blockchain": this.reqarr[this.$store.state.moneyty],

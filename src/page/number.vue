@@ -62,10 +62,10 @@ export default {
                     arr:[],
                     currentPage1: 1,
                      //请求数组
-                    reqarr:['eth','eos','nas','tron'],
-                    reqAarr:['ETH','EOS','NAS'],
+                    reqarr:['eth','eos','nas','tron','neo'],
+                    reqAarr:['ETH','EOS','NAS','NEO'],
                     // typearr:['total','game','tool','market','other'],
-                    allmoney:[['total','exchanges','games','high-risk','marketplaces','gambling','other'],['total','game','tool','exchange','marketplaces','gambling','high-risk','other'],['total','Game','Tool','Market','Other'],['total','Gambling','Games','Other']],
+                    allmoney:[['total','exchanges','games','high-risk','marketplaces','gambling','other'],['total','game','tool','exchange','marketplaces','gambling','high-risk','other'],['total','Game','Tool','Market','Other'],['total','Gambling','Games','Other'],['Other']],
                     all:'',
                     theleft:'280px',
                     stylearr:['','','100px','','','',''],
@@ -185,7 +185,7 @@ export default {
                     //                     })
 
 
-                    if(this.$store.state.moneyty <= 2){
+                    if(this.$store.state.moneyty == 0){
                         var url =  this.$store.state.requrl+'/'+this.reqarr[this.$store.state.moneyty]+'/rank';
                         Axios.post(url,{
                                             "page":this.currentPage1,
@@ -204,7 +204,7 @@ export default {
                                             this.$store.commit('changeloadopacty',false)
                                         })
 
-                    }else if(this.$store.state.moneyty == 3){
+                    }else{
                         var url =  this.$store.state.requrlnew+'/dapp/rank';
                         Axios.post(url,{
                                             "blockchain": this.reqarr[this.$store.state.moneyty],
