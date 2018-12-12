@@ -207,19 +207,19 @@ export default {
             }
             // this.drawall()
             var newchart = setInterval(()=>{
-                window.newuser.reflow()
-            },17)
+                window.newuser.resize()
+            },100)
             var newchart1 = setInterval(()=>{
-                window.totaluser.reflow()
-            },17)
+                window.totaluser.resize()
+            },100)
             var newchart2 = setInterval(()=>{
-                window.activeuser.reflow()
-            },17)
+                window.activeuser.resize()
+            },100)
             setTimeout(()=>{
                 clearInterval(newchart)
                 clearInterval(newchart1)
                 clearInterval(newchart2)
-            },1010)
+            },1500)
         },
         value7(n,o){
             console.log(n)
@@ -325,61 +325,140 @@ export default {
             return year+'-'+month+'-'+day
         },
         drawuser1(aa,arr1,arr2,string,windowname){
-             var options={   //hchart的参数
-			        chart: {
-			            zoomType: 'xy'
+            //  var options={   //hchart的参数
+			//         chart: {
+			//             zoomType: 'xy'
+            //         },
+            //         colors:['#409efe','#00e175','#ff0a50','black'],
+			//         title: {
+			//             text: ''
+            //         },
+            //         credits: {
+            //             enabled: false
+            //         },
+			//         subtitle: {
+			//             text: ''
+			//         },
+			//         xAxis: [{ //横坐标
+			//             categories: arr1,
+			//             crosshair: true
+			//         }],
+			//         yAxis: [
+			// 	        { // Primary yAxis
+			// 	            labels: {
+			// 	                format: '{value}',
+			// 	                style: {
+			// 	                    color: '#409efe'
+			// 	                }
+			// 	            },
+			// 	            title: {
+			// 	                text: string,
+			// 	                style: {
+			// 	                    color:'#409efe'
+			// 	                }
+			// 	            }
+			// 	        }
+			//         ],
+			//         tooltip: {
+			//             shared: true
+            //         },
+            //         legend:{
+            //             enabled:false
+            //         },
+			//         series: [
+			// 	        {
+			// 	            name: string,
+			// 	            data: arr2,
+			// 	            type: 'spline',
+			// 	        }
+
+			//         ]
+			// 	}
+                // this.chart = new Highcharts.Chart(chartContainer, options)
+            var echarts = require('echarts');
+            var colors = ["#409efe", "#00e175", "#ff0a50","#fbbc05","#000"]
+            window[windowname] = echarts.init(document.getElementById(aa));
+            var option = {
+                tooltip: {
+                    trigger: 'axis',
+                    textStyle:{
+                      align:'left'
+                    }
+                },
+                grid:{
+                  bottom:100,
+                  top:20,
+                  left:80,
+                  right:40
+                },
+                xAxis: {
+                    type: 'category',
+                    data: arr1,
+                    axisLine: {
+                        lineStyle: {
+                            type: 'solid',
+                            color:'#ebecf0',
+                            width:'1'
+                        }
                     },
-                    colors:['#409efe','#00e175','#ff0a50','black'],
-			        title: {
-			            text: ''
-                    },
-                    credits: {
-                        enabled: false
-                    },
-			        subtitle: {
-			            text: ''
-			        },
-			        xAxis: [{ //横坐标
-			            categories: arr1,
-			            crosshair: true
-			        }],
-			        yAxis: [
-				        { // Primary yAxis
-				            labels: {
-				                format: '{value}',
-				                style: {
-				                    color: '#409efe'
-				                }
-				            },
-				            title: {
-				                text: string,
-				                style: {
-				                    color:'#409efe'
-				                }
-				            }
-				        }
-			        ],
-			        tooltip: {
-			            shared: true
-                    },
-                    legend:{
-                        enabled:false
-                    },
-			        series: [
+                    axisLabel: {
+                        textStyle: {
+                            color: '#000',//坐标值得具体的颜色
+    
+                        }
+                    }
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        splitLine:{
+                          lineStyle:{
+                            color:'#ebecf0'
+                          }
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                type: 'solid',
+                                color:'#ebecf0',
+                                width:'1'
+                            }
+                        },
+                        axisLabel: {
+                            textStyle: {
+                                color: '#000',//坐标值得具体的颜色
+        
+                            }
+                        }
+                    }
+                ],
+                
+                series: [
 				        {
 				            name: string,
 				            data: arr2,
-				            type: 'spline',
+                            type: 'line',
+                            smooth: true
 				        }
 
-			        ]
-				}
-                // this.chart = new Highcharts.Chart(chartContainer, options)
-                window[windowname] = Highcharts.chart(aa,options)
+			        ],
+                color: colors
+            };
+            window[windowname].setOption(option)
+            window.onresize = function() {
+                // chart.reflow();
+                // window.trend.reflow();
+                setTimeout(function(){
+                window[windowname].resize();
+                }, 50)
+            };
+
+
+
+                // window[windowname] = Highcharts.chart(aa,options)
                 
-	        	    window.onresize = function () {
-	        	    	 window[windowname].reflow();
-	        	    }
+	        	//     window.onresize = function () {
+	        	//     	 window[windowname].reflow();
+	        	//     }
         },
         newuserPage(val){
             console.log(`当前页: ${val}`);

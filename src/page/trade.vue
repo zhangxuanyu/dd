@@ -182,13 +182,13 @@ export default {
                 }
                 // this.drawall() 
                 var newchart = setInterval(()=>{
-                    window.tradenum.reflow()
-                    window.alltrade.reflow()
-                    window.usemun.reflow()
-                },17)
+                    window.tradenum.resize()
+                    window.alltrade.resize()
+                    window.usemun.resize()
+                },100)
                 setTimeout(()=>{
                     clearInterval(newchart)
-                },1010)
+                },1500)
             },
             value7(n,o){
                 console.log(n)
@@ -316,62 +316,140 @@ export default {
             }
             return year+'-'+month+'-'+day 
         },
-        drawuser(aa,arr1,arr2,string,windname){
-             var options={   //hchart的参数
-			        chart: {
-			            zoomType: 'xy'
-			        },
-			        title: {
-			            text: ''
+        drawuser(aa,arr1,arr2,string,windowname){
+            //  var options={   //hchart的参数
+			//         chart: {
+			//             zoomType: 'xy'
+			//         },
+			//         title: {
+			//             text: ''
+            //         },
+            //         colors:['#409efe','#00e175','#ff0a50','black'],
+            //         credits: {
+            //             enabled: false
+            //         },
+			//         subtitle: {
+			//             text: ''
+            //         },
+            //         legend: {
+            //             enabled: false
+            //         },
+			//         xAxis: [{ //横坐标
+			//             categories: arr1,
+			//             crosshair: true
+			//         }],
+			//         yAxis: [
+			// 	        { // Primary yAxis
+			// 	            labels: {
+			// 	                format: '{value}',
+			// 	                style: {
+			// 	                    color: '#409efe'
+			// 	                }
+			// 	            },
+			// 	            title: {
+			// 	                text: string,
+			// 	                style: {
+			// 	                    color:'#409efe'
+			// 	                }
+			// 	            }
+			// 	        }
+			//         ],
+			//         tooltip: {
+			//             shared: true
+			//         },
+			//         series: [
+			// 	        {
+			// 	            name: string,
+			// 	            data: arr2,
+			// 	            type: 'spline',
+			// 	        }
+
+			//         ]
+			// 	}
+            //     // this.chart = new Highcharts.Chart(chartContainer, options)
+            //     window[windname] = Highcharts.chart(aa,options)
+                
+	        // 	    window.onresize = function () {
+	        // 	    	 window[windname].reflow();
+            // 	    }
+            
+
+            var echarts = require('echarts');
+            var colors = ["#409efe", "#00e175", "#ff0a50","#fbbc05","#000"]
+            window[windowname] = echarts.init(document.getElementById(aa));
+            var option = {
+                tooltip: {
+                    trigger: 'axis',
+                    textStyle:{
+                      align:'left'
+                    }
+                },
+                grid:{
+                  bottom:100,
+                  top:20,
+                  left:80,
+                  right:40
+                },
+                xAxis: {
+                    type: 'category',
+                    data: arr1,
+                    axisLine: {
+                        lineStyle: {
+                            type: 'solid',
+                            color:'#ebecf0',
+                            width:'1'
+                        }
                     },
-                    colors:['#409efe','#00e175','#ff0a50','black'],
-                    credits: {
-                        enabled: false
-                    },
-			        subtitle: {
-			            text: ''
-                    },
-                    legend: {
-                        enabled: false
-                    },
-			        xAxis: [{ //横坐标
-			            categories: arr1,
-			            crosshair: true
-			        }],
-			        yAxis: [
-				        { // Primary yAxis
-				            labels: {
-				                format: '{value}',
-				                style: {
-				                    color: '#409efe'
-				                }
-				            },
-				            title: {
-				                text: string,
-				                style: {
-				                    color:'#409efe'
-				                }
-				            }
-				        }
-			        ],
-			        tooltip: {
-			            shared: true
-			        },
-			        series: [
+                    axisLabel: {
+                        textStyle: {
+                            color: '#000',//坐标值得具体的颜色
+    
+                        }
+                    }
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        splitLine:{
+                          lineStyle:{
+                            color:'#ebecf0'
+                          }
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                type: 'solid',
+                                color:'#ebecf0',
+                                width:'1'
+                            }
+                        },
+                        axisLabel: {
+                            textStyle: {
+                                color: '#000',//坐标值得具体的颜色
+        
+                            }
+                        }
+                    }
+                ],
+                
+                series: [
 				        {
 				            name: string,
 				            data: arr2,
-				            type: 'spline',
+                            type: 'line',
+                            smooth: true
 				        }
 
-			        ]
-				}
-                // this.chart = new Highcharts.Chart(chartContainer, options)
-                window[windname] = Highcharts.chart(aa,options)
-                
-	        	    window.onresize = function () {
-	        	    	 window[windname].reflow();
-	        	    }
+			        ],
+                color: colors
+            };
+            window[windowname].setOption(option)
+            window.onresize = function() {
+                // chart.reflow();
+                // window.trend.reflow();
+                setTimeout(function(){
+                window[windowname].resize();
+                }, 50)
+            };
         },
         newuserPage(val){
             console.log(`当前页: ${val}`);
@@ -478,11 +556,6 @@ export default {
                                         
                                         // })
                                         this.arr1.forEach(e => {
-                                            var ddd = new Date(e.timestamp*1000-86400000)
-                                            var year = ddd.getFullYear()
-                                            var month = ddd.getMonth()+1
-                                            var day=ddd.getDate();
-                                            this.xarr.unshift(year+'/'+month+'/'+day)
                                             this.usearr.unshift(e.day_call)
                                         });
                                         console.log(this.xarr)

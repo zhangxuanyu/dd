@@ -214,14 +214,14 @@ export default {
             }
             // this.drawall()
             var newchart = setInterval(()=>{
-                window.allusechart.reflow()
-                window.newuser.reflow()
-                window.acuser.reflow()
-            },17)
+                window.allusechart.resize()
+                window.newuser.resize()
+                window.acuser.resize()
+            },100)
             setTimeout(()=>{
                 // this.initChart(this.xarr,this.etharr,this.nasarr,this.eosarr)
                 clearInterval(newchart)
-            },1010)
+            },1500)
         },
         value7(n,o){
             console.log(n)
@@ -306,7 +306,7 @@ export default {
                 },
         drawall(){
             setTimeout(()=>{
-                    this.drawuser('alluser',this.xarr,this.userarr,this.addarr,'allusechart')
+                    this.drawuser1('alluser',this.xarr,this.userarr,this.titlearr[3][this.$store.state.alllang],'allusechart')
                 },1000)
                 setTimeout(()=>{
                     this.drawuser1('newuser',this.xarr,this.newarr,this.ttarr[2][this.$store.state.alllang],'newuser')
@@ -387,61 +387,139 @@ export default {
 	        	    }
         },
         drawuser1(aa,arr1,arr2,string,windowname){
-             var options={   //hchart的参数
-			        chart: {
-			            zoomType: 'xy'
+            //  var options={   //hchart的参数
+			//         chart: {
+			//             zoomType: 'xy'
+            //         },
+            //         colors:['#409efe','#00e175','#ff0a50','black'],
+			//         title: {
+			//             text: ''
+            //         },
+            //         credits: {
+            //             enabled: false
+            //         },
+            //         legend: {
+            //             enabled: false
+            //         },
+			//         subtitle: {
+			//             text: ''
+			//         },
+			//         xAxis: [{ //横坐标
+			//             categories: arr1,
+			//             crosshair: true
+			//         }],
+			//         yAxis: [
+			// 	        { // Primary yAxis
+			// 	            labels: {
+			// 	                format: '{value}',
+			// 	                style: {
+			// 	                    color: '#409efe'
+			// 	                }
+			// 	            },
+			// 	            title: {
+			// 	                text: string,
+			// 	                style: {
+			// 	                    color:'#409efe'
+			// 	                }
+			// 	            }
+			// 	        }
+			//         ],
+			//         tooltip: {
+			//             shared: true
+			//         },
+			//         series: [
+			// 	        {
+			// 	            name: string,
+			// 	            data: arr2,
+			// 	            type: 'spline',
+			// 	        }
+
+			//         ]
+			// 	}
+            //     // this.chart = new Highcharts.Chart(chartContainer, options)
+            //     window[windowname] = Highcharts.chart(aa,options)
+                
+	        // 	    window.onresize = function () {
+	        // 	    	 window[windowname].reflow();
+            // 	    }
+            
+            var echarts = require('echarts');
+            var colors = ["#409efe", "#00e175", "#ff0a50","#fbbc05","#000"]
+            window[windowname] = echarts.init(document.getElementById(aa));
+            var option = {
+                tooltip: {
+                    trigger: 'axis',
+                    textStyle:{
+                      align:'left'
+                    }
+                },
+                grid:{
+                  bottom:100,
+                  top:20,
+                  left:80,
+                  right:40
+                },
+                xAxis: {
+                    type: 'category',
+                    data: arr1,
+                    axisLine: {
+                        lineStyle: {
+                            type: 'solid',
+                            color:'#ebecf0',
+                            width:'1'
+                        }
                     },
-                    colors:['#409efe','#00e175','#ff0a50','black'],
-			        title: {
-			            text: ''
-                    },
-                    credits: {
-                        enabled: false
-                    },
-                    legend: {
-                        enabled: false
-                    },
-			        subtitle: {
-			            text: ''
-			        },
-			        xAxis: [{ //横坐标
-			            categories: arr1,
-			            crosshair: true
-			        }],
-			        yAxis: [
-				        { // Primary yAxis
-				            labels: {
-				                format: '{value}',
-				                style: {
-				                    color: '#409efe'
-				                }
-				            },
-				            title: {
-				                text: string,
-				                style: {
-				                    color:'#409efe'
-				                }
-				            }
-				        }
-			        ],
-			        tooltip: {
-			            shared: true
-			        },
-			        series: [
+                    axisLabel: {
+                        textStyle: {
+                            color: '#000',//坐标值得具体的颜色
+    
+                        }
+                    }
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        splitLine:{
+                          lineStyle:{
+                            color:'#ebecf0'
+                          }
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                type: 'solid',
+                                color:'#ebecf0',
+                                width:'1'
+                            }
+                        },
+                        axisLabel: {
+                            textStyle: {
+                                color: '#000',//坐标值得具体的颜色
+        
+                            }
+                        }
+                    }
+                ],
+                
+                series: [
 				        {
 				            name: string,
 				            data: arr2,
-				            type: 'spline',
+                            type: 'line',
+                            smooth: true
 				        }
 
-			        ]
-				}
-                // this.chart = new Highcharts.Chart(chartContainer, options)
-                window[windowname] = Highcharts.chart(aa,options)
-                
-	        	    window.onresize = function () {
-	        	    	 window[windowname].reflow();
-	        	    }
+			        ],
+                color: colors
+            };
+            window[windowname].setOption(option)
+            window.onresize = function() {
+                // chart.reflow();
+                // window.trend.reflow();
+                setTimeout(function(){
+                window[windowname].resize();
+                }, 50)
+            };
+
         },
         newuserPage(val){
             console.log(`当前页: ${val}`);

@@ -94,7 +94,7 @@ export default {
       ],
       rank_reqarr:['chain_new_user','chain_active_user','chain_day_vol','chain_day_call'],
       rank_state:1,
-      rank_type:0,
+      rank_type:1,
       // 排序功能图片数组
       rankpic_arr: [
         "../../static/sort1.png",
@@ -164,7 +164,9 @@ export default {
         // {word:'nas',arr:this.nasarr},
         // {word:'eos',arr:this.eosarr},
         // {word:'bbarr',arr:this.bbarr}
-      ]
+      ],
+      // watch执行
+      first:false
     };
   },
   computed: {
@@ -185,20 +187,24 @@ export default {
   watch: {
     themoney(n, o) {
       this.currentPage1 = this.$store.state.yourpage;
-      this.fornew();
+      if(this.first){
+        this.fornew();
+      }
     },
     thetime(n, o) {
-      this.fornew();
+      if(this.first){
+        this.fornew();
+      }
     },
     inleft(n, o) {
       console.log(n);
       this.cglf(n);
       var newchart = setInterval(() => {
-        window.trend.reflow();
-      }, 17);
+         window.myChart1.resize();
+      }, 100);
       setTimeout(() => {
         clearInterval(newchart);
-      }, 1010);
+      }, 1500);
     },
     redrawflag() {
       setTimeout(() => {
@@ -222,6 +228,9 @@ export default {
     this.$store.commit("changeloadflge", true);
     setTimeout(() => {
       this.fornew();
+      setTimeout(()=>{
+        this.first = true
+      },2000)
     }, 50);
     this.cglf(this.$store.state.themenuflag);
     this.currentPage1 = this.$store.state.yourpage;
@@ -232,49 +241,129 @@ export default {
       var obj = this.chart_series(argument);
       console.log("-----------------------");
       console.log(obj);
-      var options1 = {
-        //hchart的参数
-        chart: {
-          zoomType: "xy"
-        },
-        colors: ["#409efe", "#00e175", "#ff0a50","#fbbc05","#000"],
-        title: {
-          text: ""
-        },
-        subtitle: {
-          text: ""
-        },
-        credits: {
-          enabled: false
-        },
-        xAxis: [
-          {
-            //横坐标
-            categories: arr1,
-            crosshair: true
-          }
-        ],
-        yAxis: [
-          {
-            // Primary yAxis
-            labels: {
-              format: "{value}"
-            },
-            title: {
-              text: this.typearr1[this.type][this.$store.state.alllang]
-            }
-          }
-        ],
-        tooltip: {
-          shared: true
-        },
-        series: obj
-      };
-      window.trend = Highcharts.chart("mychart", options1);
+      console.log(arr1)
+      var lgarr = []
+      var lgselect = {}
+      obj.forEach((e,index) => {
+        lgarr.push(e.name)
+        if(index >= 3){
+          lgselect[e.name]=false
+        }
+      });
+      var colors = ["#409efe", "#00e175", "#ff0a50","#fbbc05","#000"]
+      var echarts = require('echarts');
+      window.myChart1 = echarts.init(document.getElementById('mychart'));
+      var option = {
+                tooltip: {
+                    trigger: 'axis',
+                    textStyle:{
+                      align:'left'
+                    }
+                },
+                
+                legend: {
+                    data:lgarr,
+                    // selected:lgselect,
+                    bottom:30,
+                    itemGap:50
+                },
+                grid:{
+                  bottom:100,
+                  top:20,
+                  left:80,
+                  right:40
+                },
+                xAxis: {
+                    type: 'category',
+                    data: arr1,
+                    axisLine: {
+                        lineStyle: {
+                            type: 'solid',
+                            color:'#ebecf0',
+                            width:'1'
+                        }
+                    },
+                    axisLabel: {
+                        textStyle: {
+                            color: '#000',//坐标值得具体的颜色
+    
+                        }
+                    }
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        splitLine:{
+                          lineStyle:{
+                            color:'#ebecf0'
+                          }
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                type: 'solid',
+                                color:'#ebecf0',
+                                width:'1'
+                            }
+                        },
+                        axisLabel: {
+                            textStyle: {
+                                color: '#000',//坐标值得具体的颜色
+        
+                            }
+                        }
+                    }
+                ],
+                
+                series: obj,
+                color: colors
+            };
+            window.myChart1.setOption(option)
+      // var options1 = {
+      //   //hchart的参数
+      //   chart: {
+      //     zoomType: "xy"
+      //   },
+      //   colors: ["#409efe", "#00e175", "#ff0a50","#fbbc05","#000"],
+      //   title: {
+      //     text: ""
+      //   },
+      //   subtitle: {
+      //     text: ""
+      //   },
+      //   credits: {
+      //     enabled: false
+      //   },
+      //   xAxis: [
+      //     {
+      //       //横坐标
+      //       categories: arr1,
+      //       crosshair: true
+      //     }
+      //   ],
+      //   yAxis: [
+      //     {
+      //       // Primary yAxis
+      //       labels: {
+      //         format: "{value}"
+      //       },
+      //       title: {
+      //         text: this.typearr1[this.type][this.$store.state.alllang]
+      //       }
+      //     }
+      //   ],
+      //   tooltip: {
+      //     shared: true
+      //   },
+      //   series: obj
+      // };
+      // window.trend = Highcharts.chart("mychart", options1);
 
       window.onresize = function() {
         // chart.reflow();
-        window.trend.reflow();
+        // window.trend.reflow();
+        setTimeout(function(){
+          window.myChart1.resize();
+        }, 50)
       };
     },
     //根据数组的长度，组装chart参数
@@ -292,13 +381,29 @@ export default {
       //     }
       // ]
       var series_obj = [];
-      argument.forEach((e, index) => {
+      console.log('+++++++++++++++++++++++++++++++')
+      console.log(this.chainarr)
+      var changeargu = {}
+      argument.forEach((e) => {
+        changeargu[e.word] = e.arr[this.type]
+      });
+      var endarr = []
+      this.chainarr.forEach((e)=>{
+          endarr.push([])
+          endarr[endarr.length-1].word = e.blockchain
+          endarr[endarr.length-1].arr = changeargu[e.blockchain]
+      })
+
+
+      endarr.forEach((e, index) => {
         console.log(index);
         series_obj.push({
           name: e.word.toUpperCase(),
-          data: e.arr[this.type],
-          type: "spline",
-          visible: index <= 2 ? true : false
+          data: e.arr,
+          type: "line",
+          smooth: true
+          // type: "spline",
+          // visible: index <= 2 ? true : false
         });
       });
       return series_obj;
@@ -389,18 +494,20 @@ export default {
         // this.arr = res.data.msg.info
         // this.rankarr(1,'rank_order')
         this.drawarr = [];
-        res.data.msg.day30.forEach(e => {
+        
+        res.data.msg.day30.forEach((e,index) => {
           this.drawarr.push({
             word: e.blockchain,
             arr: [[], [], [], [], []]
           });
-
           e.day30.forEach(el => {
-            var ddd = new Date(el.timestamp * 1000);
-            var year = ddd.getFullYear();
-            var month = ddd.getMonth() + 1;
-            var day = ddd.getDate();
-            this.xarr.unshift(year + "/" + month + "/" + day);
+            if(index == 0){
+              var ddd = new Date(el.timestamp * 1000);
+              var year = ddd.getFullYear();
+              var month = ddd.getMonth() + 1;
+              var day = ddd.getDate();
+              this.xarr.unshift(year + "/" + month + "/" + day);
+            }
             this.drawarr[this.drawarr.length - 1]["arr"][0].unshift(
               el.chain_new_user
             );
@@ -492,7 +599,6 @@ table td {
 .ttimg {
   width: 26px;
   height: 26px;
-  border-radius: 13px;
   /* background-image:url(../../static/all1.png); */
   overflow: hidden;
   display: inline-block;
