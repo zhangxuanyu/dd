@@ -23,7 +23,6 @@
             <!-- 新用户数图表 -->
             <div class="dapp">
                 <div style="padding-top:5px;"><span style="float:left;color: #212229;font-weight: 600;margin-bottom:30px;">{{titlearr[4][$store.state.alllang]}}</span> 
-                    
                 </div>
                 <div id="newuser"  style="min-width:500px;height:500px"></div>            
             </div>
@@ -43,7 +42,7 @@
             </div>
 
              <div class="dapp">
-                <div style="padding-top:5px;"><span style="float:left;color: #212229;font-weight: 600;margin-bottom:30px;">{{titlearr[7][$store.state.alllang]}}({{$store.state.appid=='tron'?'TRX':$store.state.appid.toUpperCase()}})</span> 
+                <div style="padding-top:5px;"><span style="float:left;color: #212229;font-weight: 600;margin-bottom:30px;">{{titlearr[7][$store.state.alllang]}}({{$store.state.appid=='tron'?'TRX':$store.state.appid=='gxchain'?'GXC':$store.state.appid=='litecoin'?'LTC':$store.state.appid.toUpperCase()}})</span> 
                     
                 </div>
                 <div id="volume"  style="min-width:500px;height:500px"></div>            
@@ -55,7 +54,7 @@
                     </div>
                 <table  width="100%" cellspacing='0' style="text-align: center;">
                     <tr class="top bg pd">
-                        <th  v-for="(item,index) in titlearr" class="title all topbt" :style="index == titlearr.length -1 ?{borderRight:'1px solid #ebecf0'}:''">{{item[$store.state.alllang]}} <span v-if="index == titlearr.length -1" style="font-weight:400;color:#808c9b;">({{$store.state.appid=='tron'?'TRX':$store.state.appid.toUpperCase()}})</span> </th>
+                        <th  v-for="(item,index) in titlearr" class="title all topbt" :style="index == titlearr.length -1 ?{borderRight:'1px solid #ebecf0'}:''">{{item[$store.state.alllang]}} <span v-if="index == titlearr.length -1" style="font-weight:400;color:#808c9b;">({{$store.state.appid=='tron'?'TRX':$store.state.appid=='gxchain'?'GXC':$store.state.appid=='litecoin'?'LTC':$store.state.appid.toUpperCase()}})</span> </th>
                     </tr>
                     <tr class="top pd nbt" v-for="(item,index) in arr" v-if="index>=(currentPage1-1)*10&&index<currentPage1*10" :key="index">
                         <td class="title all" style="width:55px;">{{index+1}}</td>
@@ -207,11 +206,18 @@ export default {
             this.$store.commit('changeloadflge',true)
             this.geth = window.innerHeight - 60 + 'px'
             var now = new Date(new Date().setHours(0, 0, 0, 0)) - 0
+            var myDate = new Date();
+            console.log(myDate.getHours());
+            if(myDate.getHours()<=9){
+                now = now - 86400000
+            }
+            console.log(now)
             var now1 = now -  86400000 * 14
             //小时,分钟，秒，毫秒
             //凌晨2点50分50秒0毫秒
             console.log(now)
             console.log(now1)
+            
             this.begintime = now1;
             this.endtime = now-86400000;
             this.value7 = [this.begintime,this.endtime]
@@ -368,61 +374,6 @@ export default {
             return year+'-'+month+'-'+day
         },
         drawuser1(aa,arr1,arr2,string,windowname){
-            //  var options={   //hchart的参数
-			//         chart: {
-			//             zoomType: 'xy'
-            //         },
-            //         colors:['#409efe','#00e175','#ff0a50','black'],
-			//         title: {
-			//             text: ''
-            //         },
-            //         credits: {
-            //             enabled: false
-            //         },
-			//         subtitle: {
-			//             text: ''
-			//         },
-			//         xAxis: [{ //横坐标
-			//             categories: arr1,
-			//             crosshair: true
-			//         }],
-			//         yAxis: [
-			// 	        { // Primary yAxis
-			// 	            labels: {
-			// 	                format: '{value}',
-			// 	                style: {
-			// 	                    color: '#409efe'
-			// 	                }
-			// 	            },
-			// 	            title: {
-			// 	                text: string,
-			// 	                style: {
-			// 	                    color:'#409efe'
-			// 	                }
-			// 	            }
-			// 	        }
-			//         ],
-			//         tooltip: {
-			//             shared: true
-            //         },
-            //         legend:{
-            //             enabled:false
-            //         },
-			//         series: [
-			// 	        {
-			// 	            name: string,
-			// 	            data: arr2,
-			// 	            type: 'spline',
-			// 	        }
-
-			//         ]
-			// 	}
-            //     // this.chart = new Highcharts.Chart(chartContainer, options)
-            //     window[windowname] = Highcharts.chart(aa,options)
-                
-	        // 	    window.onresize = function () {
-	        // 	    	 window[windowname].reflow();
-            // 	    }
             
             var echarts = require('echarts');
             var colors = ["#409efe", "#00e175", "#ff0a50","#fbbc05","#000"]
@@ -493,13 +444,9 @@ export default {
                 color: colors
             };
             window[windowname].setOption(option)
-            window.onresize = function() {
-                // chart.reflow();
-                // window.trend.reflow();
-                setTimeout(function(){
-                window[windowname].resize();
-                }, 50)
-            };
+            window.addEventListener("resize",function(){
+                    window[windowname].resize();
+                });
         },
         newuserPage(val){
             console.log(`当前页: ${val}`);

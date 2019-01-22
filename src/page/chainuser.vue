@@ -66,8 +66,8 @@
                     <tr class="top pd nbt" v-for="(item,index) in arr" v-if="index>=(currentPage1-1)*10&&index<currentPage1*10" :key="index">
                         <td class="title all" style="width:55px;">{{index+1}}</td>
                         <td class="title all">{{timeuse(item.timestamp)}}</td>
-                        <td class="title all">{{conversion(item.chain_new_user.toString())}}</td>
                         <td class="title all">{{conversion(item.chain_total_user.toString())}}</td>
+                        <td class="title all">{{conversion(item.chain_new_user.toString())}}</td>
                         <td class="title all"  style="border-right:1px solid #ebecf0;">{{conversion(item.chain_active_user.toString())}}</td>
                        
                     </tr>
@@ -162,13 +162,22 @@ export default {
             this.$store.commit('changeloadflge',true)
             this.geth = window.innerHeight - 60 + 'px'
             var now = new Date(new Date().setHours(0, 0, 0, 0)) - 0
+
+            console.log(now)
+            var myDate = new Date();
+            console.log(myDate.getHours());
+            if(myDate.getHours()<=9){
+                now = now - 86400000
+            }
+            console.log(now)
             var now1 = now -  86400000 * 14
             //小时,分钟，秒，毫秒
             //凌晨2点50分50秒0毫秒
             console.log(now)
             console.log(now1)
+            
             this.begintime = now1;
-            this.endtime = now-86400000;
+            this.endtime = now - 86400000;
             this.value7 = [this.begintime,this.endtime]
             setTimeout(()=>{
                     this.fornew()
@@ -276,8 +285,8 @@ export default {
                 str+=`${i+1 + '\t'},`; 
                 str+=`${this.timeuse(dataarr[i].timestamp)  + '\t'},`; 
                  str+=`${dataarr[i].chain_active_user.toString() + '\t'},`; 
-                str+=`${(dataarr[i].chain_new_user).toString()  + '\t'},`; 
                 str+=`${dataarr[i].chain_total_user.toString()  + '\t'},`; 
+                str+=`${(dataarr[i].chain_new_user).toString()  + '\t'},`; 
                 str+='\n';
             }
             
@@ -444,13 +453,9 @@ export default {
                 color: colors
             };
             window[windowname].setOption(option)
-            window.onresize = function() {
-                // chart.reflow();
-                // window.trend.reflow();
-                setTimeout(function(){
-                window[windowname].resize();
-                }, 50)
-            };
+            window.addEventListener("resize",function(){ 
+                    window[windowname].resize();
+                });
 
 
 

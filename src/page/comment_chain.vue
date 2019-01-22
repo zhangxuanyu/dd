@@ -31,10 +31,10 @@
                     </div>{{item.blockchain.toUpperCase()}}</td>
                     <td class="title all" :style="index == chainarr.length -1 ?{border:'none'}:''">{{conversion(item.chain_new_user.toString())}}</td>
                     <td class="title all" :style="index == chainarr.length -1 ?{border:'none'}:''">{{conversion(item.chain_active_user.toString())}}</td>
-                    <td class="title all" :style="index == chainarr.length -1 ?{border:'none'}:''">{{conversion(item.chain_day_vol.toFixed(2))}} <span style="position:absolute;font-size:12px;bottom:10px;right:19px;">{{item.blockchain=='tron'?'TRX':item.blockchain.toUpperCase()}}</span> </td>
+                    <td class="title all" :style="index == chainarr.length -1 ?{border:'none'}:''">{{conversion(item.chain_day_vol.toFixed(2))}} <span style="position:absolute;font-size:12px;bottom:10px;right:19px;">{{item.blockchain=='tron'?'TRX':item.blockchain=='gxchain'?'GXC':item.blockchain=='litecoin'?'LTC':item.blockchain.toUpperCase()}}</span> </td>
                     <td class="title all" :style="index == chainarr.length -1 ?{border:'none'}:''">{{conversion(item.chain_day_call.toString())}}</td>
-                    <td class="title all" :style="index == chainarr.length -1 ?{border:'none'}:''">{{item.blockchain!='steem'?conversion(item.dapp_vol.toFixed(2)):'--'}} <span v-if="item.blockchain != 'steem'" style="position:absolute;font-size:12px;bottom:10px;right:19px;">{{item.blockchain=='tron'?'TRX':item.blockchain.toUpperCase()}}</span></td>
-                    <td class="title all" :style="index == chainarr.length -1 ?{border:'none'}:''">{{item.blockchain!='steem'?conversion(item.dapp_call.toString()):'--'}}</td>
+                    <td class="title all" :style="index == chainarr.length -1 ?{border:'none'}:''">{{(item.blockchain=='steem'||item.blockchain=='btc'||item.blockchain=='litecoin')?'--':conversion((item.dapp_vol).toFixed(2))}} <span v-if="!(item.blockchain == 'steem'||item.blockchain=='btc'||item.blockchain=='litecoin')" style="position:absolute;font-size:12px;bottom:10px;right:19px;">{{item.blockchain=='tron'?'TRX':item.blockchain=='gxchain'?'GXC':item.blockchain=='litecoin'?'LTC':item.blockchain.toUpperCase()}}</span></td>
+                    <td class="title all" :style="index == chainarr.length -1 ?{border:'none'}:''">{{(item.blockchain=='steem'||item.blockchain=='btc'||item.blockchain=='litecoin')?'--':conversion(item.dapp_call.toString())}}</td>
                 </tr>
             </table>
            
@@ -102,7 +102,7 @@ export default {
         "../../static/sort3.png"
       ],
       // 排序功能控制数组
-      ranknum: [-1, -1, 0, 0, 0, 0, -1, -1],
+      ranknum: [-1, -1, 0, 1, 0, 0, -1, -1],
       arr: [],
       chainarr: [
         // {
@@ -246,11 +246,11 @@ export default {
       var lgselect = {}
       obj.forEach((e,index) => {
         lgarr.push(e.name)
-        if(index >= 3){
-          lgselect[e.name]=false
-        }
+        // if(index >= 3){
+        //   lgselect[e.name]=false
+        // }
       });
-      var colors = ["#409efe", "#00e175", "#ff0a50","#fbbc05","#000"]
+      var colors = ["#4da7fb", "#27d0ab", "#f86677","#f8c366","#b266f8","#666df8","#66f893","#f88166","#66e5f8","#f866ca"]
       var echarts = require('echarts');
       window.myChart1 = echarts.init(document.getElementById('mychart'));
       var option = {
@@ -270,7 +270,7 @@ export default {
                 grid:{
                   bottom:100,
                   top:20,
-                  left:80,
+                  left:100,
                   right:40
                 },
                 xAxis: {
@@ -317,47 +317,7 @@ export default {
                 series: obj,
                 color: colors
             };
-            window.myChart1.setOption(option)
-      // var options1 = {
-      //   //hchart的参数
-      //   chart: {
-      //     zoomType: "xy"
-      //   },
-      //   colors: ["#409efe", "#00e175", "#ff0a50","#fbbc05","#000"],
-      //   title: {
-      //     text: ""
-      //   },
-      //   subtitle: {
-      //     text: ""
-      //   },
-      //   credits: {
-      //     enabled: false
-      //   },
-      //   xAxis: [
-      //     {
-      //       //横坐标
-      //       categories: arr1,
-      //       crosshair: true
-      //     }
-      //   ],
-      //   yAxis: [
-      //     {
-      //       // Primary yAxis
-      //       labels: {
-      //         format: "{value}"
-      //       },
-      //       title: {
-      //         text: this.typearr1[this.type][this.$store.state.alllang]
-      //       }
-      //     }
-      //   ],
-      //   tooltip: {
-      //     shared: true
-      //   },
-      //   series: obj
-      // };
-      // window.trend = Highcharts.chart("mychart", options1);
-
+            window.myChart1.setOption(option,true)
       window.onresize = function() {
         // chart.reflow();
         // window.trend.reflow();
@@ -475,6 +435,7 @@ export default {
       this.arr = "";
       this.xarr = [];
       console.log(this.$store.state.moneyty, this.$store.state.requesttime);
+      
       var url = this.$store.state.requrlnew + "/chain/rank";
       Axios.post(
         url,

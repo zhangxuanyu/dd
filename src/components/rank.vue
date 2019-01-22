@@ -126,27 +126,6 @@ export default {
   },
   methods: {
     request() {
-      if(this.$store.state.appid.split("_")[0]=='ETH'||this.$store.state.appid.split("_")[0]=='EOS'||this.$store.state.appid.split("_")[0]=='NAS'){
-        var url =
-        this.$store.state.requrl +
-        "/" +
-        this.$store.state.appid.split("_")[0].toLowerCase() +
-        "/detail";
-      console.log(url);
-      Axios.post(
-        url,
-        {
-          dapp_id: this.$store.state.appid,
-          flag: 0
-        },
-        {
-          headers: { "Content-Type": "application/x-www-form-urlencoded" }
-        }
-      ).then(res => {
-        console.log(res.data.msg);
-        this.showDapp = res.data.msg
-      });
-      }else{
         var url =
         this.$store.state.requrlnew +
         "/dapp/detail";
@@ -168,26 +147,8 @@ export default {
         this.showDapp = res.data.msg
         
       });
-      }
-      var url =
-        this.$store.state.requrl +
-        "/" +
-        this.$store.state.appid.split("_")[0].toLowerCase() +
-        "/detail";
-      console.log(url);
-      Axios.post(
-        url,
-        {
-          dapp_id: this.$store.state.appid,
-          flag: 0
-        },
-        {
-          headers: { "Content-Type": "application/x-www-form-urlencoded" }
-        }
-      ).then(res => {
-        console.log(res.data.msg);
-        this.showDapp = res.data.msg
-      });
+      
+     
     },
     gotoother(aa, bb) {
       console.log(this.routearr[aa] != this.$route.path);

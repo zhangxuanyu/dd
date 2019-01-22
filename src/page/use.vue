@@ -56,19 +56,22 @@ export default {
                         '../../static/sort1.png','../../static/sort2.png','../../static/sort3.png'
                         ],
                     // 排序功能控制数组 
-                    ranknum:[-1,-1,0,0,0,-1],
+                    ranknum:[-1,-1,1,0,0,-1],
                     toptip:['合约调用排行','Transactions'],
                     titlearr:[[' ',' '],['名称','Name'],['调用次数','Transactions'],['当日调用次数','Daily Transactions'],['增长率','Growth Rate'],['分类','Category']],
                     arr:[],
                     currentPage1: 1,
                     //请求数组
-                    reqarr:['eth','eos','nas','tron','neo'],
-                    reqAarr:['ETH','EOS','NAS','NEO'],
-                    allmoney:[['total','exchanges','games','high-risk','marketplaces','gambling','other'],['total','game','tool','exchange','marketplaces','gambling','high-risk','other'],['total','Game','Tool','Market','Other'],['total','Gambling','Games','Other'],['Other']],
+                    reqarr:['eos','tron','eth','nas','gxchain','qtum','neo'],
+                    reqAarr:['EOS','TRON','ETH','NAS','GXCHAIN','QTUM','NEO'],
+                    allmoney:[['total','exchanges','games','high-risk','marketplaces','gambling','other'],['total','game','tool','exchange','marketplaces','gambling','high-risk','other'],['total','Game','Tool','Market','Other'],['total','Gambling','Games','Other'],['Other'],['Other'],['Other']],
                     all:'',
                     theleft:'280px',
                     stylearr:['','','100px','','','',''],
-                    pagesize:30
+                    pagesize:30,
+                    rank_state:-1,
+                    req_rankarr:['total_call','day_call','call_rate'],
+                    rankytpe:0
                 }
             },
             computed:{
@@ -115,18 +118,23 @@ export default {
                 rankdata(index){
                     console.log(this.ranknum[index])
                     if(index>1&&index<6){
+                        this.rankytpe = index - 2
                         if(this.ranknum[index] == 0){
                             this.ranknum=[-1,-1,0,0,0,0,-1]
                             this.ranknum[index] = 1
+                            this.rank_state = -1
                         }else if(this.ranknum[index] == 1){
                             this.ranknum=[-1,-1,0,0,0,0,-1]
                             this.ranknum[index] = 2
+                            this.rank_state = 1
                         }else if(this.ranknum[index] == 2){
                             this.ranknum=[-1,-1,0,0,0,0,-1]
                             this.ranknum[index] = 1
+                            this.rank_state = -1
                         }
                         
                     }
+                    this.fornew()
                 },
                 //数字字符串添加逗号
                 conversion(str){
@@ -159,54 +167,17 @@ export default {
                 fornew(){
                     this.all = []
                     this.arr = ''
-                    // console.log(this.$store.state.moneyty,this.$store.state.requesttime)
-                    // var url = this.$store.state.requrl+'/'+this.reqarr[this.$store.state.moneyty]+'/rank';
-                    // Axios.post(url,{
-                    //                     "page":this.currentPage1,
-                    //                     "timestamp":this.$store.state.requesttime/1000+86400,
-                    //                     "order_by":'call',
-                    //                     "num":this.pagesize,
-                    //                     "category":this.allmoney[this.$store.state.moneyty][this.$store.state.dapptype]
-                    //                 },{
-                    //                     headers: {'Content-Type': "application/x-www-form-urlencoded"}
-                    //                 }).then(res => {
-                    //                     console.log(res.data.msg)
-                    //                     this.all = res.data.msg.count
-                    //                     this.arr = res.data.msg.data.data
-                    //                     this.$store.commit('changeloadopacty',false)
-                    //                 })
-
-
-                    if(this.$store.state.moneyty == 0){
-                        var url =  this.$store.state.requrl+'/'+this.reqarr[this.$store.state.moneyty]+'/rank';
-                        Axios.post(url,{
-                                            "page":this.currentPage1,
-                                            "timestamp":this.$store.state.requesttime/1000+86400,
-                                            "order_by":'call',
-                                            "num":this.pagesize,
-                                            "category":this.allmoney[this.$store.state.moneyty][this.$store.state.dapptype]
-                                        },{
-                                            headers: {'Content-Type': "application/x-www-form-urlencoded"}
-                                        }).then(res => {
-                                            console.log(res.data.msg)
-                                            this.all = res.data.msg.count
-                                            this.arr = res.data.msg.data.data
-                                            // this.rankarr(1,'rank_order')
-                                            
-                                            this.$store.commit('changeloadopacty',false)
-                                        })
-
-                    }else{
+                    
                         var url =  this.$store.state.requrlnew+'/dapp/rank';
                         Axios.post(url,{
                                             "blockchain": this.reqarr[this.$store.state.moneyty],
                                             "timestamp": this.$store.state.requesttime/1000,
-                                            "order": "total_call",
+                                            "order": this.req_rankarr[this.rankytpe],
                                             "category": this.allmoney[this.$store.state.moneyty][this.$store.state.dapptype],
                                             "page_num": this.currentPage1,
                                             "page_size": this.pagesize,
                                             "rank": "call",
-                                            "stat": -1
+                                            "stat": this.rank_state
                                         },{
                                             headers: {'Content-Type': "application/x-www-form-urlencoded"}
                                         }).then(res => {
@@ -217,7 +188,7 @@ export default {
                                            
                                             this.$store.commit('changeloadopacty',false)
                                         })
-                    }
+                    
                 }
             }
 }

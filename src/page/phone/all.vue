@@ -5,9 +5,9 @@
             <span  @click="gotoother(2,0)">{{blocktitle[3][$store.state.alllang]}} ></span>
         </p>
 
-        <div v-for="(item,index) in arr" :key="index" class="chain"> 
+        <div v-for="(item,index) in arr" :key="index" class="chain" @click="gotoother(4,item.word.toLowerCase())"> 
             <div class="chain_title">
-                <p class="chain_type">{{item.word}} <span v-if="index == 1" style="font-size:0.24rem;color:rgb(73, 165, 251);">(beta)</span> </p>
+                <p class="chain_type">{{item.word}}  </p>
                 <p class="dappnum">{{blocktitle[6][$store.state.alllang]}}:{{item.num}}</p>
             </div>
             
@@ -168,7 +168,7 @@ export default {
           ]
         },
         {
-          word: "NAS",
+          word: "TRON",
           num: 0,
           data: [
             {
@@ -249,6 +249,8 @@ export default {
           this.$router.push({path:'/chain'});
         }else if(a == 3){
           this.$router.push({path:'/detail?id='+b});
+        }else if(a == 4){
+          this.$router.push({path:'/chaindetail?id='+b});
         }
       },
       initChart(arr1, arr2, arr3, arr4) {
@@ -358,105 +360,105 @@ export default {
       this.nasarr = [];
       this.eosarr = [];
       console.log(this.$store.state.moneyty, this.$store.state.requesttime);
-      var url = this.$store.state.requrl + "/index";
+      var url = this.$store.state.requrlnew + "/hotchain";
       Axios.post(
         url,
         {
-          key: this.reqarr[this.typedata]
+          "num":3,"order":"active_user"
         },
         {
           headers: { "Content-Type": "application/x-www-form-urlencoded" }
         }
       ).then(res => {
-        console.log(res.data.msg);
+        console.log(res.data.data);
         var numtimes = 1;
         if (aa) {
           var numroll = setInterval(() => {
-            if (numtimes >= 90) {
+            if (numtimes >= 89) {
               clearInterval(numroll);
             }
             numtimes++;
             this.arr[0].data[0].num = parseInt(
-              (res.data.msg.change_24h.eth.user / 90) * numtimes
+              (res.data.data[0].active_user / 90) * numtimes
             );
 
             this.arr[0].data[1].num = parseInt(
-              (res.data.msg.change_24h.eth.vol / 90) * numtimes
+              (res.data.data[0].vol / 90) * numtimes
             );
 
             this.arr[0].data[2].num = parseInt(
-              (res.data.msg.change_24h.eth.tx / 90) * numtimes
+              (res.data.data[0].call / 90) * numtimes
             );
 
             this.arr[1].data[0].num = parseInt(
-              (res.data.msg.change_24h.eos.user / 90) * numtimes
+              (res.data.data[1].active_user / 90) * numtimes
             );
 
             this.arr[1].data[1].num = parseInt(
-              (res.data.msg.change_24h.eos.vol / 90) * numtimes
+              (res.data.data[1].vol / 90) * numtimes
             );
 
             this.arr[1].data[2].num = parseInt(
-              (res.data.msg.change_24h.eos.tx / 90) * numtimes
+              (res.data.data[1].call / 90) * numtimes
             );
 
             this.arr[2].data[0].num = parseInt(
-              (res.data.msg.change_24h.nas.user / 90) * numtimes
+              (res.data.data[2].active_user / 90) * numtimes
             );
 
             this.arr[2].data[1].num = parseInt(
-              (res.data.msg.change_24h.nas.vol / 90) * numtimes
+              (res.data.data[2].vol / 90) * numtimes
             );
 
             this.arr[2].data[2].num = parseInt(
-              (res.data.msg.change_24h.nas.tx / 90) * numtimes
+              (res.data.data[2].call / 90) * numtimes
             );
           }, 20);
         }
-        this.arr[0].data[0].num = res.data.msg.change_24h.eth.user;
+        this.arr[0].data[0].num = res.data.data[0].active_user;
         this.arr[0].data[0].add = (
-          res.data.msg.change_24h.eth.user_rate * 100
+          res.data.data[0].active_user_rate * 100
         ).toFixed(2);
-        this.arr[0].data[1].num = res.data.msg.change_24h.eth.vol.toFixed(0);
+        this.arr[0].data[1].num = res.data.data[0].vol.toFixed(0);
         this.arr[0].data[1].add = (
-          res.data.msg.change_24h.eth.vol_rate * 100
+          res.data.data[0].vol_rate * 100
         ).toFixed(2);
-        this.arr[0].data[2].num = res.data.msg.change_24h.eth.tx;
+        this.arr[0].data[2].num = res.data.data[0].call;
         this.arr[0].data[2].add = (
-          res.data.msg.change_24h.eth.tx_rate * 100
+          res.data.data[0].call_rate * 100
         ).toFixed(2);
 
-        this.arr[1].data[0].num = res.data.msg.change_24h.eos.user;
+        this.arr[1].data[0].num = res.data.data[1].active_user;
         this.arr[1].data[0].add = (
-          res.data.msg.change_24h.eos.user_rate * 100
+          res.data.data[1].active_user_rate * 100
         ).toFixed(2);
-        this.arr[1].data[1].num = res.data.msg.change_24h.eos.vol.toFixed(0);
+        this.arr[1].data[1].num = res.data.data[1].vol.toFixed(0);
         this.arr[1].data[1].add = (
-          res.data.msg.change_24h.eos.vol_rate * 100
+          res.data.data[1].vol_rate * 100
         ).toFixed(2);
-        this.arr[1].data[2].num = res.data.msg.change_24h.eos.tx;
+        this.arr[1].data[2].num = res.data.data[1].call;
         this.arr[1].data[2].add = (
-          res.data.msg.change_24h.eos.tx_rate * 100
+          res.data.data[1].call_rate * 100
         ).toFixed(2);
 
-        this.arr[2].data[0].num = res.data.msg.change_24h.nas.user;
+        this.arr[2].data[0].num = res.data.data[2].active_user;
         this.arr[2].data[0].add = (
-          res.data.msg.change_24h.nas.user_rate * 100
+          res.data.data[2].active_user_rate * 100
         ).toFixed(2);
-        this.arr[2].data[1].num = res.data.msg.change_24h.nas.vol.toFixed(0);
+        this.arr[2].data[1].num = res.data.data[2].vol.toFixed(0);
         this.arr[2].data[1].add = (
-          res.data.msg.change_24h.nas.vol_rate * 100
+          res.data.data[2].vol_rate * 100
         ).toFixed(2);
-        this.arr[2].data[2].num = res.data.msg.change_24h.nas.tx;
+        this.arr[2].data[2].num = res.data.data[2].call;
         this.arr[2].data[2].add = (
-          res.data.msg.change_24h.nas.tx_rate * 100
+          res.data.data[2].call_rate * 100
         ).toFixed(2);
 
-        this.arr[0].num = res.data.msg.count.eth;
-        this.arr[1].num = res.data.msg.count.eos;
-        this.arr[2].num = res.data.msg.count.nas;
-        // this.xarr = res.data.msg.day_30d.eth_info
-        res.data.msg.day_30d.eth_info.forEach(e => {
+        this.arr[0].num = res.data.data[0].dapp_num;
+        this.arr[1].num = res.data.data[1].dapp_num;
+        this.arr[2].num = res.data.data[2].dapp_num;
+        // this.xarr = res.data.data.day_30d.eth_info
+        res.data.data.day_30d.eth_info.forEach(e => {
           var ddd = new Date((e.timestamp - 86400) * 1000);
           var year = ddd.getFullYear();
           var month = ddd.getMonth() + 1;
@@ -465,10 +467,10 @@ export default {
           this.etharr.unshift(e.value);
         });
         console.log(this.etharr)
-        res.data.msg.day_30d.nas_info.forEach(e => {
+        res.data.data.day_30d.nas_info.forEach(e => {
           this.nasarr.unshift(e.value);
         });
-        res.data.msg.day_30d.eos_info.forEach(e => {
+        res.data.data.day_30d.eos_info.forEach(e => {
           this.eosarr.unshift(e.value);
         });
         this.$store.commit("changeloadopacty", false);

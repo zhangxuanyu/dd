@@ -14,6 +14,8 @@
                 <el-option :key="index" :label="item[$store.state.alllang]"  :value="index" v-for="(item,index) in typearr3" v-if="$store.state.moneyty == 2">{{item[$store.state.alllang]}}</el-option>
                 <el-option :key="index" :label="item[$store.state.alllang]"  :value="index" v-for="(item,index) in typearr4" v-if="$store.state.moneyty == 3">{{item[$store.state.alllang]}}</el-option>
                 <el-option :key="index" :label="item[$store.state.alllang]"  :value="index" v-for="(item,index) in typearr5" v-if="$store.state.moneyty == 4">{{item[$store.state.alllang]}}</el-option>
+                <el-option :key="index" :label="item[$store.state.alllang]"  :value="index" v-for="(item,index) in typearr6" v-if="$store.state.moneyty == 5">{{item[$store.state.alllang]}}</el-option>
+                <el-option :key="index" :label="item[$store.state.alllang]"  :value="index" v-for="(item,index) in typearr7" v-if="$store.state.moneyty == 6">{{item[$store.state.alllang]}}</el-option>
             </el-select>
          </p>
     </div>
@@ -23,11 +25,20 @@
 export default {
     data(){
         return{
-            typearr1:[['全部','Total'],['交易所','Exchanges'],['游戏','Games'],['高风险','High-Risk'],['市场','Marketplaces'],['博彩','Gambling'],['其他','Other']],
-            typearr2:[['全部','Total'],['游戏','Game'],['工具','Tool'],['交易所','Exchange'],['市场','Marketplaces'],['博彩','Gambling'],['高风险','High-Risk'],['其他','Other']],
-            typearr3:[['全部','Total'],['游戏','Game'],['工具','Tool'],['市场','Marketplace'],['其他','Other']],
-            typearr4:[['全部','Total'],['博彩','Gambling'],['游戏','Game'],['其他','Other']],
+            // typearr1:[['全部','Total'],['交易所','Exchanges'],['游戏','Games'],['高风险','High-Risk'],['市场','Marketplaces'],['博彩','Gambling'],['其他','Other']],
+            // typearr2:[['全部','Total'],['游戏','Game'],['工具','Tool'],['交易所','Exchange'],['市场','Marketplaces'],['博彩','Gambling'],['高风险','High-Risk'],['其他','Other']],
+            // typearr3:[['全部','Total'],['游戏','Game'],['工具','Tool'],['市场','Marketplace'],['其他','Other']],
+            // typearr4:[['全部','Total'],['博彩','Gambling'],['游戏','Game'],['其他','Other']],
+            // typearr5:[['其他','Other']],
+            // typearr6:[['其他','Other']],
+            // typearr7:[['其他','Other']],
+            typearr1:[['全部','Total'],['游戏','Game'],['工具','Tool'],['交易所','Exchange'],['市场','Marketplaces'],['博彩','Gambling'],['高风险','High-Risk'],['其他','Other']],
+            typearr2:[['全部','Total'],['博彩','Gambling'],['游戏','Game'],['其他','Other']],
+            typearr3:[['全部','Total'],['交易所','Exchanges'],['游戏','Games'],['高风险','High-Risk'],['市场','Marketplaces'],['博彩','Gambling'],['其他','Other']],
+            typearr4:[['全部','Total'],['游戏','Game'],['工具','Tool'],['市场','Marketplace'],['其他','Other']],
             typearr5:[['其他','Other']],
+            typearr6:[['其他','Other']],
+            typearr7:[['其他','Other']],
             value1: '',
             time:['日期','Date'],
             tyarr:['分类','Categories'],
@@ -49,7 +60,14 @@ export default {
             //凌晨2点50分50秒0毫秒
             now.setHours(0, 0, 0, 0);
             console.log(now.getTime());
-            this.$store.commit('gettime',now.getTime()-86400000)
+            var tentime = now.getTime()
+            var myDate = new Date();
+            console.log(myDate.getHours());
+            if(myDate.getHours()<=9){
+                tentime = tentime - 86400000
+            }
+      console.log(this.$store.state.moneyty, this.$store.state.requesttime);
+            this.$store.commit('gettime',tentime-86400000)
             this.value1 = new Date(this.$store.state.requesttime);
         }
        

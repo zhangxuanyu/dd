@@ -81,14 +81,14 @@ export default {
                         '../../static/sort1.png','../../static/sort2.png','../../static/sort3.png'
                         ],
                         //请求数组
-                    reqarr:['eth','eos','nas'],
+                    reqarr:['eth','eos','nas','tron','neo','qtum','gxchain'],
                         // 排序功能控制数组 
                     ranknum:[-1,-1,0,0,0,0,-1],
                     thepage:1,
                     thepagesize:10,
                     arr:[],
                     all:0,
-                    allmoney:[['total','exchanges','games','high-risk','marketplaces','gambling','other'],['total','game','tool','exchange','marketplaces','gambling','high-risk','other'],['total','Game','Tool','Market','Other']],
+                    allmoney:[['total','exchanges','games','high-risk','marketplaces','gambling','other'],['total','game','tool','exchange','marketplaces','gambling','high-risk','other'],['total','Game','Tool','Market','Other'],['total','Gambling','Games','Other'],['Other'],['Other'],['Other']],
         }
     },
     created(){
@@ -146,21 +146,23 @@ export default {
                     this.all = 0
                     this.arr = ''
                     console.log(this.$store.state.moneyty,this.$store.state.requesttime)
-                    var url =  this.$store.state.requrl+'/'+this.reqarr[this.$store.state.moneyty]+'/rank';
+                     var url =  this.$store.state.requrlnew+'/dapp/rank';
                     Axios.post(url,{
-                                        "page":this.thepage,
-                                        "timestamp":this.$store.state.requesttime/1000+86400,
-                                        "order_by":'user',
-                                        "num":this.thepagesize,
-                                        "category":this.allmoney[this.$store.state.moneyty][this.$store.state.dapptype]
+                                        "blockchain": this.reqarr[this.$store.state.moneyty],
+                                        "timestamp": this.$store.state.requesttime/1000,
+                                        "order": "active_user",
+                                        "category": this.allmoney[this.$store.state.moneyty][this.$store.state.dapptype],
+                                        "page_num": this.thepage,
+                                        "page_size": this.thepagesize,
+                                        "rank": "user",
+                                        "stat": -1
                                     },{
                                         headers: {'Content-Type': "application/x-www-form-urlencoded"}
                                     }).then(res => {
-                                        
+                                        console.log(res.data.msg)
                                         this.all = res.data.msg.count
-                                        this.arr = res.data.msg.data.data
-                                        console.log(this.arr)
-                                    
+                                        this.arr = res.data.msg.data
+                                        
                                     })
                 }
     }

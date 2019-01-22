@@ -47,16 +47,14 @@ export default {
     methods:{
         request() {
       var url =
-        this.$store.state.requrl +
-        "/" +
-        this.$store.state.appid.split("_")[0].toLowerCase() +
-        "/detail";
+        this.$store.state.requrlnew +
+        "/dapp/detail";
       console.log(url);
       Axios.post(
         url,
         {
-          dapp_id: this.$store.state.appid,
-          flag: 0
+          blockchain:this.$store.state.appid.split("_")[0].toLowerCase(),
+          dapp_id:this.$store.state.appid
         },
         {
           headers: { "Content-Type": "application/x-www-form-urlencoded" }

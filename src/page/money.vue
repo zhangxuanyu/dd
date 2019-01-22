@@ -11,7 +11,7 @@
                 <tr class="top bg" style="color: rgb(70, 74, 88);background-color:#f7fafc;">
                     <th  v-for="(item,index) in titlearr" class="title all" :style="{width:stylearr[index],borderBottom:'2px solid #ebecf0'}" :class="{cur:rankpic_arr[ranknum[index]]}" 
                     :key="index" @click="rankdata(index)">
-                       <span>{{item[$store.state.alllang]}}</span> <span v-if="index == 2" style="font-weight:400;color:#797b8e;">({{reqAarr[$store.state.moneyty]}})</span>  
+                       <span>{{item[$store.state.alllang]}}</span> <span v-if="index == 2" style="font-weight:400;color:#797b8e;">({{reqAarr[$store.state.moneyty] == 'TRON'?'TRX':reqAarr[$store.state.moneyty] == 'GXCHAIN'?'GXC':reqAarr[$store.state.moneyty]}})</span>  
                         <img :src="rankpic_arr[ranknum[index]]" alt="" style="width:6px;height:12px;vertical-align: -1px;margin-left:6px;" v-if="rankpic_arr[ranknum[index]]" >
                     </th>
                 </tr>
@@ -57,20 +57,23 @@ export default {
                         '../../static/sort1.png','../../static/sort2.png','../../static/sort3.png'
                         ],
                     // 排序功能控制数组 
-                    ranknum:[-1,-1,0,0,0,0,-1],
+                    ranknum:[-1,-1,1,0,0,0,-1],
                     toparr:['交易金额排行','Volume'],
                     titlearr:[[' ',' '],['名称','Name'],['累计交易量','Volume'],['当日交易量','Daily Volume'],['增长率','Growth Rate'],['日均交易量','ADTV'],['分类','Category']],
                     arr:[],
                     currentPage1: 1,
                     //请求数组
-                    reqarr:['eth','eos','nas','tron','neo'],
-                    reqAarr:['ETH','EOS','NAS','TRON','NEO'],
+                    reqarr:['eos','tron','eth','nas','gxchain','qtum','neo'],
+                    reqAarr:['EOS','TRON','ETH','NAS','GXCHAIN','QTUM','NEO'],
                     all:'',
                     // typearr:['total','game','tool','market','other'],
-                    allmoney:[['total','exchanges','games','high-risk','marketplaces','gambling','other'],['total','game','tool','exchange','marketplaces','gambling','high-risk','other'],['total','Game','Tool','Market','Other'],['total','Gambling','Games','Other'],['Other']],
+                    allmoney:[['total','exchanges','games','high-risk','marketplaces','gambling','other'],['total','game','tool','exchange','marketplaces','gambling','high-risk','other'],['total','Game','Tool','Market','Other'],['total','Gambling','Games','Other'],['Other'],['Other'],['Other']],
                     theleft:'280px',
                     stylearr:['','','200px','','','','',''],
-                    pagesize:30
+                    pagesize:30,
+                    rank_state:-1,
+                    req_rankarr:['total_vol','day_vol','total_vol_rate','average_vol'],
+                    rankytpe:0
                     
                 }
             },
@@ -119,18 +122,23 @@ export default {
                 rankdata(index){
                     console.log(this.ranknum[index])
                     if(index>1&&index<6){
+                        this.rankytpe = index - 2
                         if(this.ranknum[index] == 0){
                             this.ranknum=[-1,-1,0,0,0,0,-1]
                             this.ranknum[index] = 1
+                            this.rank_state = -1
                         }else if(this.ranknum[index] == 1){
                             this.ranknum=[-1,-1,0,0,0,0,-1]
                             this.ranknum[index] = 2
+                            this.rank_state = 1
                         }else if(this.ranknum[index] == 2){
                             this.ranknum=[-1,-1,0,0,0,0,-1]
                             this.ranknum[index] = 1
+                            this.rank_state = -1
                         }
                         
                     }
+                    this.fornew()
                 },
                 //数字字符串添加逗号
                 conversion(str){
@@ -163,54 +171,17 @@ export default {
                 fornew(){
                     this.all = []
                     this.arr = ''
-                    // console.log(this.$store.state.moneyty,this.$store.state.requesttime)
-                    // var url = this.$store.state.requrl+'/'+this.reqarr[this.$store.state.moneyty]+'/rank';
-                    // Axios.post(url,{
-                    //                     "page":this.currentPage1,
-                    //                     "timestamp":this.$store.state.requesttime/1000+86400,
-                    //                     "order_by":'vol',
-                    //                     "num":this.pagesize,
-                    //                     "category":this.allmoney[this.$store.state.moneyty][this.$store.state.dapptype]
-                    //                 },{
-                    //                     headers: {'Content-Type': "application/x-www-form-urlencoded"}
-                    //                 }).then(res => {
-                    //                     console.log(res.data.msg)
-                    //                     this.all = res.data.msg.count
-                    //                     this.arr = res.data.msg.data.data
-                    //                     this.$store.commit('changeloadopacty',false)
-                    //                 })
-
-
-                    if(this.$store.state.moneyty == 0){
-                        var url =  this.$store.state.requrl+'/'+this.reqarr[this.$store.state.moneyty]+'/rank';
-                        Axios.post(url,{
-                                            "page":this.currentPage1,
-                                            "timestamp":this.$store.state.requesttime/1000+86400,
-                                            "order_by":'vol',
-                                            "num":this.pagesize,
-                                            "category":this.allmoney[this.$store.state.moneyty][this.$store.state.dapptype]
-                                        },{
-                                            headers: {'Content-Type': "application/x-www-form-urlencoded"}
-                                        }).then(res => {
-                                            console.log(res.data.msg)
-                                            this.all = res.data.msg.count
-                                            this.arr = res.data.msg.data.data
-                                            // this.rankarr(1,'rank_order')
-                                        
-                                            this.$store.commit('changeloadopacty',false)
-                                        })
-
-                    }else{
+                    
                         var url =  this.$store.state.requrlnew+'/dapp/rank';
                         Axios.post(url,{
                                             "blockchain": this.reqarr[this.$store.state.moneyty],
                                             "timestamp": this.$store.state.requesttime/1000,
-                                            "order": "day_vol",
+                                            "order": this.req_rankarr[this.rankytpe],
                                             "category": this.allmoney[this.$store.state.moneyty][this.$store.state.dapptype],
                                             "page_num": this.currentPage1,
                                             "page_size": this.pagesize,
                                             "rank": "tx",
-                                            "stat": -1
+                                            "stat": this.rank_state
                                         },{
                                             headers: {'Content-Type': "application/x-www-form-urlencoded"}
                                         }).then(res => {
@@ -221,7 +192,7 @@ export default {
                                             
                                             this.$store.commit('changeloadopacty',false)
                                         })
-                    }
+                    
                 }
             }
 }

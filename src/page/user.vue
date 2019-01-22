@@ -60,7 +60,7 @@
                         <th  v-for="(item,index) in titlearr2" class="title all topbt" :style="index == titlearr1.length -1 ?{borderRight:'1px solid #ebecf0'}:''">{{item[$store.state.alllang]}}</th>
                     </tr>
                     <tr class="top pd nbt" v-for="(item,index) in arr" v-if="index>=(currentPage2-1)*10&&index<currentPage2*10">
-                        <td class="title all">{{timeuse(item.timestamp-86400)}}</td>
+                        <td class="title all">{{timeuse(item.timestamp)}}</td>
                         <td class="title all">{{conversion(item.new_user.toString())}}</td>
                         <td class="title all">{{conversion(item.active_user.toString())}}</td>
                         <td class="title all">{{conversion(item.week_user.toString())}}</td>
@@ -167,10 +167,18 @@ export default {
             }
         },
     created(){
+        console.log(11111111111111111111)
             this.$store.commit('changeloadopacty',true)
             this.$store.commit('changeloadflge',true)
             this.geth = window.innerHeight - 60 + 'px'
             var now = new Date(new Date().setHours(0, 0, 0, 0)) - 0
+            var myDate = new Date();
+            console.log(myDate.getHours());
+            if(myDate.getHours()<=9){
+                console.log(11111111111111111111)
+                now = now - 86400000
+            }
+            console.log(now)
             var now1 = now -  86400000 * 14
             //小时,分钟，秒，毫秒
             //凌晨2点50分50秒0毫秒
@@ -275,7 +283,7 @@ export default {
             
             //增加\t为了不让表格显示科学计数法或者其他格式
             for(let i = 0 ; i < dataarr.length ; i++ ){
-                str+=`${this.timeuse(dataarr[i].timestamp-86400)  + '\t'},`; 
+                str+=`${this.timeuse(dataarr[i].timestamp)  + '\t'},`; 
                 str+=`${dataarr[i].new_user.toString()  + '\t'},`; 
                 str+=`${dataarr[i].active_user.toString()  + '\t'},`; 
                 str+=`${dataarr[i].week_user.toString() + '\t'},`; 
@@ -512,13 +520,18 @@ export default {
                 color: colors
             };
             window[windowname].setOption(option)
-            window.onresize = function() {
-                // chart.reflow();
-                // window.trend.reflow();
-                setTimeout(function(){
-                window[windowname].resize();
-                }, 50)
-            };
+
+            window.addEventListener("resize",function(){
+                    window[windowname].resize();
+                });
+            
+            // window.onresize = function() {
+            //     // chart.reflow();
+            //     // window.trend.reflow();
+            //     setTimeout(function(){
+            //         window[windowname].resize();
+            //     }, 50)
+            // };
 
         },
         newuserPage(val){
@@ -535,39 +548,6 @@ export default {
             this.actarr = []
             this.arr = []
             console.log(this.$store.state.moneyty,this.$store.state.requesttime)
-            if(this.$store.state.appid.split("_")[0]=='ETH'){
-                var url = this.$store.state.requrl+'/'+this.$store.state.appid.split('_')[0].toLowerCase()+'/user';
-                    console.log(url)
-                    Axios.post(url,{
-                                        "dapp_id":this.$store.state.appid,
-                                        "start":this.begintime/1000,
-                                        "last":this.endtime/1000+86400
-                                    },{
-                                        headers: {'Content-Type': "application/x-www-form-urlencoded"}
-                                    }).then(res => {
-                                        console.log(res.data.msg)
-                                        res.data.msg.item.forEach((a,bb) => {
-                                            if(bb < res.data.msg.item.length -1){
-                                                this.arr.push(a)
-                                            }
-                                            
-                                        })
-                                        console.log(this.arr)
-                                        this.arr.forEach(e => {
-                                            var ddd = new Date(e.timestamp*1000-86400000)
-                                            var year = ddd.getFullYear()
-                                            var month = ddd.getMonth()+1
-                                            var day=ddd.getDate();
-                                            this.xarr.unshift(year+'/'+month+'/'+day)
-                                            this.userarr.unshift(e.total_user)
-                                            this.addarr.unshift((e.total_rate*100).toFixed(3)-0) 
-                                            this.newarr.unshift(e.new_user)
-                                            this.actarr.unshift(e.active_user)
-                                        });
-                                        this.drawall()
-                                        this.$store.commit('changeloadopacty',false)
-                                    })
-            }else{
                 var url = this.$store.state.requrlnew+'/dapp';
                     console.log(url)
                     Axios.post(url,{
@@ -584,7 +564,7 @@ export default {
                                         this.arr = this.rank(1,'timestamp',res.data.msg.data)
                                         console.log(this.arr)
                                         this.arr.forEach(e => {
-                                            var ddd = new Date(e.timestamp*1000-86400000)
+                                            var ddd = new Date(e.timestamp*1000)
                                             var year = ddd.getFullYear()
                                             var month = ddd.getMonth()+1
                                             var day=ddd.getDate();
@@ -597,7 +577,7 @@ export default {
                                         this.drawall()
                                         this.$store.commit('changeloadopacty',false)
                                     })
-            }
+            
                     
 
 

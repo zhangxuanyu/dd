@@ -12,6 +12,10 @@
                     <el-option :key="index" :label="item[$store.state.alllang]" :value="index" v-for="(item,index) in typearr1" v-if="$store.state.moneyty == 0">{{item[$store.state.alllang]}}</el-option>
                     <el-option :key="index" :label="item[$store.state.alllang]"  :value="index" v-for="(item,index) in typearr2" v-if="$store.state.moneyty == 1">{{item[$store.state.alllang]}}</el-option>
                     <el-option :key="index" :label="item[$store.state.alllang]"  :value="index" v-for="(item,index) in typearr3" v-if="$store.state.moneyty == 2">{{item[$store.state.alllang]}}</el-option>
+                    <el-option :key="index" :label="item[$store.state.alllang]" :value="index" v-for="(item,index) in typearr4" v-if="$store.state.moneyty == 3">{{item[$store.state.alllang]}}</el-option>
+                    <el-option :key="index" :label="item[$store.state.alllang]"  :value="index" v-for="(item,index) in typearr5" v-if="$store.state.moneyty == 4">{{item[$store.state.alllang]}}</el-option>
+                    <el-option :key="index" :label="item[$store.state.alllang]"  :value="index" v-for="(item,index) in typearr6" v-if="$store.state.moneyty == 5">{{item[$store.state.alllang]}}</el-option>
+                    <el-option :key="index" :label="item[$store.state.alllang]"  :value="index" v-for="(item,index) in typearr7" v-if="$store.state.moneyty == 6">{{item[$store.state.alllang]}}</el-option>
                 </el-select>
             </div>
             
@@ -30,6 +34,10 @@ export default {
             typearr1:[['全部','total'],['交易所','exchanges'],['游戏','game'],['高风险','high-risk'],['市场','marketplaces'],['博彩','gambling'],['其他','other']],
             typearr2:[['全部','total'],['游戏','game'],['工具','tool'],['交易所','exchanges'],['市场','marketplaces'],['博彩','gambling'],['高风险','high-risk'],['其他','other']],
             typearr3:[['全部','total'],['游戏','game'],['工具','tool'],['市场','marketplaces'],['其他','other']],
+            typearr4:[['全部','Total'],['博彩','Gambling'],['游戏','Game'],['其他','Other']],
+            typearr5:[['其他','Other']],
+            typearr6:[['其他','Other']],
+            typearr7:[['其他','Other']],
             value1: '',
             time:['日期','Date'],
             tyarr:['分类','Categories'],

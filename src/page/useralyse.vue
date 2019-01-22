@@ -16,7 +16,7 @@
                     :key="index"
                     @click="rankdata(index)"
                     >
-                       <span>{{item[$store.state.alllang]}}</span>  <span v-if="index == 4" style="font-weight:400;color:#797b8e;">({{reqAarr[$store.state.moneyty] == 'TRON'?'TRX':reqAarr[$store.state.moneyty] == 'GXCHAIN'?'GXC':reqAarr[$store.state.moneyty]}})</span>  
+                       <span>{{item[$store.state.alllang]}}</span>  <span v-if="index == 4||index == 6" style="font-weight:400;color:#797b8e;">({{reqAarr[$store.state.moneyty]}})</span>  
                         <img :src="rankpic_arr[ranknum[index]]" alt="" style="width:6px;height:12px;vertical-align: -1px;margin-left:6px;" v-if="rankpic_arr[ranknum[index]]" >
                     </th>
                 </tr>
@@ -57,7 +57,7 @@
 
 <script>
 import theSel from '../components/type_money'
-import theTime from '../components/time_type'
+import theTime from '../components/user_time'
 import Axios from 'axios';
 export default {
     components:{
@@ -65,21 +65,20 @@ export default {
             },
             data(){
                 return{
-                    toparr:['综合排行','Rankings'],
-                    titlearr:[[' ',' '],['名称','Name'],['新增用户','New Users'],['活跃用户','Active Users'],['交易量','Volume'],['调用次数','Transactions'],['分类','Category']],
+                    toparr:['用户排行(TOP50)','User Ranking (TOP50)'],
+                    titlearr:[[' ',' '],['用户','User'],['使用Dapp数量','Dapp Number'],['Dapp交易笔数','Dapp Tx'],['Dapp交易额','Dapp Volume'],['总交易笔数','All Tx'],['总交易额','Volume']],
                     // 排序功能图片数组
                     rankpic_arr:[
                         '../../static/sort1.png','../../static/sort2.png','../../static/sort3.png'
                         ],
                     // 排序功能控制数组 
-                    ranknum:[-1,-1,0,1,0,0,-1],
+                    ranknum:[-1,-1,0,0,0,0,-1],
                     arr:[],
-                    allmoney:[['total','exchanges','games','high-risk','marketplaces','gambling','other'],['total','game','tool','exchange','marketplaces','gambling','high-risk','other'],['total','Game','Tool','Market','Other'],['total','Gambling','Games','Other'],['Other'],['Other'],['Other']],
+                    allmoney:[['total','exchanges','games','high-risk','marketplaces','gambling','other'],['total','game','tool','exchange','marketplaces','gambling','high-risk','other'],['total','Game','Tool','Market','Other'],['total','Gambling','Games','Other'],['Other'],['Other']],
                     currentPage1: 1,
                      //请求数组
-                    // reqarr:['eth','eos','nas','tron','neo','qtum','gxchain'],
-                    reqarr:['eos','tron','eth','nas','gxchain','qtum','neo'],
-                    reqAarr:['EOS','TRON','ETH','NAS','GXCHAIN','QTUM','NEO'],
+                    reqarr:['eth','eos','nas','tron','neo','qtum'],
+                    reqAarr:['ETH','EOS','NAS','TRON','NEO','QTUM'],
                     stylearr:['','','100px','','','',''],
                     all:'',
                     theleft:'280px',
@@ -87,10 +86,7 @@ export default {
                     //是否有通过id命名的icon
                     picfalt:false,
                     //pagesize
-                    pagesize:30,
-                    rank_state:-1,
-                    req_rankarr:['new_user','active_user','day_vol','day_call'],
-                    rankytpe:1
+                    pagesize:30
                 }
             },
             computed:{
@@ -139,23 +135,18 @@ export default {
                 rankdata(index){
                     console.log(this.ranknum[index])
                     if(index>1&&index<6){
-                        this.rankytpe = index - 2
                         if(this.ranknum[index] == 0){
                             this.ranknum=[-1,-1,0,0,0,0,-1]
                             this.ranknum[index] = 1
-                            this.rank_state = -1
                         }else if(this.ranknum[index] == 1){
                             this.ranknum=[-1,-1,0,0,0,0,-1]
                             this.ranknum[index] = 2
-                            this.rank_state = 1
                         }else if(this.ranknum[index] == 2){
                             this.ranknum=[-1,-1,0,0,0,0,-1]
                             this.ranknum[index] = 1
-                            this.rank_state = -1
                         }
                         
                     }
-                    this.fornew()
                 },
                 //数字字符串添加逗号
                 conversion(str){
@@ -196,7 +187,7 @@ export default {
                     this.fornew()
                 },
                 gotodetail(a){
-                    this.$router.push({path:'/detail?id='+a});
+                    this.$router.push({path:'/userdetail?id='+a});
                 },
                 //请求数据函数
                 fornew(){
@@ -209,12 +200,12 @@ export default {
                         Axios.post(url,{
                                             "blockchain": this.reqarr[this.$store.state.moneyty],
                                             "timestamp": this.$store.state.requesttime/1000,
-                                            "order": this.req_rankarr[this.rankytpe],
+                                            "order": "active_user",
                                             "category": this.allmoney[this.$store.state.moneyty][this.$store.state.dapptype],
                                             "page_num": this.currentPage1,
                                             "page_size": this.pagesize,
                                             "rank": "total",
-                                            "stat": this.rank_state
+                                            "stat": -1
                                         },{
                                             headers: {'Content-Type': "application/x-www-form-urlencoded"}
                                         }).then(res => {

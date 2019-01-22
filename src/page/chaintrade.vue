@@ -13,7 +13,7 @@
             </p>
             <!-- 新用户数图表 -->
             <div class="dapp">
-                <div style="padding-top:5px;"><span style="float:left;color: #212229;font-weight: 600;margin-bottom:30px;">{{ttarr1[0][$store.state.alllang]}} <span>({{$store.state.appid=='tron'?'TRX':$store.state.appid.toUpperCase()}})</span> </span> 
+                <div style="padding-top:5px;"><span style="float:left;color: #212229;font-weight: 600;margin-bottom:30px;">{{ttarr1[0][$store.state.alllang]}} <span>({{$store.state.appid=='tron'?'TRX':$store.state.appid=='litecoin'?'LTC':$store.state.appid=='gxchain'?'GXC':$store.state.appid.toUpperCase()}})</span> </span> 
                     
                 </div>
                 <div id="volume"  style="min-width:500px;height:500px"></div>
@@ -127,11 +127,11 @@ export default {
                         }
                     }]
                     },
-                    titlearr:[['',''],['日期','Date'],['当日交易量','Daily Volume'],['当日交易笔数','Daily Transactions'],['日转账笔数','Daily Transfer'],['累计交易量','Total Volume'],['累计交易笔数','Total Tramsactions'],['累计转账笔数','Total Transfer']],
+                    titlearr:[['',''],['日期','Date'],['当日交易量','Daily Volume'],['当日交易笔数','Daily Transactions'],['日转账笔数','Daily Transfer'],['累计交易量','Total Volume'],['累计交易笔数','Total Transactions'],['累计转账笔数','Total Transfer']],
                     arr:[],
                     tablearr:[],
                     ttarr:[['交易数据','Transaction Data'],['时间段','Period'],['新增用户','New users'],['活跃用户','Active Users'],['用户分析','User Analysis']],
-                    ttarr1:[['日交易额','Daily Volume'],['日交易笔数','Daily Tramsactions'],['日转账笔数','Daily Transfer']],
+                    ttarr1:[['日交易额','Daily Volume'],['日交易笔数','Daily Transactions'],['日转账笔数','Daily Transfer']],
                     currentPage1:1,
                     //伸展宽度
                     open:'',
@@ -153,11 +153,18 @@ export default {
             this.$store.commit('changeloadflge',true)
             this.geth = window.innerHeight - 60 + 'px'
             var now = new Date(new Date().setHours(0, 0, 0, 0)) - 0
+            var myDate = new Date();
+            console.log(myDate.getHours());
+            if(myDate.getHours()<=9){
+                now = now - 86400000
+            }
+            console.log(now)
             var now1 = now -  86400000 * 14
             //小时,分钟，秒，毫秒
             //凌晨2点50分50秒0毫秒
             console.log(now)
             console.log(now1)
+          
             this.begintime = now1;
             this.endtime = now-86400000;
             this.value7 = [this.begintime,this.endtime]
@@ -351,7 +358,7 @@ export default {
                 grid:{
                   bottom:100,
                   top:20,
-                  left:80,
+                  left:100,
                   right:40
                 },
                 xAxis: {
@@ -407,13 +414,9 @@ export default {
                 color: colors
             };
             window[windowname].setOption(option)
-            window.onresize = function() {
-                // chart.reflow();
-                // window.trend.reflow();
-                setTimeout(function(){
-                window[windowname].resize();
-                }, 50)
-            };
+            window.addEventListener("resize",function(){
+                    window[windowname].resize();
+                });
             //  var options={   //hchart的参数
 			//         chart: {
 			//             zoomType: 'xy'

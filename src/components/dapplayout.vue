@@ -5,95 +5,12 @@
         </div>
         <min-menu class="leftme" :style="{left:open}"></min-menu>
         <!-- <p class="alltitle">{{ttarr[10][$store.state.alllang]}}</p> -->
-        <div class="contright" v-if="arr.title">
-          <div style="" class="showbigpic" v-if="bigpic">
-
-          </div>
-            <!-- dapp介绍 -->
-            <div class="dapp" style="minHeight:610px;">
-                <p class="preview">{{ttarr[12][$store.state.alllang]}}</p>
-                <!-- 轮播图 -->
-                <div class="pic topnav_box" >
-                    <ul :style="allleng" class="allpic"  v-show="picshow">
-                        <li v-for="(item,index) in picarr" class="outpic" v-show="imgcount">
-                          <img :src="'https://bkc-dapp-1252899312.cos.ap-hongkong.myqcloud.com/dappdata/static/'+urlid+'/'+item+'.png'" alt="" onerror="javascript:this.src=''"  class="picwh" @click="show_dapp_pic('https://bkc-dapp-1252899312.cos.ap-hongkong.myqcloud.com/dappdata/static/'+urlid+'/'+item+'.png')">
-                          <img :src="'https://bkc-dapp-1252899312.cos.ap-hongkong.myqcloud.com/dappdata/static/'+urlid+'/'+item+'.jpg'" alt="" onerror="javascript:this.src=''"  class="picwh" @click="show_dapp_pic('https://bkc-dapp-1252899312.cos.ap-hongkong.myqcloud.com/dappdata/static/'+urlid+'/'+item+'.jpg')"> </li>
-                        <li v-for="(item,index) in picarr" class="inpic" v-show="!imgcount" ><img :src="wrongarr[index]" alt="" onerror="javascript:this.src=''"  class="picwh" @click="show_dapp_pic(wrongarr[index])"></li>
-                    </ul>
-                </div>
-                
-                <div style="position:relative;">
-                    <div class="intro">
-                        <p style="color:rgb(33, 34, 41);font-weight:600;font-size:16px;margin-bottom:10px;">{{ttarr[0][$store.state.alllang]}}</p>
-                        <p style="line-height:30px;font-size:14px; color: #797b8e;">{{arr.en_cn[$store.state.alllang].description}}</p>
-                    </div>
-
-                    <div class="info">
-                        <p style="color:rgb(33, 34, 41);font-weight:600;font-size:16px;margin-bottom:10px;">{{ttarr[1][$store.state.alllang]}}</p>
-                        <div style="overflow:hidden;">
-                            <div  style="line-height:30px;font-size:14px;" class="cur base">
-                                <a :href="arr.website.indexOf('http')==-1?'http://'+arr.website:arr.website" target="_black" rel="noopener noreferrer">
-                                    <img src="../../static/home.png" alt=""> {{ttarr[2][$store.state.alllang]}} 
-                                    <div class="go"></div>
-                                    <span style="color:rgb(214, 222, 230);margin-left:20px;margin-right:20px;">|</span>
-                                    
-                                </a>
-                            </div>
-                            <div  style="line-height:30px;font-size:14px;" class="cur base">
-                                <a :href="arr.github?arr.github:'javascript:;'" :style="arr.github?{}:{color:'#ccc'}" target="_black" rel="noopener noreferrer">
-                                    <img src="../../static/GitHub.png" alt=""> {{ttarr[3][$store.state.alllang]}} 
-                                    <div class="go" v-if="arr.github"></div>
-                                </a>
-                            </div>
-                        </div>
-                        
-                        <div class="tableout"> 
-                          <table width="100%" cellspacing='0' style="text-align: center;">
-                              <tr>
-                                  <th style="width:300px;" class="title">{{ttarr[4][$store.state.alllang]}}</th>
-                                  <th  class="title">{{ttarr[5][$store.state.alllang]}}</th>
-                              </tr>
-                              <tr v-for="(item,index) in arr.contracts" :key="index" v-if="index<=ctra">
-                                  <td class="all" v-if="index == 0">{{'contracts'+(index+1)}}</td>
-                                  <td class="all" v-if="index != 0"> </td>
-                                  <td class="all">
-                                    <a :href="'https://explorer.nebulas.io/#/address/'+item" v-if="arr.platform == 'NAS'" target="_black" rel="noopener noreferrer">{{item}}</a>
-                                    <a :href="'https://etherscan.io/address/'+item" v-if="arr.platform == 'ETH'" target="_black" rel="noopener noreferrer">{{item}}</a>
-                                    <a :href="'https://eospark.com/MainNet/account/'+item" v-if="arr.platform == 'EOS'" target="_black" rel="noopener noreferrer">{{item}}</a> 
-                                    <a :href="'https://tronscan.org/#/contract/'+item" v-if="arr.platform == 'TRON'" target="_black" rel="noopener noreferrer">{{item}}</a>   
-                                    <a :href="'http://state.otcgo.cn/assetinfo.html?index='+item" v-if="arr.platform == 'NEO'" target="_black" rel="noopener noreferrer">{{item}}</a>   
-                                    <a :href="'https://qtum.info/contract/'+item" v-if="arr.platform == 'QTUM'" target="_black" rel="noopener noreferrer">{{item}}</a> 
-                                    <a :href="'https://block.gxb.io/#/asset/'+item" v-if="arr.platform == 'GXCHAIN'" target="_black" rel="noopener noreferrer">{{item}}</a> 
-                                  </td>
-                              </tr>
-                          </table>
-
-                          <div class="showcontract cur" @click="showctr(arr.contracts.length>1)" v-if="arr.contracts.length>1">
-                              {{ctra?ttarr[14][$store.state.alllang]:ttarr[6][$store.state.alllang]}}
-                              <img :src="ctra?'../../static/unshow.png':'../../static/show.png'" alt="" style="vertical-align:3px;margin-left:10px;">
-                          </div>
-                      </div>  
-                    </div>
-                </div>
-                
-
-                
-            </div>
-
-
-            <!-- 动态和资讯 -->
-            <div class="news" v-show="false">
-                <div class="newinfo">
-                    <p style="color: #212229;font-weight: 600;">{{ttarr[5][$store.state.alllang]}}</p>
-                    <p style="line-height:30px;font-size:14px;"></p>
-                </div>
-            </div>
-        </div>
+        <router-view  class="cont"/>
     </div>
 </template>
 
 <script>
-import minMenu from "../components/rank";
+import minMenu from "./rank";
 import Highcharts from "highcharts/highstock";
 import HighchartsMore from "highcharts/highcharts-more";
 import HighchartsDrilldown from "highcharts/modules/drilldown";
@@ -180,6 +97,9 @@ export default {
     }
   },
   mounted() {
+<<<<<<< HEAD
+      
+=======
     setTimeout(() => {
       console.log(this.xarr);
       console.log(this.$store.state.close);
@@ -214,6 +134,7 @@ export default {
         this.allleng = { width: this.wrongarr.length * 370 + "px" };
       }
     }, 1000);
+>>>>>>> dappdata_dev
   },
   computed: {
     addclose() {

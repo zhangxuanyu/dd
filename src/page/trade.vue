@@ -36,13 +36,13 @@
                         <th  v-for="(item,index) in titlearr2" class="title all topbt" :style="index == titlearr2.length - 1?{borderRight:'1px solid #ebecf0'}:''">{{item[$store.state.alllang]}}</th>
                     </tr>
                     <tr class="top pd" v-for="(item,index) in tablearr" v-if="index>=(currentPage1-1)*10&&index<currentPage1*10">
-                        <td  class="title all" >{{timeuse(item.timestamp-86400)}}</td>
+                        <td  class="title all" >{{timeuse(item.timestamp)}}</td>
                         <td  class="title all" >{{conversion(item.day_vol.toFixed(2))}}</td>
-                        <td  class="title all" >{{conversion(item.day_tx.toString())}}</td>
                         <td  class="title all" >{{conversion(item.day_call.toString())}}</td>
+                        <td  class="title all" >{{conversion(item.day_tx.toString())}}</td>
                         <td  class="title all" >{{conversion(item.total_vol.toFixed(2))}}</td>
-                        <td  class="title all" >{{conversion(item.total_tx.toString())}}</td>
-                        <td  class="title all" style="border-right:1px solid #ebecf0;">{{conversion(item.total_call.toString())}}</td>
+                        <td  class="title all" >{{conversion(item.total_call.toString())}}</td>
+                        <td  class="title all" style="border-right:1px solid #ebecf0;">{{conversion(item.total_tx.toString())}}</td>
                     </tr>
                 </table>
                
@@ -139,6 +139,13 @@ export default {
             this.$store.commit('changeloadflge',true)
             this.geth = window.innerHeight - 60 + 'px'
             var now = new Date(new Date().setHours(0, 0, 0, 0)) - 0
+            console.log(now)
+            var myDate = new Date();
+            console.log(myDate.getHours());
+            if(myDate.getHours()<=9){
+                now = now - 86400000
+            }
+            console.log(now)
             var now1 = now -  86400000 * 14
             //小时,分钟，秒，毫秒
             //凌晨2点50分50秒0毫秒
@@ -244,13 +251,13 @@ export default {
             
             //增加\t为了不让表格显示科学计数法或者其他格式
             for(let i = 0 ; i < dataarr.length ; i++ ){
-                str+=`${this.timeuse(dataarr[i].timestamp-86400)  + '\t'},`; 
+                str+=`${this.timeuse(dataarr[i].timestamp)  + '\t'},`; 
                 str+=`${dataarr[i].day_vol.toFixed(2)  + '\t'},`; 
-                str+=`${dataarr[i].day_tx.toString()  + '\t'},`; 
                 str+=`${dataarr[i].day_call.toString()  + '\t'},`; 
+                str+=`${dataarr[i].day_tx.toString()  + '\t'},`; 
                 str+=`${dataarr[i].total_vol.toFixed(2) + '\t'},`; 
-                str+=`${dataarr[i].total_tx.toString() + '\t'},`; 
                 str+=`${dataarr[i].total_call.toString() + '\t'},`; 
+                str+=`${dataarr[i].total_tx.toString() + '\t'},`; 
 
                 str+='\n';
             }
@@ -443,13 +450,16 @@ export default {
                 color: colors
             };
             window[windowname].setOption(option)
-            window.onresize = function() {
-                // chart.reflow();
-                // window.trend.reflow();
-                setTimeout(function(){
-                window[windowname].resize();
-                }, 50)
-            };
+            window.addEventListener("resize",function(){
+                    window[windowname].resize();
+                });
+            // window.onresize = function() {
+            //     // chart.reflow();
+            //     // window.trend.reflow();
+            //     setTimeout(function(){
+            //     window[windowname].resize();
+            //     }, 50)
+            // };
         },
         newuserPage(val){
             console.log(`当前页: ${val}`);
@@ -463,39 +473,7 @@ export default {
             this.allarr = []
             this.arr = []
             console.log(this.$store.state.moneyty,this.$store.state.requesttime)
-            if(this.$store.state.appid.split("_")[0]=='ETH'){
-                var url = this.$store.state.requrl+'/'+this.$store.state.appid.split('_')[0].toLowerCase()+'/tx';
-                    console.log(url)
-                    Axios.post(url,{
-                                        "dapp_id":this.$store.state.appid,
-                                        "start":this.begintime/1000,
-                                        "last":this.endtime/1000+86400
-                                    },{
-                                        headers: {'Content-Type': "application/x-www-form-urlencoded"}
-                                    }).then(res => {
-                                        console.log(res)
-                                        res.data.msg.tx_info.forEach((a,bb) => {
-                                            if(bb < res.data.msg.tx_info.length -1){
-                                                this.arr.push(a)
-                                            }                                          
-                                        })
-                                        
-                                        this.arr.forEach((e) => {
-                                                var ddd = new Date(e.timestamp*1000-86400000)
-                                                var year = ddd.getFullYear()
-                                                var month = ddd.getMonth()+1
-                                                var day=ddd.getDate();
-                                                this.xarr.unshift(year+'/'+month+'/'+day)
-                                                this.timearr.unshift(e.day_tx)
-                                                this.allarr.unshift(e.day_vol) 
-                                        });
-                                        
-                                        this.$store.commit('changeloadopacty',false)
-                                        setTimeout(()=>{
-                                            this.drawall() 
-                                        },100)
-                                    })
-            }else{
+            
                 var url = this.$store.state.requrlnew+'/dapp';
                     console.log(url)
                     Axios.post(url,{
@@ -511,7 +489,7 @@ export default {
                                        
                                         this.arr = this.rank(1,'timestamp',res.data.msg.data)
                                         this.arr.forEach((e) => {
-                                                var ddd = new Date(e.timestamp*1000-86400000)
+                                                var ddd = new Date(e.timestamp*1000)
                                                 var year = ddd.getFullYear()
                                                 var month = ddd.getMonth()+1
                                                 var day=ddd.getDate();
@@ -525,43 +503,13 @@ export default {
                                             this.drawall() 
                                         },100)
                                     })
-            }
+            
                     
         },
         fornew1(){
             this.usearr  = []
             this.arr1 = []
             console.log(this.$store.state.moneyty,this.$store.state.requesttime)
-            if(this.$store.state.appid.split("_")[0]=='ETH'||this.$store.state.appid.split("_")[0]=='EOS'||this.$store.state.appid.split("_")[0]=='NAS'){
-                var url = this.$store.state.requrl+'/'+this.$store.state.appid.split('_')[0].toLowerCase()+'/call';
-                    console.log(url)
-                    Axios.post(url,{
-                                        "dapp_id":this.$store.state.appid,
-                                        "start":this.begintime/1000,
-                                        "last":this.endtime/1000+86400
-                                    },{
-                                        headers: {'Content-Type': "application/x-www-form-urlencoded"}
-                                    }).then(res => {
-                                        console.log(res)
-                                        res.data.msg.call_info.forEach((a,bb) => {
-                                            if(bb < res.data.msg.call_info.length -1){
-                                                this.arr1.push(a)
-                                            }
-                                            
-                                        })
-                                        // res.data.msg.view_info.forEach((a,bb) => {
-                                        //     if(bb < res.data.msg.view_info.length -1){
-                                        //         this.arr1.push(a)
-                                        //     }
-                                        
-                                        // })
-                                        this.arr1.forEach(e => {
-                                            this.usearr.unshift(e.day_call)
-                                        });
-                                        console.log(this.xarr)
-                                        this.$store.commit('changeloadopacty',false)
-                                    })
-            }else{
                 var url =  this.$store.state.requrlnew+'/dapp';
                     console.log(url)
                     Axios.post(url,{
@@ -587,7 +535,7 @@ export default {
                                         console.log(this.xarr)
                                         this.$store.commit('changeloadopacty',false)
                                     })
-            }
+            
                     
         } 
     }

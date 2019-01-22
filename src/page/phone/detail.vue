@@ -35,6 +35,10 @@
             <a :href="'https://explorer.nebulas.io/#/address/'+item" v-if="arr.platform == 'NAS'" target="_black" rel="noopener noreferrer">{{item}}</a>
             <a :href="'https://etherscan.io/address/'+item" v-if="arr.platform == 'ETH'" target="_black" rel="noopener noreferrer">{{item}}</a>
             <a :href="'https://eospark.com/MainNet/account/'+item" v-if="arr.platform == 'EOS'" target="_black" rel="noopener noreferrer">{{item}}</a>  
+            <a :href="'https://tronscan.org/#/contract/'+item" v-if="arr.platform == 'TRON'" target="_black" rel="noopener noreferrer">{{item}}</a>   
+            <a :href="'http://state.otcgo.cn/assetinfo.html?index='+item" v-if="arr.platform == 'NEO'" target="_black" rel="noopener noreferrer">{{item}}</a>   
+            <a :href="'https://qtum.info/contract/'+item" v-if="arr.platform == 'QTUM'" target="_black" rel="noopener noreferrer">{{item}}</a> 
+            <a :href="'https://block.gxb.io/#/asset/'+item" v-if="arr.platform == 'GXCHAIN'" target="_black" rel="noopener noreferrer">{{item}}</a> 
         </div>
                 </div>
               
@@ -133,16 +137,14 @@ export default {
         fornew() {
       console.log(this.$store.state.moneyty, this.$store.state.requesttime);
       var url =
-        this.$store.state.requrl +
-        "/" +
-        this.$store.state.appid.split("_")[0].toLowerCase() +
-        "/detail";
+        this.$store.state.requrlnew +
+        "/dapp/detail";
       console.log(url);
       Axios.post(
         url,
         {
-          dapp_id: this.$store.state.appid,
-          flag:1
+          blockchain:this.$store.state.appid.split("_")[0].toLowerCase(),
+          dapp_id:this.$store.state.appid
         },
         {
           headers: { "Content-Type": "application/x-www-form-urlencoded" }

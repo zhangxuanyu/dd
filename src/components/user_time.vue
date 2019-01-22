@@ -1,9 +1,8 @@
 <template>
-    <div style="overflow:hidden;padding-left:1px;height:45px;">
-         <div v-for="(item,index) in moneyarr" class="mytype cur" :style="mnysel == index?{color:'rgb(73,165,251)',backgroundColor:'#fff',border:'none'}:''" @click="changemny(index)">
-             {{item}}
-             <!-- <span v-if="index == 1" style="font-size:12px;color:rgb(73, 165, 251)">(beta)</span> -->
-        </div>
+    <div style="overflow:hidden;padding-left:1px;height:45px;margin-top:-30px;">
+         <div class="right">
+             <div class="timetab" v-for="(item,index) in  arr" :key="index" :style="select == index?{color:'#409efe',border:'1px solid #409efe'}:{}" @click="changesel(index)">{{item[$store.state.alllang]}}</div>
+         </div>
     </div>
 </template>
 
@@ -11,34 +10,26 @@
 export default {
     data(){
         return{
-            // moneyarr:['ETH','EOS','NAS','TRON','NEO','QTUM','GXCHAIN'],
-            moneyarr:['EOS','TRON','ETH','NAS','GXCHAIN','QTUM','NEO'],
-            type:'',
-            //币种选择
-            mnysel:0,
-            //分类模块的显示
-            showtype:true,
+           arr:[['全部','All'],['近三月','Last Quarter'],['本月','Last Month']],
+           select:2
             
         }
     },
     created(){
-        this.mnysel = this.$store.state.moneyty
-        this.$store.commit('getdapptype',0)
-        this.type = this.$store.state.dapptype
+        
+    },
+    mounted(){
+        
+    },
+    computed:{
+        
     },
     watch:{
-        type(n,o){
-            console.log(n)
-            this.$store.commit('getdapptype',n)
-        }
+        
     },
     methods:{
-        changemny(aa){
-            this.mnysel = aa
-            this.$store.commit('getdapptype',0)
-            this.$store.commit('savepage',1)
-            this.type = this.$store.state.dapptype
-            this.$store.commit('changemoneyty',aa)
+        changesel(index){
+            this.select = index
         }
     }
 }
@@ -94,8 +85,22 @@ select option:hover{
 }
 .right{
     float:right;
-    margin-right:30px;
+    color: #797b8e;
+    font-weight: 400;
+    overflow: hidden;
+}
+.timetab{
+    width: 100px;
+	height: 30px;
+	border-radius: 15px;
+	border: solid 1px #ebecf0;
+    margin-left: 30px;
+    text-align: center;
+    line-height: 30px;
+    float: right;
+    color: #797b8e;
+    font-size: 14px;
+    cursor: pointer;
 }
 </style>
-
 

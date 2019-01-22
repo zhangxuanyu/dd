@@ -442,27 +442,29 @@ export default {
       this.actarr = [];
       this.arr = [];
       console.log(this.$store.state.moneyty, this.$store.state.requesttime);
-      var url =
-        this.$store.state.requrl +
-        "/" +
-        this.$store.state.appid.split("_")[0].toLowerCase() +
-        "/user";
+      var url = this.$store.state.requrlnew+'/dapp';
       console.log(url);
       Axios.post(
         url,
         {
-          dapp_id: this.$store.state.appid,
-          start: this.begintime / 1000,
-          last: this.endtime / 1000 + 86400
+          // dapp_id: this.$store.state.appid,
+          // start: this.begintime / 1000,
+          // last: this.endtime / 1000 + 86400
+
+          "blockchain": this.$store.state.appid.split("_")[0].toLowerCase(),
+          "dapp_id":this.$store.state.appid,
+          "begin": this.begintime/1000,
+          "end": this.endtime/1000+86400,
+          "type":"user"
         },
         {
           headers: { "Content-Type": "application/x-www-form-urlencoded" }
         }
       ).then(res => {
         console.log(res.data.msg);
-        res.data.msg.item.forEach((a, bb) => {
-          if (bb < res.data.msg.item.length - 1) {
-            this.arr.push(a);
+        res.data.msg.data.forEach((a, bb) => {
+          if (bb < res.data.msg.data.length - 1) {
+            this.arr.unshift(a);
           }
         });
         console.log(this.arr);

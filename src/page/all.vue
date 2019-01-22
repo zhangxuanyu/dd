@@ -1,63 +1,23 @@
 <template>
-    <div class="cont" :style="{marginLeft:theleft,minWidth: '1144px'}">
+    <div class="cont" id="allout" :style="{marginLeft:theleft,minWidth: '1144px'}">
         <!-- 币种 -->
         <p class="new">
             <span>{{blocktitle[0][$store.state.alllang]}}</span>
             <span @click="gotoother(1,'')">{{blocktitle[3][$store.state.alllang]}} ></span>
         </p>
         <div class="card_flex">
-            <!-- <div class="card cur" v-for="(item,index) in arr" :style="{width:cdwd}" :key="index" @click="gotoother(5,'ETH_'+360)"> -->
-            <!-- <div class="card cur" v-for="(item,index) in chainallarr" :style="{width:cdwd}" :key="index" >
-                <p class="title">{{item.blockchain.toUpperCase()}} <span v-if="item.flag" style="color:rgb(73, 165, 251);font-size:14px;font-weight:400;">(beta)</span> </p>
-                <div class="dappnum">{{dappnumtips[$store.state.alllang]}}：{{item.dapp_num}}</div>
-                <div  class="card_out">
-                    <div class="card_in">
-                        <p class="subtitle"><img src="" alt="" :style="index == 2?{position:'absolute',top:'-1px',left:'0px'}:{position:'absolute',top:'-1px',left:'5px'}">{{chainarr[0][$store.state.alllang]}}</p>
-                        <p class="tips">(24h)</p>
-                        <p class="numbers">{{item.active_user}}</p>
-                        <p class="subtitle" :style="item.active_user_rate > 0?{color:'#1ccfa7'}:item.active_user_rate < 0?{color:'#f85e70'}:{color: 'rgb(167, 174, 182);'}">
-                        <img src="../../static/up.png" alt="" v-if="item.active_user_rate > 0" class="mgt">
-                        <img src="../../static/down.png" alt="" v-if="item.active_user_rate < 0" class="mgt" >
-                        {{(item.active_user_rate>0?'+'+item.active_user_rate:item.active_user_rate).toFixed(2)}}%
-                        </p>
-                    </div>
 
-                    <div class="card_in">
-                        <p class="subtitle"><img :src="'../../static/'+item.blockchain.toUpperCase()+'-1.png'" alt="" :style="index == 2?{position:'absolute',top:'-1px',left:'0px'}:{position:'absolute',top:'-1px',left:'5px'}">{{chainarr[1][$store.state.alllang]}}</p>
-                        <p class="tips">(24h)</p>
-                        <p class="numbers">{{item.vol.toFixed(0)}}</p>
-                        <p class="subtitle" :style="item.vol_rate > 0?{color:'#1ccfa7'}:item.vol_rate < 0?{color:'#f85e70'}:{color: 'rgb(167, 174, 182);'}">
-                        <img src="../../static/up.png" alt="" v-if="item.vol_rate > 0" class="mgt">
-                        <img src="../../static/down.png" alt="" v-if="item.vol_rate < 0" class="mgt" >
-                        {{(item.vol_rate>0?'+'+item.vol_rate:item.vol_rate).toFixed(2)}}%
-                        </p>
-                    </div>
+            <div class="card cur" v-for="(item,index) in arr" :style="{width:cdwd}" :key="index" @click="gotoother(5,item.word.toLowerCase())">
 
 
-                    <div class="card_in">
-                        <p class="subtitle"><img src="" alt="" :style="index == 2?{position:'absolute',top:'-1px',left:'0px'}:{position:'absolute',top:'-1px',left:'5px'}">{{chainarr[2][$store.state.alllang]}}</p>
-                        <p class="tips">(24h)</p>
-                        <p class="numbers">{{item.call}}</p>
-                        <p class="subtitle" :style="item.call_rate > 0?{color:'#1ccfa7'}:item.call_rate < 0?{color:'#f85e70'}:{color: 'rgb(167, 174, 182);'}">
-                        <img src="../../static/up.png" alt="" v-if="item.call_rate > 0" class="mgt">
-                        <img src="../../static/down.png" alt="" v-if="item.call_rate < 0" class="mgt" >
-                        {{(item.call_rate>0?'+'+item.call_rate:item.call_rate).toFixed(2)}}%
-                        </p>
-                    </div>
-                </div>
-                
-            </div> -->
-
-
-            <div class="card cur" v-for="(item,index) in arr" :style="{width:cdwd}" :key="index" >
-
-
-                <p class="title">{{item.word}} <span v-if="index == 1" style="color:rgb(73, 165, 251);font-size:14px;font-weight:400;">(beta)</span> </p>
+                <p class="title">{{item.word}} 
+                  <!-- <span v-if="index == 1" style="color:rgb(73, 165, 251);font-size:14px;font-weight:400;">(beta)</span>  -->
+                  </p>
                 <div class="dappnum">{{dappnumtips[$store.state.alllang]}}：{{item.num}}</div>
                 <div  class="card_out">
                     <div v-for="(it,inde) in item.data" class="card_in" :key="inde">
-                        <p class="subtitle"><img :src="inde == 1?it.img:''" alt="" :style="index == 2?{position:'absolute',top:'-1px',left:'0px'}:{position:'absolute',top:'-1px',left:'5px'}">{{it.word[$store.state.alllang]}}</p>
-                        <p class="tips">(24h)</p>
+                        <p class="subtitle"><img :src="inde == 1?it.img:''" alt="" :style="index == 2?{position:'absolute',top:'-1px',left:'0px'}:index == 1?{position:'absolute',top:'-1px',left:'5px',width:'20px'}:{position:'absolute',top:'-1px',left:'5px'}">{{it.word[$store.state.alllang]}}</p>
+                        <p class="tips">{{inde == 1?'(K)':'&nbsp;'}}</p>
                         <p class="numbers">{{it.num}}</p>
                         <p class="subtitle" :style="it.add > 0?{color:'#1ccfa7'}:it.add < 0?{color:'#f85e70'}:{color: 'rgb(167, 174, 182);'}">
                         <img src="../../static/up.png" alt="" v-if="it.add > 0" class="mgt">
@@ -90,7 +50,7 @@
                     <div class="hot_right">
                         <div class="hot_right_left">
                             <p>{{blocktitle[4][$store.state.alllang]}}</p>
-                            <p>(24h)</p>
+                            <p> &nbsp; </p>
                             <p>{{item.new_user}}</p>
                             <p :style="item.new_user_rate>0?{color:'#1ccfa7'}:item.new_user_rate<0?{color:'#f85e70'}:{color:'#797b8e'}">
                                 <img src="../../static/up.png" alt="" class="mgt" v-if="item.new_user_rate>0">
@@ -101,7 +61,7 @@
 
                         <div class="hot_right_left">
                             <p>{{blocktitle[5][$store.state.alllang]}}</p>
-                            <p>(24h)</p>
+                            <p> &nbsp; </p>
                             <p>{{item.active_user}}</p>
                             <p :style="item.active_user_rate>0?{color:'#1ccfa7'}:item.active_user_rate<0?{color:'#f85e70'}:{color:'#797b8e'}">
                                 <img src="../../static/up.png" alt="" class="mgt" v-if="item.active_user_rate>0">
@@ -119,7 +79,7 @@
          
 
         <!-- 研究报告 -->
-         <p class="report">
+         <!-- <p class="report">
             <span>{{blocktitle[2][$store.state.alllang]}}</span>
             <span @click="gotoother(3)">{{blocktitle[3][$store.state.alllang]}} ></span>
          </p>
@@ -139,7 +99,7 @@
                   
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 
@@ -248,17 +208,17 @@ export default {
           ]
         },
         {
-          word: "NAS",
+          word: "TRON",
           num: 0,
           data: [
             {
-              img: "../../static/NAS-1.png",
+              img: "../../static/TRON-1.png",
               word: ["活跃用户", "Active Users"],
               num: "",
               add: ""
             },
             {
-              img: "../../static/NAS-1.png",
+              img: "../../static/TRON-1.png",
               word: ["交易量", "Volume"],
               num: "",
               add: ""
@@ -280,15 +240,17 @@ export default {
       // 图表文字切换
       dappnumtips: ["Dapps数量", "Dapps"],
       blocktitle: [
-        ["热门公链", "HOT Chains"],
-        ["热门Dapp", "HOT Dapps"],
+        ["热门公链", "HOT Chains(24H)"],
+        ["热门Dapp", "HOT Dapps(24H)"],
         ["研究报告", "Report"],
         ["查看全部","more"],
         ["新增用户数","New Users"],
         ["活跃用户数","Active Users"]
       ],
       //报告数据
-      reportarr:[]
+      reportarr:[],
+      //allout宽度
+      alloutwidth:''
     };
   },
   created() {
@@ -315,8 +277,13 @@ export default {
         slidesPerView:"auto"
     })
     const that = this;
+
+    that.alloutwidth = document.getElementById('allout').offsetWidth
+    
+
     $(window).on("resize", function() {
       that.clientHeight = document.body.clientWidth;
+      that.alloutwidth = document.getElementById('allout').offsetWidth
     });
   },
   computed: {
@@ -328,13 +295,61 @@ export default {
     inleft(n, o) {
       console.log(n);
       this.cglf(n);
+
+      var movehot = setInterval(()=>{
+        this.alloutwidth = document.getElementById('allout').offsetWidth
+      },17)
+      
+      setTimeout(()=>{
+        clearInterval(movehot)
+      },500)
+      
     },
     clientHeight(val, o) {
       var bbc = window.innerWidth;
       this.cdwd = (bbc - parseInt(this.theleft) - 110) / 3 + "px";
+    },
+    alloutwidth(n,o){
+      this.changestyle(n)
     }
   },
   methods: {
+    //改变hotdapp样式
+    changestyle(n){
+      console.log('------------------changestyle111111----------------')
+      console.log(n)
+        if(n<=1200){
+        var stylearr = document.getElementsByClassName('hotbox')
+        console.log(stylearr)
+        for(let i = 0;i < stylearr.length;i++){
+          stylearr[i].style.width = '50%';
+          if(i%2 == 0){
+            stylearr[i].style.paddingLeft = '0';
+            stylearr[i].style.paddingRight = '15px';
+          }else{
+            stylearr[i].style.paddingLeft = '15px';
+            stylearr[i].style.paddingRight = '0';
+          }
+        }
+        
+      }else{
+        var stylearr = document.getElementsByClassName('hotbox')
+        console.log(stylearr)
+        for(let i = 0;i < stylearr.length;i++){
+          stylearr[i].style.width = '33.33%';
+          if(i%3 == 0){
+            stylearr[i].style.paddingLeft = '0';
+            stylearr[i].style.paddingRight = '20px';
+          }else if(i%3 == 1){
+            stylearr[i].style.paddingLeft = '10px';
+            stylearr[i].style.paddingRight = '10px';
+          }else{
+            stylearr[i].style.paddingLeft = '20px';
+            stylearr[i].style.paddingRight = '0';
+          }
+        }
+      }
+    },
     gotoother(a,id){
       if(a == 1){
         this.$router.push({ path: "/chain" });
@@ -371,103 +386,99 @@ export default {
     },
     fornew(aa) {
       console.log(this.$store.state.moneyty, this.$store.state.requesttime);
-      var url = this.$store.state.requrl + "/index";
+      var url = this.$store.state.requrlnew + "/hotchain";
       Axios.post(
         url,
         {
-          key: "call"
+          "num":3,"order":"active_user"
           },
         {
           headers: { "Content-Type": "application/x-www-form-urlencoded" }
         }
       ).then(res => {
-        console.log(res.data.msg);
+        console.log(res.data.data);
+        var rank_res_arr = []
+        res.data.data.forEach(e => {
+          if(e.blockchain == 'eth'){
+            rank_res_arr[0] = e
+          }else if(e.blockchain == 'eos'){
+            rank_res_arr[1] = e
+          }else if(e.blockchain == 'tron'){
+            rank_res_arr[2] = e
+          }
+        });
         var numtimes = 1;
         if (aa) {
           var numroll = setInterval(() => {
-            if (numtimes >= 90) {
+            if (numtimes >= 89) {
               clearInterval(numroll);
             }
             numtimes++;
             this.arr[0].data[0].num = parseInt(
-              (res.data.msg.change_24h.eth.user / 90) * numtimes
+              (rank_res_arr[0].active_user / 90) * numtimes
             );
 
             this.arr[0].data[1].num = parseInt(
-              (res.data.msg.change_24h.eth.vol / 90) * numtimes
+              (rank_res_arr[0].vol / 90000) * numtimes
             );
 
             this.arr[0].data[2].num = parseInt(
-              (res.data.msg.change_24h.eth.tx / 90) * numtimes
+              (rank_res_arr[0].call / 90) * numtimes
             );
 
             this.arr[1].data[0].num = parseInt(
-              (res.data.msg.change_24h.eos.user / 90) * numtimes
+              (rank_res_arr[1].active_user / 90) * numtimes
             );
 
             this.arr[1].data[1].num = parseInt(
-              (res.data.msg.change_24h.eos.vol / 90) * numtimes
+              (rank_res_arr[1].vol / 90000) * numtimes
             );
 
             this.arr[1].data[2].num = parseInt(
-              (res.data.msg.change_24h.eos.tx / 90) * numtimes
+              (rank_res_arr[1].call / 90) * numtimes
             );
 
             this.arr[2].data[0].num = parseInt(
-              (res.data.msg.change_24h.nas.user / 90) * numtimes
+              (rank_res_arr[2].active_user / 90) * numtimes
             );
 
             this.arr[2].data[1].num = parseInt(
-              (res.data.msg.change_24h.nas.vol / 90) * numtimes
+              (rank_res_arr[2].vol / 90000) * numtimes
             );
 
             this.arr[2].data[2].num = parseInt(
-              (res.data.msg.change_24h.nas.tx / 90) * numtimes
+              (rank_res_arr[2].call / 90) * numtimes
             );
           }, 20);
         }
-        this.arr[0].data[0].num = res.data.msg.change_24h.eth.user;
-        this.arr[0].data[0].add = (
-          res.data.msg.change_24h.eth.user_rate * 100
-        ).toFixed(2);
-        this.arr[0].data[1].num = res.data.msg.change_24h.eth.vol.toFixed(0);
-        this.arr[0].data[1].add = (
-          res.data.msg.change_24h.eth.vol_rate * 100
-        ).toFixed(2);
-        this.arr[0].data[2].num = res.data.msg.change_24h.eth.tx;
-        this.arr[0].data[2].add = (
-          res.data.msg.change_24h.eth.tx_rate * 100
-        ).toFixed(2);
 
-        this.arr[1].data[0].num = res.data.msg.change_24h.eos.user;
-        this.arr[1].data[0].add = (
-          res.data.msg.change_24h.eos.user_rate * 100
-        ).toFixed(2);
-        this.arr[1].data[1].num = res.data.msg.change_24h.eos.vol.toFixed(0);
-        this.arr[1].data[1].add = (
-          res.data.msg.change_24h.eos.vol_rate * 100
-        ).toFixed(2);
-        this.arr[1].data[2].num = res.data.msg.change_24h.eos.tx;
-        this.arr[1].data[2].add = (
-          res.data.msg.change_24h.eos.tx_rate * 100
-        ).toFixed(2);
+        var ddarr = [1,2,3]
+        setTimeout(()=>{
+          rank_res_arr.forEach((e,idx) => {
+            this.arr[idx].word = e.blockchain.toUpperCase()
+            this.arr[idx].num = e.dapp_num
+            ddarr.forEach((el,index)=> {
+              console.log(22222222222222222222222222)
+              console.log(el)
+              this.arr[idx].data[index].img = '../../static/'+e.blockchain.toUpperCase()+'-1.png'
+              if(index === 0){
+                this.arr[idx].data[index].num = (e.active_user).toFixed(0)
+                this.arr[idx].data[index].add = (e.active_user_rate*100).toFixed(2)
+              }else if(index === 1){
+                this.arr[idx].data[index].num = (e.vol/1000).toFixed(0)
+                this.arr[idx].data[index].add = (e.vol_rate*100).toFixed(2)
+              }else if(index === 2){
+                this.arr[idx].data[index].num = (e.call).toFixed(0)
+                this.arr[idx].data[index].add = (e.call_rate*100).toFixed(2)
+              }
+              
+  
+            });
+           
+          });
 
-        this.arr[2].data[0].num = res.data.msg.change_24h.nas.user;
-        this.arr[2].data[0].add = (
-          res.data.msg.change_24h.nas.user_rate * 100
-        ).toFixed(2);
-        this.arr[2].data[1].num = res.data.msg.change_24h.nas.vol.toFixed(0);
-        this.arr[2].data[1].add = (
-          res.data.msg.change_24h.nas.vol_rate * 100
-        ).toFixed(2);
-        this.arr[2].data[2].num = res.data.msg.change_24h.nas.tx;
-        this.arr[2].data[2].add = (
-          res.data.msg.change_24h.nas.tx_rate * 100
-        ).toFixed(2);
+        },1880)
 
-        this.arr[0].num = res.data.msg.count.eth;
-        this.arr[1].num = res.data.msg.count.eos;
-        this.arr[2].num = res.data.msg.count.nas;
         this.$store.commit("changeloadopacty", false);
       });
     },
@@ -475,7 +486,7 @@ export default {
       Axios.post(
         this.$store.state.requrlnew + "/hotdapp",
         {
-          "num":6,
+          "num":9,
           "order":"active_user",
           "blockchain":"total"
          },
@@ -485,8 +496,11 @@ export default {
       ).then(res => {
         console.log(res)
         res.data.msg.data.forEach(element => {
-          this.hotarr.unshift(element)
+          this.hotarr.push(element)
         });
+        setTimeout(()=>{
+          this.changestyle(this.alloutwidth)
+        },50)
         
       })
     }
@@ -533,17 +547,17 @@ a{
   color: #c1c7cd;
 }
 .card:nth-of-type(1) {
-  background-image: url(../../static/ETH.png);
+  /* background-image: url(../../static/ETH.png); */
   background-position: center center;
   background-repeat: no-repeat;
 }
 .card:nth-of-type(2) {
-  background-image: url(../../static/EOS.png);
+  /* background-image: url(../../static/EOS.png); */
   background-position: center center;
   background-repeat: no-repeat;
 }
 .card:nth-of-type(3) {
-  background-image: url(../../static/NAS.png);
+  /* background-image: url(../../static/NAS.png); */
   background-position: center center;
   background-repeat: no-repeat;
 }
@@ -603,7 +617,7 @@ a{
   position: relative;
 }
 .numbers {
-  font-size: 26px;
+  font-size: 20px;
   color: #464a58;
   margin-bottom: 20px;
 }
@@ -616,7 +630,7 @@ a{
 }
 .hotbox{
     height: 176px;
-    width: 50%;
+    width: 33.33%;
     box-sizing: border-box;
     float: left;
     margin-bottom: 30px;
@@ -672,14 +686,14 @@ a{
 }
 .hot_right_left p:nth-of-type(2){
     font-size: 12px;
-    margin-bottom: 15px;
+    margin-bottom: 6px;
 }
 .hot_right_left p:nth-of-type(3){
-    font-size: 30px;
+    font-size: 20px;
 	line-height: 24px;
 	letter-spacing: 1px;
 	color: #464a58;
-    margin-bottom: 15px;
+    margin-bottom: 24px;
 }
 .hot_right_left p:nth-of-type(4){
     font-size: 14px;
@@ -689,11 +703,15 @@ a{
 .hot_right_right{
     float: right;
 }
-.hotbox:nth-of-type(2n){
-    padding-left: 15px;
+.hotbox:nth-of-type(3n){
+    padding-left: 20px;
 }
-.hotbox:nth-of-type(2n+1){
-    padding-right: 15px;
+.hotbox:nth-of-type(3n+1){
+    padding-right: 20px;
+}
+.hotbox:nth-of-type(3n+2){
+    padding-right: 10px;
+    padding-left: 10px;
 }
 
 

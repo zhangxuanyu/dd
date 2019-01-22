@@ -64,19 +64,19 @@
                        {{conversion(it.day_vol.toFixed(2))}}
                     </div>
                     <div class="all" v-if="index == 2&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in tablearr" :key="idx">
-                        {{conversion(it.day_tx.toString())}}
+                        {{conversion(it.day_call.toString())}}
                     </div>
                      <div class="all" v-if="index == 3&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in tablearr" :key="idx">
-                        {{conversion(it.day_call.toString())}}
+                        {{conversion(it.day_tx.toString())}}
                     </div>
                      <div class="all" v-if="index == 4&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in tablearr" :key="idx">
                         {{conversion(it.total_vol.toFixed(2))}}
                     </div>
                      <div class="all" v-if="index == 5&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in tablearr" :key="idx">
-                        {{conversion(it.total_tx.toString())}}
+                        {{conversion(it.total_call.toString())}}
                     </div>
                     <div class="all" v-if="index == 6&&idx<thepage*thepagesize&&idx>=(thepage-1)*thepagesize" v-for="(it,idx) in tablearr" :key="idx">
-                        {{conversion(it.total_call.toString())}}
+                        {{conversion(it.total_tx.toString())}}
                     </div>
                     
                 </li>
@@ -392,27 +392,25 @@ export default {
             this.allarr = []
             this.arr = []
       console.log(this.$store.state.moneyty, this.$store.state.requesttime);
-      var url =
-        this.$store.state.requrl +
-        "/" +
-        this.$store.state.appid.split("_")[0].toLowerCase() +
-        "/tx";
+      var url = this.$store.state.requrlnew+'/dapp'
       console.log(url);
       Axios.post(
         url,
         {
-          dapp_id: this.$store.state.appid,
-          start: this.begintime / 1000,
-          last: this.endtime / 1000 + 86400
+          "blockchain": this.$store.state.appid.split("_")[0].toLowerCase(),
+          "dapp_id":this.$store.state.appid,
+          "begin": this.begintime/1000,
+          "end": this.endtime/1000+86400,
+          "type":"tx"
         },
         {
           headers: { "Content-Type": "application/x-www-form-urlencoded" }
         }
       ).then(res => {
         console.log(res);
-        res.data.msg.tx_info.forEach((a, bb) => {
-          if (bb < res.data.msg.tx_info.length - 1) {
-            this.arr.push(a);
+        res.data.msg.data.forEach((a, bb) => {
+          if (bb < res.data.msg.data.length - 1) {
+            this.arr.unshift(a);
           }
         });
 
@@ -437,33 +435,31 @@ export default {
             this.arr2 = []
             this.arr1 = []
       console.log(this.$store.state.moneyty, this.$store.state.requesttime);
-      var url =
-        this.$store.state.requrl +
-        "/" +
-        this.$store.state.appid.split("_")[0].toLowerCase() +
-        "/call";
+      var url = this.$store.state.requrlnew+'/dapp';
       console.log(url);
       Axios.post(
         url,
         {
-          dapp_id: this.$store.state.appid,
-          start: this.begintime / 1000,
-          last: this.endtime / 1000 + 86400
+          "blockchain": this.$store.state.appid.split("_")[0].toLowerCase(),
+          "dapp_id":this.$store.state.appid,
+          "begin": this.begintime/1000,
+          "end": this.endtime/1000+86400,
+          "type":"call"
         },
         {
           headers: { "Content-Type": "application/x-www-form-urlencoded" }
         }
       ).then(res => {
         console.log(res)
-                                        res.data.msg.call_info.forEach((a,bb) => {
-                                            if(bb < res.data.msg.call_info.length -1){
-                                                this.arr2.push(a)
+                                        res.data.msg.data.forEach((a,bb) => {
+                                            if(bb < res.data.msg.data.length -1){
+                                                this.arr2.unshift(a)
                                             }
                                             
                                         })
-                                        res.data.msg.view_info.forEach((a,bb) => {
-                                            if(bb < res.data.msg.view_info.length -1){
-                                                this.arr1.push(a)
+                                        res.data.msg.data.forEach((a,bb) => {
+                                            if(bb < res.data.msg.data.length -1){
+                                                this.arr1.unshift(a)
                                             }
                                         
                                         })

@@ -15,7 +15,7 @@
 export default {
     data(){
         return{
-            chainarr:['ETH','EOS','NAS'],
+            chainarr:['ETH','EOS','NAS','TRON','NEO','QTUM','GXCHAIN'],
             //选择
             nowchain:0
         }

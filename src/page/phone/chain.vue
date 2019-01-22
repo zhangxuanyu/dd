@@ -32,10 +32,10 @@
                         {{conversion(it.chain_day_call.toString())}}
                     </div>
                     <div class="all" v-if="index == 6" v-for="(it,idx) in chainarr" :key="idx">
-                        {{it.blockchain!='steem'?conversion(it.dapp_vol.toFixed(2)):'--'}}
+                        {{it.blockchain =='steem'||it.blockchain =='btc'||it.blockchain =='litecoin'?'--':conversion(it.dapp_vol.toFixed(2))}}
                     </div>
                     <div class="all" v-if="index == 7" v-for="(it,idx) in chainarr" :key="idx">
-                        {{it.blockchain!='steem'?conversion(it.dapp_call.toString()):'--'}}
+                        {{it.blockchain =='steem'||it.blockchain =='btc'||it.blockchain =='litecoin'?'--':conversion(it.dapp_call.toString())}}
                     </div>
                     
                 </li>

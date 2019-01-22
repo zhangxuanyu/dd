@@ -38,7 +38,7 @@
             <div class="dapp" style="">
                 <p class="preview">{{ttarr[7][$store.state.alllang]}}</p>
                <div v-for="(item,index) in dayarr" :key="index" class="daydata">
-                   <p>{{item.title[$store.state.alllang]}} <span v-if="index == 2||index == 4" style="font-size:12px;">({{arr.blockchain=='tron'?'TRX':arr.blockchain.toUpperCase()}})</span> </p>
+                   <p>{{item.title[$store.state.alllang]}} <span v-if="index == 2||index == 4" style="font-size:12px;">({{arr.blockchain=='tron'?'TRX':arr.blockchain=='gxchain'?'GXC':arr.blockchain=='litecoin'?'LTC':arr.blockchain.toUpperCase()}})</span> </p>
                    <p>(24h)</p>
                    <p>{{item.value=="-"?item.value:item.value.toFixed(0)}}</p>
                    <p :style="item.rate>0?{color:'#1ccfa7'}:item.rate<0?{color:'#f85e70'}:{color:'#797b8e'}"><img :src="item.rate>0?'../../static/up.png':item.rate<0?'../../static/down.png':''" alt=""> {{item.rate=='-'?item.rate:(item.rate*100).toFixed(5)}}{{item.rate=='-'?'':'%'}}</p>
@@ -46,12 +46,12 @@
             </div>
 
             <!-- 热门dapp -->
-        <p class="hot" v-if="this.$store.state.appid!='steem'">
+        <p class="hot" v-if="!(this.$store.state.appid=='steem'||this.$store.state.appid=='btc'||this.$store.state.appid=='litecoin')">
             <span>{{ttarr[8][$store.state.alllang]}}</span>
             <span @click="gotodapp(1,'')">{{ttarr[9][$store.state.alllang]}} ></span>
         </p>
 
-           <div class="hotdapp" v-if="this.$store.state.appid!='steem'">
+           <div class="hotdapp" v-if="!(this.$store.state.appid=='steem'||this.$store.state.appid=='btc'||this.$store.state.appid=='litecoin')">
             <div v-for="(item,index) in hotarr" :key="index" class="hotbox" @click="gotodapp(2,item.dapp_id)" v-if="hotarr.length>0">
                 <div class="hot_content cur">
                     <div class="hot_left">

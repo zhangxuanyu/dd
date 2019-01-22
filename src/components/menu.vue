@@ -63,7 +63,9 @@ export default {
         {
           title: ["公链", "Chain"],
           content: [
-            { word: ["公链数据", "Chain"], img: "../../static/data1.png" }
+            { word: ["公链数据", "Chain"], img: "../../static/data1.png" },
+            { word: ["用户分析", "User Analysis"], img: "../../static/useralyse1.png" },
+            { word: ["Dapp活跃分析", "Dapp Active"], img: "../../static/dappact1.png" }
           ]
         },
         {
@@ -78,12 +80,12 @@ export default {
             }
           ]
         },
-        {
-          title: ["报告", "Report"],
-          content: [
-            { word: ["研究报告", "Report"], img: "../../static/report1.png" }
-          ]
-        }
+        // {
+        //   title: ["报告", "Report"],
+        //   content: [
+        //     { word: ["研究报告", "Report"], img: "../../static/report1.png" }
+        //   ]
+        // }
       ],
       //改变菜单
       // menuflag:true,
@@ -138,15 +140,17 @@ export default {
     //控制菜单栏伸缩
     jump_menu(from,to){
       if(from =='/'||from =='/rank'||from =='/num'||from =='/money'||from =='/use'||from =='/search'||from =='/report'||from =='/chain' ){
-        if(to =='/'||to =='/rank'||to =='/num'||to =='/money'||to =='/use'||to =='/search'||to =='/report'||to =='/chain'){
+        if(to =='/'||to =='/rank'||to =='/num'||to =='/money'||to =='/use'||to =='/search'||to =='/report'||to =='/chain'||to =='/useranalysis'||to =='/dappactive'){
 
-        }else if(to =='/detail'||to =='/user'||to =='/trade'||to =='/usedapp'||to =='/chaindetail'||to =='/chainuser'||to =='/chainusedapp'||to =='/chaintrade'||to =='/chaindapp'){
+        }else if(to =='/detail'||to =='/user'||to =='/trade'||to =='/usedapp'||to =='/chaindetail'||to =='/chainuser'||to =='/chainusedapp'||to =='/chaintrade'||to =='/chaindapp'||to =='/userdetail'){
           this.$store.commit('changemenuflag',false)
+          console.log('-------------------xiangqing-----------------')
         }
-      }else if(from =='/detail'||from =='/user'||from =='/trade'||from =='/usedapp'||from =='/chaindetail'||from =='/chainuser'||from =='/chainusedapp'||from =='/chaintrade'||from =='/chaindapp'){
-        if(to =='/'||to =='/rank'||to =='/num'||to =='/money'||to =='/use'||to =='/search'||to =='/report'||to =='/chain'){
+      }else if(from =='/detail'||from =='/user'||from =='/trade'||from =='/usedapp'||from =='/chaindetail'||from =='/chainuser'||from =='/chainusedapp'||from =='/chaintrade'||from =='/chaindapp'||from =='/userdetail'){
+        if(to =='/'||to =='/rank'||to =='/num'||to =='/money'||to =='/use'||to =='/search'||to =='/report'||to =='/chain'||to =='/useranalysis'||to =='/dappactive'){
           this.$store.commit('changemenuflag',true)
-        }else if(to =='/detail'||to =='/user'||to =='/trade'||to =='/usedapp'||to =='/chaindetail'||to =='/chainuser'||to =='/chainusedapp'||to =='/chaintrade'||to =='/chaindapp'){
+          console.log('-------------------waimian-----------------')
+        }else if(to =='/detail'||to =='/user'||to =='/trade'||to =='/usedapp'||to =='/chaindetail'||to =='/chainuser'||to =='/chainusedapp'||to =='/chaintrade'||to =='/chaindapp'||to =='/userdetail'){
 
         }
       }
@@ -177,6 +181,13 @@ export default {
           if(aa == 0){
             this.mearr[bb].content[aa].img = "../../static/data2.png";
             this.$router.push({ path: "/chain" });
+          }
+          else if(aa == 1){
+            this.mearr[bb].content[aa].img = "../../static/useralyse2.png";
+            this.$router.push({ path: "/useranalysis" });
+          }else if(aa == 2){
+            this.mearr[bb].content[aa].img = "../../static/dappact2.png";
+            this.$router.push({ path: "/dappactive" });
           }
       }
       else if(bb == 3){
@@ -219,7 +230,12 @@ export default {
       else if(bb == 1){
           if(aa == 0){
             this.mearr[bb].content[aa].img = "../../static/data2.png";
-            
+          }
+          else if(aa == 1){
+            this.mearr[bb].content[aa].img = "../../static/useralyse2.png";
+          }
+          else if(aa == 2){
+            this.mearr[bb].content[aa].img = "../../static/dappact2.png";
           }
       }
       else if(bb == 3){
@@ -255,7 +271,9 @@ export default {
         {
           title: ["公链", "Chain"],
           content: [
-            { word: ["公链数据", "Chain"], img: "../../static/data1.png" }
+            { word: ["公链数据", "Chain"], img: "../../static/data1.png" },
+            { word: ["用户分析", "User Analysis"], img: "../../static/useralyse1.png" },
+            { word: ["Dapp活跃分析", "Dapp Active"], img: "../../static/dappact1.png" }
           ]
         },
         {
@@ -270,12 +288,12 @@ export default {
             }
           ]
         },
-        {
-          title: ["报告", "Report"],
-          content: [
-            { word: ["研究报告", "Report"], img: "../../static/report1.png" }
-          ]
-        }
+        // {
+        //   title: ["报告", "Report"],
+        //   content: [
+        //     { word: ["研究报告", "Report"], img: "../../static/report1.png" }
+        //   ]
+        // }
       ]
       this.pic_src(aa,bb)
       setTimeout(() => {
@@ -295,7 +313,9 @@ export default {
         {
           title: ["公链", "Chain"],
           content: [
-            { word: ["公链数据", "Chain"], img: "../../static/data1.png" }
+            { word: ["公链数据", "Chain"], img: "../../static/data1.png" },
+            { word: ["用户分析", "User Analysis"], img: "../../static/useralyse1.png" },
+            { word: ["Dapp活跃分析", "Dapp Active"], img: "../../static/dappact1.png" }
           ]
         },
         {
@@ -310,12 +330,12 @@ export default {
             }
           ]
         },
-        {
-          title: ["报告", "Report"],
-          content: [
-            { word: ["研究报告", "Report"], img: "../../static/report1.png" }
-          ]
-        }
+        // {
+        //   title: ["报告", "Report"],
+        //   content: [
+        //     { word: ["研究报告", "Report"], img: "../../static/report1.png" }
+        //   ]
+        // }
       ]
       if (this.$route.path == "/") {
         this.select = 0;
@@ -354,6 +374,16 @@ export default {
         this.select = 0;
         this.outselect = 1
         this.mearr[1].content[0].img = "../../static/data2.png";
+      }
+      else if (this.$route.path == "/useranalysis"){
+        this.select = 1;
+        this.outselect = 1
+        this.mearr[1].content[1].img = "../../static/useralyse2.png";
+      }
+      else if (this.$route.path == "/dappactive"){
+        this.select = 2;
+        this.outselect = 1
+        this.mearr[1].content[2].img = "../../static/dappact2.png";
       }
       this.imglist = this.deepclone(this.mearr);
     }

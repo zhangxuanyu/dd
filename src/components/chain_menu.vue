@@ -10,7 +10,7 @@
               {{showDapp.blockchain.toUpperCase()}}
             </div>
         </div>
-        <div v-for="(item,index) in mearr" class="outlock"  v-if="($store.state.appid =='steem'&&index == 3)?false:true">
+        <div v-for="(item,index) in mearr" class="outlock"  v-if="(($store.state.appid =='steem'||$store.state.appid =='btc'||$store.state.appid =='litecoin')&&index == 3)?false:true">
             <div class="lock lockh " :style="index == select?{color:'#48a5fb',backgroundColor:'#f6f9fb'}:''"  @click="gotoother(index,true)">
                 <img :src="item.img" alt="" class="left mg1 cur" >
                 <span  class="left mg2 cur" >{{item.word[$store.state.alllang]}}</span>

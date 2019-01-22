@@ -16,6 +16,9 @@ import usedapp from '../page/usedapp'
 import user from '../page/user'
 import report from '../page/report'
 import chain from '../page/comment_chain'
+import useranalysis from '../page/useralyse'
+import userdetail from '../page/chainuser_detail'
+import dappactive from '../page/dappactive'
 import chaindetail from '../page/chaindetail'
 import chainuser from '../page/chainuser'
 import chainusedapp from '../page/chainuse'
@@ -150,6 +153,27 @@ var myroutelist = [
         {
           path: '/chain',
           component: chain,
+          meta: {
+            title: 'DappData'
+          }
+        },
+        {
+          path: '/userdetail',
+          component: userdetail,
+          meta: {
+            title: 'DappData'
+          }
+        },
+        {
+          path: '/useranalysis',
+          component: useranalysis,
+          meta: {
+            title: 'DappData'
+          }
+        },
+        {
+          path: '/dappactive',
+          component: dappactive,
           meta: {
             title: 'DappData'
           }
