@@ -43,7 +43,11 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
+    /*
+    gitbub 配置修改
     assetsPublicPath: '/',
+    */
+    assetsPublicPath: './',
 
     /**
      * Source Maps

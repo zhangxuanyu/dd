@@ -30,6 +30,15 @@ export default {
     methods:{
         changesel(index){
             this.select = index
+        },
+        newTime(n){
+            if(n == 0){
+                
+            }else if(n == 1){
+
+            }else if(n == 2){
+
+            }
         }
     }
 }

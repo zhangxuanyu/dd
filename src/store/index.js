@@ -23,7 +23,9 @@ export default new Vuex.Store({
         loadopacty:true,
         //控制详情图片显示
         picshowflag:false,
-        picurl:''
+        picurl:'',
+        //用户分析页面时间范围
+        userTime:''
         
     },
     mutations:{
@@ -67,6 +69,9 @@ export default new Vuex.Store({
         },
         changeurl(state,url){
             state.picurl = url
-        }
+        },
+        changeuserTime(state,time){
+            state.userTime = time
+        },
     }
 })

@@ -49,7 +49,7 @@ export default {
             theleft: "280px",
             value1:'',
             value2:'',
-            reqarr:['eth','eos','nas','tron','neo','qtum','gxchain'],
+            reqarr:['eos','tron','eth','nas','gxchain','qtum','neo'],
             active_xarr:[],
             activearr:[],
             frequency_xarr:[],
@@ -164,10 +164,10 @@ export default {
                 this.laychart(this.active_xarr,this.activearr)
             },1000)
             setTimeout(()=>{
-                this.initChart(this.period_xarr,this.periodarr,'trend1','trend1')
+                this.initChart(this.period_xarr,this.periodarr,'trend1','trend1',true)
             },1000)
             setTimeout(()=>{
-                this.initChart(this.frequency_xarr,this.frequencyarr,'activearea','activearea')
+                this.initChart(this.frequency_xarr,this.frequencyarr,'activearea','activearea',false)
             },1000)
 
         },
@@ -195,7 +195,7 @@ export default {
                 this.theleft = "100px";
             }
         },
-        initChart(arr1, argument,id,windowname) {
+        initChart(arr1, argument,id,windowname,yflag) {
         //   var  argument=[{
         //         name: e.word.toUpperCase(),
         //         data: e.arr,
@@ -221,37 +221,36 @@ export default {
                 name: this.reqarr[this.$store.state.moneyty],
                 data: e,
                 type: "line",
-                yAxisIndex:index,
+                yAxisIndex:yflag?index:0,
                 smooth: true
             }
         )
-        yAxisarr.push(
-            {
-                        type: 'value',
-                        splitLine:{
-                          lineStyle:{
-                            color:'#ebecf0'
-                          }
-                        },
-                        axisLine: {
-                            lineStyle: {
-                                type: 'solid',
-                                color:'#ebecf0',
-                                width:'1'
-                            }
-                        },
-                        axisLabel: {
-                            textStyle: {
-                                color: '#000',//坐标值得具体的颜色
-        
-                            }
-                        }
-                    }
-        )
 
-        // if(index >= 3){
-        //   lgselect[e.name]=false
-        // }
+        if(index == 0 || yflag){
+            yAxisarr.push(
+                    {
+                                type: 'value',
+                                splitLine:{
+                                  lineStyle:{
+                                    color:'#ebecf0'
+                                  }
+                                },
+                                axisLine: {
+                                    lineStyle: {
+                                        type: 'solid',
+                                        color:'#ebecf0',
+                                        width:'1'
+                                    }
+                                },
+                                axisLabel: {
+                                    textStyle: {
+                                        color: '#000',//坐标值得具体的颜色
+                
+                                    }
+                                }
+                            }
+                )
+            }
       });
       var colors = ["#4da7fb", "#27d0ab", "#f86677","#f8c366","#b266f8","#666df8","#66f893","#f88166","#66e5f8","#f866ca"]
       var echarts = require('echarts');
@@ -402,7 +401,7 @@ export default {
                                     this.periodarr[1].push(e.dapps)
                                 });
                                 setTimeout(()=>{
-                                    this.initChart(this.period_xarr,this.periodarr,'trend1','trend1')
+                                    this.initChart(this.period_xarr,this.periodarr,'trend1','trend1',true)
                                 },1000)
                                 
                             })
@@ -448,15 +447,11 @@ export default {
                                     }
                                     
                                 });
-                                console.log(this.frequencyarr[0])
-                                setTimeout(()=>{
-                                    this.initChart(this.frequency_xarr,this.frequencyarr,'activearea','activearea')
-                                },1000)
+                                this.fornew_active_frequency()
+                               
                             })
             },
             fornew_active_frequency(){
-                this.frequency_xarr=[]
-                this.frequencyarr=[]
                 var url = this.$store.state.requrlv3+'/active_frequency';
                 Axios.post(url,{
                                 "blockchain":this.reqarr[this.$store.state.moneyty]
@@ -464,6 +459,8 @@ export default {
                                 headers: {'Content-Type': "application/x-www-form-urlencoded"}
                             }).then(res => {
                                 console.log(res.data.msg.data.length)
+                                this.frequencyarr.push([])
+                                console.log(this.frequencyarr)
                                 var count = 0
                                 res.data.msg.data.forEach((e,index) => {
                                     if(index == 0){
@@ -483,6 +480,9 @@ export default {
                                     
                                 });
                                 console.log(this.frequencyarr[1])
+                                setTimeout(()=>{
+                                    this.initChart(this.frequency_xarr,this.frequencyarr,'activearea','activearea',false)
+                                },1000)
                                
                             })
             },

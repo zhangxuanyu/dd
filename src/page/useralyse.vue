@@ -110,6 +110,7 @@ export default {
                     this.fornew()
                 },
                 thetime(n,o){
+                    console.log(n)
                     this.fornew()
                 },
                 inleft(n,o){
